@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import { MotiView, MotiImage } from 'moti';
 import Lottie from 'lottie-react-native'
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,19 +9,31 @@ import { Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; 
+import { Animated } from 'react-native';
+import { useEffect, useState } from 'react';
 
+import requestLoL from './src/api/lolProfile';
 
 
 export default function App() {
 
   const {width, height} = Dimensions.get('window')
+  const [infoProfile, setInfoProfile] = useState({})
 
     function Splash(){
+
+      useEffect(() => {
+        requestLoL(setInfoProfile)
+        console.log(infoProfile);
+      }, [])
+
+
       return(
         <View>
           <MotiView 
           style = {{backgroundColor: '#232323', width: '100%', height: '100%', alignItems: 'center'}}>
-            <Text>Splas</Text>   
+            <Text>Splash</Text> 
+            <Button title = "LOL"></Button>  
           </MotiView>
         </View>
 
@@ -79,6 +91,8 @@ export default function App() {
             tabBarIcon: ({size, focused}) => focused
             ? <FontAwesome name="user" size={size} color="black" />
             : <FontAwesome name="user-o" size={size} color="black" />
+          
+            
           }}/>
         </Tab.Navigator>
 
