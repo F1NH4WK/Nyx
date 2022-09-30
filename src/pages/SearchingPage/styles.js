@@ -12,48 +12,72 @@ const styles = StyleSheet.create({
 
     displayChampion:{
         borderRadius: 20,
-        width: Dimensions.get('window').width - 30,
+        width: Dimensions.get('window').width - 15,
         position: 'absolute',
         alignSelf: 'center',
-        height: Dimensions.get('window').height - 150,
-        
+        height: Dimensions.get('window').height - 125,
     },
 
     displayInfos: {
         width: Dimensions.get('window').width - 35,
-        paddingHorizontal: 20,
-        borderColor: 'blue',
-        borderWidth: 2,
+        paddingHorizontal: 5,
+        // borderColor: 'blue',
+        // borderWidth: 2,
         position: 'absolute',
         height: '30%',
-        top: Dimensions.get('window').height - 340,
-        borderRadius:20,
+        top: Dimensions.get('window').height - 430,
         flex: 0.5,
         flexDirection: 'row',
+        zIndex: 2,
+        justifyContent: 'space-between'
+        
     },
 
     containerTexts:{
-        height: '70%',
+        height: '85%',
         alignSelf: 'center',
         // borderColor: 'green',
         // borderWidth: 2,
-        width: '50%',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        width: '60%'
     },
 
     containerRank: {
         // borderColor: 'purple',
         // borderWidth: 2,
         alignItems: 'center',
-        width: '50%',
-        justifyContent: 'space-evenly'
+        width: '45%',
+        justifyContent: 'space-evenly',
     },
     
     nickStyle: {
-        fontSize: 30,
+        fontSize: 40,
         fontWeight: 'bold',
-        fontStyle: 'italic',
+        // fontStyle: 'italic',
         marginRight: 10,
+        // borderColor: 'red',
+        // borderWidth: 2,
+        width: '70%'
+    },
+
+    displayLikes: {
+        width: '100%',
+        // borderColor: 'red',
+        // borderWidth: 2,
+        position: 'absolute',
+        zIndex: 2,
+        height: '20%',
+        bottom: 20,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row',
+        paddingHorizontal: 30,
+
+    },
+
+    likeStyle: {
+        width: 75,
+        height: 75,
     },
 })
 

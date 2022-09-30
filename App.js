@@ -47,63 +47,66 @@ export default function App() {
 
     const Tab = createBottomTabNavigator();
     return (
+
       <NavigationContainer>
         <StatusBar style='auto'/>
         <Tab.Navigator screenOptions = {{
           tabBarShowLabel: false,
           tabBarStyle: {
-            backgroundColor: '#232323',
-            position: 'absolute',
-            bottom: 20,
-            height: 60,
-            borderRadius: 10,
             marginHorizontal: width/6,
-          }
+            backgroundColor: '#232323',
+            paddingBottom: 10,
+          },
         }}>
           <Tab.Screen name='Home' component={Splash} options={{
             tabBarIcon: ({size, focused}) => focused
-            ?<MaterialCommunityIcons name="home-variant" size={size} color="black" />
-            :<MaterialCommunityIcons name="home-variant-outline" size={24} color="black" />
+            ?
+            <View style = {{width: size +30, height: size+30, justifyContent: 'center', alignItems: 'center'}}>
+              <Image 
+              source={require('./assets/iconGradient.png')}
+              style = {{width: size + 20, height: size + 20, borderRadius:60}}
+              />
+            <MaterialCommunityIcons name="home-variant" size={size} color="black" style = {{position: 'absolute'}} />
+            </View>
+            :<MaterialCommunityIcons name="home-variant-outline" size={size} color="black" />
           }}/>
 
           <Tab.Screen name='Searching' component={SearchinPage} options = {{
-            tabBarIconStyle: {
-              backgroundColor: 'red',
-            },
-
 
             header: () => 
               <View style = {{width: '100%', alignItems: 'center', paddingTop: 30, marginBottom: 10}}>
                 <Image source={require('./assets/LogoHeader.png')}/>
               </View>,
 
-            tabBarIcon: ({size, focused}) => 
-            <View style = {{position: 'absolute', width: size +30, height: size+30, justifyContent: 'center', alignItems: 'center'}}>
+            tabBarIcon: ({size, focused}) => focused
+            ?
+            <View style = {{width: size +30, height: size+30, justifyContent: 'center', alignItems: 'center'}}>
               <Image 
               source={require('./assets/iconGradient.png')}
-              style = {{width: size + 30, height: size + 30, borderRadius:60, marginBottom: 50}}
+              style = {{width: size + 20, height: size + 20, borderRadius:60}}
               />
-              <Ionicons name="search" size={24} color="black" style = {{position: 'absolute', top: -10}}/>
+              <Ionicons name="search" size={24} color="black" style = {{position: 'absolute'}}/>
             </View>
+            :
+              <Ionicons name="search-outline" size={24} color="black" style = {{position: 'absolute'}}/>
           }}/>
+
+
           <Tab.Screen name='Profile' component={Teste} options = {{
             tabBarIcon: ({size, focused}) => focused
-            ? <FontAwesome name="user" size={size} color="black" />
+            ? 
+            <View style = {{width: size +30, height: size+30, justifyContent: 'center', alignItems: 'center'}}>
+              <Image 
+              source={require('./assets/iconGradient.png')}
+              style = {{width: size + 20, height: size + 20, borderRadius:60}}
+              />
+              <FontAwesome name="user" size={size} color="black" style = {{position: 'absolute'}}/>
+              </View>
             : <FontAwesome name="user-o" size={size} color="black" />
           
             
           }}/>
         </Tab.Navigator>
-
-        <View style = {{
-          width: width-320,
-          height: 2,
-          backgroundColor: 'red',
-          position: 'absolute',
-          bottom: 77,
-          left: width/6 + 19,
-          borderRadius: 60
-        }}/>
       </NavigationContainer>
 
       
