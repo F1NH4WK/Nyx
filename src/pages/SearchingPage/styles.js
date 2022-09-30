@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
         marginRight: 10,
         // borderColor: 'red',
         // borderWidth: 2,
-        width: '70%'
     },
 
     displayLikes: {

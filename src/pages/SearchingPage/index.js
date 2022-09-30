@@ -7,7 +7,7 @@ import styles from "./styles";
 export default function SearchingPage(){
 
     const {width, height} = Dimensions.get('window');
-    const nick = "O Azir"
+    const nick = "Suporte Drogados"
 
     return(
         <View style = {styles.container}>
@@ -29,7 +29,7 @@ export default function SearchingPage(){
                 
                 <View style = {styles.displayInfos}>
                     <View style = {styles.containerTexts}>
-                        <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+                        <View style = {{flexDirection: 'row', alignItems: 'center', borderColor: 'purple'}}>
                             <Text style = {{
                                 ...styles.nickStyle, 
                                 fontSize: 40 - nick.length * 0.7,
