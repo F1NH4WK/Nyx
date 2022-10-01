@@ -75,7 +75,7 @@ export default function App() {
               source={require('./assets/iconGradient.png')}
               style = {{width: size + 20, height: size + 20, borderRadius:60}}
               />
-              <Ionicons name="ios-home" size={size} color="black" style = {{position: 'absolute'}} />
+              <Ionicons name="ios-home" size={size} color="black" style = {{position: 'absolute', paddingBottom: 2}} />
             </View>
             : 
              <Ionicons name="ios-home-outline" size={size} color="black" />

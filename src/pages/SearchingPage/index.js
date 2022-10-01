@@ -2,8 +2,6 @@ import { Image, Text, View, Dimensions } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import styles from "./styles";
 
-
-
 export default function SearchingPage(){
 
     const {width, height} = Dimensions.get('window');
@@ -12,11 +10,9 @@ export default function SearchingPage(){
     return(
         <View style = {styles.container}>
             <View style = {{width: '100%', height: '100%', padding: 20}}>
-
                 <Image 
                 style = {{...styles.displayChampion, 
                     zIndex: 2, 
-                    opacity: 0.95,
                 }}
                 source = {require('../../../assets/EfeitoEscurecer.png')}
                 />
@@ -55,7 +51,7 @@ export default function SearchingPage(){
                     <View style = {styles.containerRank} >
                         <Image 
                         source={require('../../../assets/Emblem_Gold.png')}
-                        style = {{width: '80%', height: '80%'}}
+                        style = {{width: '80%', height: '80%', opacity: 0.75}}
                         fadeDuration = {5}
                         resizeMode = {'cover'}/>
                         <Text style = {{fontStyle: 'italic'}}>45 PDL</Text>

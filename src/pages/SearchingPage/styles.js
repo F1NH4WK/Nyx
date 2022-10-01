@@ -25,12 +25,12 @@ const styles = StyleSheet.create({
         flex: 0.5,
         flexDirection: 'row',
         zIndex: 2,
-        justifyContent: 'space-between'
-        
+        justifyContent: 'space-between',
+        opacity: 0.85
     },
 
     containerTexts:{
-        height: '85%',
+        height: '80%',
         alignSelf: 'center',
         justifyContent: 'space-evenly',
         width: '60%'
