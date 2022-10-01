@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, Button } from 'react-native';
+import { Text, View, Image, Button } from 'react-native';
 import { MotiView, MotiImage } from 'moti';
 import Lottie from 'lottie-react-native'
 import { NavigationContainer } from '@react-navigation/native';
@@ -50,13 +50,22 @@ export default function App() {
 
       <NavigationContainer>
         <StatusBar style='auto'/>
+
         <Tab.Navigator screenOptions = {{
           tabBarShowLabel: false,
+
           tabBarStyle: {
-            marginHorizontal: width/6,
             backgroundColor: '#232323',
-            paddingBottom: 10,
+            paddingBottom: 15,
+            borderTopWidth: 0,
           },
+
+          style: {
+            borderTopWidth: 0,
+            backgroundColor: '#232323'
+          },
+
+          
         }}>
           <Tab.Screen name='Home' component={Splash} options={{
             tabBarIcon: ({size, focused}) => focused
@@ -66,9 +75,10 @@ export default function App() {
               source={require('./assets/iconGradient.png')}
               style = {{width: size + 20, height: size + 20, borderRadius:60}}
               />
-            <MaterialCommunityIcons name="home-variant" size={size} color="black" style = {{position: 'absolute'}} />
+              <Ionicons name="ios-home" size={size} color="black" style = {{position: 'absolute'}} />
             </View>
-            :<MaterialCommunityIcons name="home-variant-outline" size={size} color="black" />
+            : 
+             <Ionicons name="ios-home-outline" size={size} color="black" />
           }}/>
 
           <Tab.Screen name='Searching' component={SearchinPage} options = {{

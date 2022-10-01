@@ -1,5 +1,5 @@
 import { Image, Text, View, Dimensions } from "react-native";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import styles from "./styles";
 
 
@@ -7,7 +7,7 @@ import styles from "./styles";
 export default function SearchingPage(){
 
     const {width, height} = Dimensions.get('window');
-    const nick = "Suporte Drogados"
+    const nick = "O Azir"
 
     return(
         <View style = {styles.container}>
@@ -22,14 +22,15 @@ export default function SearchingPage(){
                 />
 
                 <Image 
-                style = {styles.displayChampion}
-                source={require('../../../assets/Azir_0.jpg')}
+                style = {{...styles.displayChampion, }}
+                source={{uri: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Azir_0.jpg'}}
                 resizeMode = {"cover"}
+                blurRadius = {1}
                 />
                 
                 <View style = {styles.displayInfos}>
                     <View style = {styles.containerTexts}>
-                        <View style = {{flexDirection: 'row', alignItems: 'center', borderColor: 'purple'}}>
+                        <View style = {{flexDirection: 'row', alignItems: 'center'}}>
                             <Text style = {{
                                 ...styles.nickStyle, 
                                 fontSize: 40 - nick.length * 0.7,
@@ -42,11 +43,11 @@ export default function SearchingPage(){
                         </View>
 
                         <View style = {{flexDirection: 'row', alignItems: 'center',}}>
-                            <MaterialCommunityIcons name="clock" size={24} color="black" style = {{marginRight: 5}}/>
-                            <Text>10: 00 - 10:30</Text>
+                        <AntDesign name="clockcircleo" size={24} color="black" style = {{marginRight: 10}}/>
+                            <Text>10:00 - 10:30</Text>
                         </View>
                         <View style = {{flexDirection: 'row', alignItems: 'center',}}>
-                            <MaterialCommunityIcons name="calendar" size={24} color="black" style = {{marginRight: 5}}/>
+                            <AntDesign name="calendar" size={24} color="black" style = {{marginRight: 10}}/>
                             <Text>Sab - Dom</Text>
                         </View>
                     </View>

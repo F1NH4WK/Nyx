@@ -4,8 +4,6 @@ const styles = StyleSheet.create({
     
     container: {
         flex: 1,
-        // borderColor: 'red',
-        // borderWidth: 2,
         alignItems: 'center',
         paddingHorizontal: 20,
     },
@@ -21,11 +19,9 @@ const styles = StyleSheet.create({
     displayInfos: {
         width: Dimensions.get('window').width - 35,
         paddingHorizontal: 5,
-        // borderColor: 'blue',
-        // borderWidth: 2,
         position: 'absolute',
         height: '30%',
-        top: Dimensions.get('window').height - 430,
+        top: Dimensions.get('window').height - 415,
         flex: 0.5,
         flexDirection: 'row',
         zIndex: 2,
@@ -36,15 +32,11 @@ const styles = StyleSheet.create({
     containerTexts:{
         height: '85%',
         alignSelf: 'center',
-        // borderColor: 'green',
-        // borderWidth: 2,
         justifyContent: 'space-evenly',
         width: '60%'
     },
 
     containerRank: {
-        // borderColor: 'purple',
-        // borderWidth: 2,
         alignItems: 'center',
         width: '45%',
         justifyContent: 'space-evenly',
@@ -53,16 +45,12 @@ const styles = StyleSheet.create({
     nickStyle: {
         fontSize: 40,
         fontWeight: 'bold',
-        // fontStyle: 'italic',
         marginRight: 10,
-        // borderColor: 'red',
-        // borderWidth: 2,
+        maxWidth: '80%'
     },
 
     displayLikes: {
         width: '100%',
-        // borderColor: 'red',
-        // borderWidth: 2,
         position: 'absolute',
         zIndex: 2,
         height: '20%',
