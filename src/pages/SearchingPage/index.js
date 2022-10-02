@@ -21,7 +21,7 @@ export default function SearchingPage(){
                 style = {{...styles.displayChampion, }}
                 source={{uri: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Azir_0.jpg'}}
                 resizeMode = {"cover"}
-                blurRadius = {1}
+                blurRadius = {0.5}
                 />
                 
                 <View style = {styles.displayInfos}>
