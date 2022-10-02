@@ -7,7 +7,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 const slides = [
     {
         key: 1,
-        title: 'A',
+        title: 'Obtenção do nick',
         text: 'nao sei'
     },
     {

@@ -67,7 +67,7 @@ export default function App() {
           
           <Tab.Screen name='Home' component={Splash}  
           listeners = {{
-            tabPress: () => homeAnimation.current.play(0, 50)
+            tabPress: () => homeAnimation.current?.play()
           }}
           
           options={{
@@ -82,17 +82,16 @@ export default function App() {
               ref = {homeAnimation}
               autoPlay = {false}
               loop = {false}
-             
+              duration = {500}
               style = {{width: size + 10 , height: size + 10, position: 'absolute'}}
               source={require('./assets/animations/home.json')}
               />
             </View>
             : 
             <Lottie 
-            ref = {homeAnimation}
+            
             autoPlay = {false}
             loop = {false}
-            
             style = {{width: size + 10 , height: size + 10, position: 'absolute'}}
             source={require('./assets/animations/home.json')}
             />
@@ -142,7 +141,7 @@ export default function App() {
           <Tab.Screen name='IntroSlider' component={IntroSlider}  
           listeners = {{
             tabPress: () => {
-              animation.current?.play(25, 55);
+              animation.current?.play(20, 55);
             }
           }} 
           options = {{
@@ -163,6 +162,7 @@ export default function App() {
               ref = {animation}
               autoPlay = {false}
               loop = {false}
+              duration = {1500}
               style = {{width: size , height: size , position: 'absolute'}}
               source={require('./assets/animations/tabBar.json')}
               />
