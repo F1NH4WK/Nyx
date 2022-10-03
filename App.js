@@ -13,6 +13,7 @@ import { useEffect, useState, useRef } from 'react';
 import requestLoL from './src/api/lolProfile';
 import SearchinPage from './src/pages/SearchingPage';
 import IntroSlider from './src/pages/IntroSlider';
+import ProfilePage from './src/pages/ProfilePage';
 
 
 export default function App() {
@@ -41,7 +42,7 @@ export default function App() {
 
     const Tab = createBottomTabNavigator();
 
-    const animation = useRef(0);
+    const profileAnimation = useRef(0);
     const searchAnimation = useRef(0);
     const homeAnimation = useRef(0);
 
@@ -66,9 +67,7 @@ export default function App() {
         }}>
           
           <Tab.Screen name='Home' component={Splash}  
-          listeners = {{
-            tabPress: () => homeAnimation.current?.play()
-          }}
+          listeners = {{tabPress: () => homeAnimation.current?.play()}}
           
           options={{
             tabBarIcon: ({size, focused}) => focused
@@ -89,7 +88,6 @@ export default function App() {
             </View>
             : 
             <Lottie 
-            
             autoPlay = {false}
             loop = {false}
             style = {{width: size + 10 , height: size + 10, position: 'absolute'}}
@@ -99,9 +97,7 @@ export default function App() {
           }}/>
 
           <Tab.Screen name='Searching' component={SearchinPage} 
-          listeners = {
-            {tabPress: () => searchAnimation.current?.play(0, 120)}
-          }
+          listeners = {{tabPress: () => searchAnimation.current?.play(0, 120)}}
           options = {{
 
             header: () => 
@@ -128,7 +124,7 @@ export default function App() {
             </View>
             :
             <Lottie 
-            ref = {animation}
+            
             autoPlay = {false}
             loop = {false}
             duration = {500}
@@ -138,18 +134,15 @@ export default function App() {
           }}/>
 
 
-          <Tab.Screen name='IntroSlider' component={IntroSlider}  
+          <Tab.Screen name='IntroSlider' component={ProfilePage}  
           listeners = {{
-            tabPress: () => {
-              animation.current?.play(20, 55);
-            }
-          }} 
+            tabPress: () => profileAnimation.current?.play(20, 55)}} 
           options = {{
             tabBarIcon: ({size, focused}) => focused
             ? 
             
             <MotiView 
-            style = {{width: size +30, height: size+30, justifyContent: 'center', alignItems: 'center'}}>
+            style = {{width: size + 30, height: size+ 30, justifyContent: 'center', alignItems: 'center'}}>
 
               <MotiImage 
               from = {{transform: [{scale: 0}], opacity: 0}}
@@ -159,7 +152,7 @@ export default function App() {
               />
 
               <Lottie 
-              ref = {animation}
+              ref = {profileAnimation}
               autoPlay = {false}
               loop = {false}
               duration = {1500}
@@ -174,7 +167,6 @@ export default function App() {
               style = {{width: size , height: size }}
               source={require('./assets/animations/tabBar.json')}
               />
-            // <FontAwesome name="user-o" size={size} color="black" />,
           }
         }
           />
