@@ -101,13 +101,16 @@ export default function App() {
           options = {{
 
             header: () => 
-              <View style = {{width: '100%', alignItems: 'center', paddingTop: 30, marginBottom: 10}}>
-                <Image source={require('./assets/LogoHeader.png')}/>
+              <View style = {{width: '100%', alignItems: 'center', paddingTop: 30, marginBottom: height * 0.02}}>
+                <Image
+                style = {{width: '100%', height: height * 0.05}}
+                resizeMode = {'contain'}
+                source={require('./assets/LogoHeader.png')}/>
               </View>,
 
             tabBarIcon: ({size, focused}) => focused
             ?
-            <View style = {{width: size +30, height: size+30, justifyContent: 'center', alignItems: 'center'}}>
+            <View style = {{width: size + 30, height: size + 30, justifyContent: 'center', alignItems: 'center'}}>
               <Image 
               source={require('./assets/iconGradient.png')}
               style = {{width: size + 20, height: size + 20, borderRadius:60}}
