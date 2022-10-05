@@ -6,7 +6,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Dimensions, Animated } from 'react-native'; 
-import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState, useRef } from 'react';
 
 
@@ -20,7 +19,14 @@ export default function App() {
 
   const {width, height} = Dimensions.get('window')
   const [infoProfile, setInfoProfile] = useState({})
+  const [isFirstTime, setisFirstTime] = useState(false)
 
+
+  function Home(){
+    return(
+      <Text>Home</Text>
+    )
+  }
     function Splash(){
 
       // useEffect(() => {
@@ -36,7 +42,6 @@ export default function App() {
             <Button title = "LOL"></Button>  
           </MotiView>
         </View>
-
       )
     }
 
@@ -48,13 +53,10 @@ export default function App() {
 
     
     return (
-
       <NavigationContainer>
-        <StatusBar style='auto'/>
-
-        <Tab.Navigator initialRouteName = {'IntroSlider'} screenOptions = {{
+        <StatusBar translucent style='auto'/>
+        <Tab.Navigator initialRouteName = {'Home'} screenOptions = {{
           tabBarShowLabel: false,
-          
           tabBarStyle: {
             backgroundColor: '#232323',
             paddingBottom: 15,
@@ -65,14 +67,16 @@ export default function App() {
             backgroundColor: '#232323'
           },
         }}>
-          
-          <Tab.Screen name='Home' component={Splash}  
-          listeners = {{tabPress: () => homeAnimation.current?.play()}}
-          
+          {isFirstTime
+          ?<Tab.Screen name = 'Home' component={IntroSlider} 
+          options = {{tabBarStyle: {display: 'none'}, headerShown: false}}/>
+
+          :<Tab.Screen name='Home' component={Home}  
+          listeners = {{tabPress: () => homeAnimation.current?.play()}} 
           options={{
             tabBarIcon: ({size, focused}) => focused
             ?
-            <View style = {{width: size +30, height: size+30, justifyContent: 'center', alignItems: 'center'}}>
+            <View style = {{width: size + 30, height: size + 30, justifyContent: 'center', alignItems: 'center'}}>
               <Image 
               source={require('./assets/iconGradient.png')}
               style = {{width: size + 20, height: size + 20, borderRadius:60}}
@@ -94,7 +98,8 @@ export default function App() {
             source={require('./assets/animations/home.json')}
             />
              
-          }}/>
+          }}/>}
+          
 
           <Tab.Screen name='Searching' component={SearchinPage} 
           listeners = {{tabPress: () => searchAnimation.current?.play(0, 120)}}
@@ -127,7 +132,6 @@ export default function App() {
             </View>
             :
             <Lottie 
-            
             autoPlay = {false}
             loop = {false}
             duration = {500}
@@ -137,7 +141,7 @@ export default function App() {
           }}/>
 
 
-          <Tab.Screen name='IntroSlider' component={ProfilePage}  
+          <Tab.Screen name='ProfilePage' component={ProfilePage}  
           listeners = {{
             tabPress: () => profileAnimation.current?.play(20, 55)}} 
           options = {{
