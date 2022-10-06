@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
 
     nextButton: {
         width: width * 0.9,
+        opacity: 0.5,
         height: height * 0.07,
         borderRadius: width * 0.1,
         justifyContent: 'center',
@@ -54,6 +55,29 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: width * 0.03
         
+    },
+
+    questionTitle: {
+        fontSize: width * 0.12,
+        textAlign: 'center',
+        marginTop: StatusBar.currentHeight + height * 0.01,
+    },
+
+    textInput: {
+        fontSize: width * 0.065,
+        borderBottomColor: '#A7A7A7',
+        width: '100%',
+        height: '10%',
+        alignItems: 'center',
+        borderBottomWidth: 2,
+        borderBottomStartRadius: 10,
+        marginBottom: height * 0.01
+    },
+
+    animation: {
+        width: width * 0.5,
+        height: height * 0.5,
+        alignSelf: 'center',
     },
     
 

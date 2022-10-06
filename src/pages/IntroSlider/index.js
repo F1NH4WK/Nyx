@@ -3,6 +3,7 @@ import { View, Text, TextInput, StatusBar} from "react-native";
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage } from "moti";
+import Lottie from 'lottie-react-native';
 
 import styles from "./styles";
 
@@ -17,11 +18,18 @@ const slides = [
     },
     {
         key: 2,
-        title: 'B',
-        text: 'nao sei tambem',
-        buttonText: 'b',
+        title: 'Nickname',
+        text: null,
+        buttonText: 'Continue',
         hasBackButton: false,
     },
+    {
+        key: 3,
+        title: 'DaysAndHours',
+        text: null,
+        buttonText: 'Continue',
+        hasBackButton: true
+    }
     
 
 ]
@@ -31,23 +39,25 @@ const slides = [
 
 export default function IntroSlider(){
 
+    const [done, setDone] = useState(false)
+
     function _renderNextButton(){
         return(
-            <MotiView style = {styles.nextButton}>
-                <Text style = {styles.textInside}>let's start!</Text>
+            <MotiView style = {{...styles.nextButton, opacity: done? 1 : 0.5}}>
+                <Text style = {styles.textInside}>Continue</Text>
                 <MotiImage
                 style = {styles.nextButtonImage}
                 source={require('../../../assets/iconGradient.png')}/>
             </MotiView>
         )
     }
-    
-    function renderSlides({item}){
+
+    function FirstPage(){
         return(
             <View style = {styles.container}>
                 <Entypo name="chevron-thin-left" size={24} color="black" style = {{position: 'absolute', top: 40, display: item.hasBackButton ? 'flex' : 'none' }}/>
                 <MotiImage 
-                style = {{width: 150, height: 150, alignSelf: 'center', marginBottom: 5}}
+                style = {{width: 150, height: 150, alignSelf: 'center'}}
                 source={require('../../../assets/OnlyNyxLogo.png')}/>
                 <Text style = {styles.title}>Welcome to Nyx!</Text>
                 <Text style = {styles.descriptions}>Read the infos below, they will explain about the app.</Text>
@@ -72,10 +82,33 @@ export default function IntroSlider(){
         )
     }
     
+    function renderSlides({item}){
+        return(
+            <View style = {styles.container}>
+                <Entypo name="chevron-thin-left" size={24} color="black" style = {{position: 'absolute', top:StatusBar.currentHeight + 10, left: 20}}/>
+                <Text style = {styles.questionTitle}>My nickname is</Text>
+                <TextInput 
+                style = {styles.textInput} placeholder="Nickname"
+                onSubmitEditing={() => setDone(true)}
+                />
+
+                <Text style = {{...styles.descriptions, fontStyle: 'italic', textAlign: 'left'}}>Example: O Azir {'\n'}
+                This will be used to search your profile and catch infos about you. You will not be able to change it.</Text>
+                <Lottie
+                source={require('../../../assets/animations/khazix.json')}
+                style = {styles.animation}
+                autoPlay
+                autoSize
+                loop/>
+            </View>
+            
+        )
+    }
+    
     return(
         <AppIntroSlider
         bottomButton
-        scrollEnabled = {false}
+        scrollEnabled = {true}
         renderItem={renderSlides}
         renderNextButton = {_renderNextButton}
         data = {slides}
