@@ -19,7 +19,7 @@ export default function App() {
 
   const {width, height} = Dimensions.get('window')
   const [infoProfile, setInfoProfile] = useState({})
-  const [isFirstTime, setisFirstTime] = useState(false)
+  const [isFirstTime, setisFirstTime] = useState(true)
 
 
   function Home(){
@@ -55,6 +55,7 @@ export default function App() {
     return (
       <NavigationContainer>
         <StatusBar translucent style='auto'/>
+
         <Tab.Navigator initialRouteName = {'Home'} screenOptions = {{
           tabBarShowLabel: false,
           tabBarStyle: {
