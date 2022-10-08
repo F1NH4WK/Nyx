@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
 
     nextButton: {
         width: width * 0.9,
-        opacity: 0.5,
         height: height * 0.07,
         borderRadius: width * 0.1,
         justifyContent: 'center',
@@ -79,8 +78,13 @@ const styles = StyleSheet.create({
         height: height * 0.5,
         alignSelf: 'center',
     },
-    
 
+    optionsChose: {
+        fontSize: 18,
+        borderBottomColor: '#A7A7A7',
+        borderBottomWidth: 2,
+        opacity: 0.9
+    },
 })
 
 export default styles;
