@@ -85,6 +85,30 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         opacity: 0.9
     },
+
+    iconsStyle: {
+        width: 40, 
+        height: 40,
+        marginRight: 15
+    },
+
+    weekdaysStyle: {
+        width: 50,
+        height: 50,
+        borderRadius: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#A7A7A7',
+        borderColor: 'black',
+        borderWidth: 0.5,
+    },
+
+    selectedStyle: {
+        width: 50,
+        height: 50,
+        borderRadius: 40,
+        position: 'absolute',
+    },
 })
 
 export default styles;

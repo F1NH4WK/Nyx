@@ -5,8 +5,6 @@ import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage } from "moti";
 import Lottie from 'lottie-react-native';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import DropDownPicker from "react-native-dropdown-picker";
-
 
 import styles from "./styles";
 
@@ -45,9 +43,26 @@ export default function IntroSlider(){
     const [done, setDone] = useState(false)
     const [time1, setTime1] = useState(new Date())
     const [time2, setTime2] = useState(new Date())
-    const [days, setDays] = useState([])
-    const [open, setOpen] = useState(false)
+    const [days, setDays] = useState([
+        {key: 0, label: 'SUN', value: 'Sunday', selected: false},
+        {key: 1, label: 'MON', value: 'Monday', selected: false},
+        {key: 2, label: 'TUE', value: 'Tuesday', selected: false},
+        {key: 3, label: 'WED', value: 'Wednesday', selected: false},
+        {key: 4, label: 'THU', value: 'Thursday', selected: false},
+        {key: 5, label: 'FRI', value: 'Friday', selected: false},
+        {key: 6, label: 'SAT', value: 'Saturday', selected: false}
+    ])
 
+    function setWeekdays(id){
+        setDays(days.filter((i, index) => {
+        index == id
+        ? days[index].selected = !i.selected
+        : days[index].selected = i.selected
+        return days[index]
+
+        }))
+    }
+    
     const showTime = (args) => args == 1
     ? DateTimePickerAndroid.open({
         value: time1,
@@ -120,7 +135,7 @@ export default function IntroSlider(){
                 
                 <MotiView style = {styles.infosView}>
                     <MotiImage 
-                    style = {{width: 40, height: 40, marginRight: 15}}
+                    style = {styles.iconsStyle}
                     source = {require('../../../assets/InfoGradient.png')} />
                     <Text style = {{...styles.title, fontSize: 20}}>What infos should I pass?</Text>
                 </MotiView>
@@ -137,7 +152,7 @@ export default function IntroSlider(){
                 <MotiView style = {styles.infosView}>
                     <MotiImage
                     source={require('../../../assets/clockGradient.png')}
-                    style = {{width: 40, height: 40, marginRight: 15}} />
+                    style = {styles.iconsStyle} />
                     <View style = {{width: '40%', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Pressable onPress={() => showTime(1)}>
                             <Text  style = {styles.optionsChose}>{time1.getHours().toString() + " : " + time1.getMinutes().toString()}</Text>
@@ -146,26 +161,42 @@ export default function IntroSlider(){
                         <Pressable onPress={() => showTime(2)}>
                             <Text style = {styles.optionsChose}>{time2.getHours().toString() + " : " + time2.getMinutes().toString()}</Text>
                         </Pressable>
-                        
-                        
                     </View>
                 </MotiView>
 
                 <MotiView style = {styles.infosView}>
                     <MotiImage
                     source={require('../../../assets/calendarGradient.png')}
-                    style = {{width: 40, height: 40, marginRight: 15}}/>
-                    <Pressable>
-                        <DropDownPicker
-                        open = {open}
-                        items = {days}
-                        setOpen = {setOpen}
-                        setItems = {setDays}
-                        multiple
-                        style = {{width: '70%'}}/>
-                    </Pressable>
-                  
+                    style = {styles.iconsStyle}/>
+                    <View style = {{width: '80%', flexDirection: 'row', justifyContent: 'space-around'}}>
+                    
+                    {
+                    days.map((val, index) => 
+                    val.selected 
+                       ? 
+                       <Pressable
+                        onPress={() => setWeekdays(index)}
+                        key={val.key}
+                        style = {{...styles.weekdaysStyle, backgroundColor: val.selected ? 'deeppink' : '#A7A7A7'}}>
+                            <MotiImage 
+                            style = {styles.selectedStyle}
+                            source = {require('../../../assets/iconGradient.png')} />
+                            <Text style = {{fontWeight: 'bold', fontSize: 10}}>{val.label}</Text>
+                        </Pressable>
+                        :
+                        <Pressable
+                        onPress={() => setWeekdays(index)}
+                        key={val.key}
+                        style = {{...styles.weekdaysStyle, backgroundColor: '#A7A7A7'}}>
+                            <Text style = {{fontWeight: 'bold', fontSize: 10}}>{val.label}</Text>
+                        </Pressable>
+                        
+                        
+                        )}
+                </View>
                 </MotiView>
+
+
             </View>
 
         )
