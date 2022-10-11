@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
         color: '#A7A7A7',
         fontSize: width * 0.045,
         textAlign: 'center',
-        
     },
 
     infosView: {
@@ -63,14 +62,16 @@ const styles = StyleSheet.create({
     },
 
     textInput: {
-        fontSize: width * 0.065,
+        fontSize: width * 0.050,
         borderBottomColor: '#A7A7A7',
-        width: '100%',
-        height: '10%',
+        width: '95%',
+        height: '8%',
+        marginTop: 20,
         alignItems: 'center',
         borderBottomWidth: 2,
         borderBottomStartRadius: 10,
-        marginBottom: height * 0.01
+        marginBottom: height * 0.01,
+        alignItems: 'center',
     },
 
     animation: {
@@ -108,6 +109,45 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 40,
         position: 'absolute',
+    },
+
+    userInfos: {
+        fontWeight: 'bold',
+        fontSize: 10
+    },
+
+    weekdaysWrapper: {
+        width: '80%',
+        justifyContent: 'space-around',
+        flexDirection: 'row',
+    },
+
+    hoursWrapper: {
+        width: '40%',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    noDisplay: {
+        display: 'none',
+    },
+
+    logoDisplay: {
+        width: 150,
+        height: 150,
+        alignSelf: 'center',
+    },
+
+    subQuestion: {
+        fontWeight: 'bold',
+        fontSize: width * 0.045,
+        margin: height * 0.005,
+    },
+
+    subDescription: {
+        color: '#A7A7A7',
+        fontSize: width * 0.045,
+        textAlign: 'left',
     },
 })
 

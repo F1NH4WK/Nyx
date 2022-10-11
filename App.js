@@ -5,13 +5,14 @@ import Lottie from 'lottie-react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Dimensions, Animated } from 'react-native'; 
 import { useEffect, useState, useRef } from 'react';
 
 
 import requestLoL from './src/api/lolProfile';
 import SearchinPage from './src/pages/SearchingPage';
-import IntroSlider from './src/pages/IntroSlider';
+import {FirstPage, NicknamePage, FrequencyPage} from './src/pages/IntroSlider';
 import ProfilePage from './src/pages/ProfilePage';
 
 
@@ -19,12 +20,13 @@ export default function App() {
 
   const {width, height} = Dimensions.get('window')
   const [infoProfile, setInfoProfile] = useState({})
-  const [isFirstTime, setisFirstTime] = useState(true)
+  const [isSignedIn, setIsSignedIn] = useState(false)
 
 
   function Home(){
     return(
       <Text>Home</Text>
+
     )
   }
     function Splash(){
@@ -36,6 +38,7 @@ export default function App() {
 
       return(
         <View>
+          
           <MotiView 
           style = {{backgroundColor: '#232323', width: '100%', height: '100%', alignItems: 'center'}}>
             <Text>Splash</Text> 
@@ -46,6 +49,7 @@ export default function App() {
     }
 
     const Tab = createBottomTabNavigator();
+    const Stack = createNativeStackNavigator()
 
     const profileAnimation = useRef(0);
     const searchAnimation = useRef(0);
@@ -56,6 +60,7 @@ export default function App() {
       <NavigationContainer>
         <StatusBar translucent style='auto'/>
 
+        {isSignedIn ?
         <Tab.Navigator initialRouteName = {'Home'} screenOptions = {{
           tabBarShowLabel: false,
           tabBarStyle: {
@@ -68,11 +73,7 @@ export default function App() {
             backgroundColor: '#232323'
           },
         }}>
-          {isFirstTime
-          ?<Tab.Screen name = 'Home' component={IntroSlider} 
-          options = {{tabBarStyle: {display: 'none'}, headerShown: false}}/>
-
-          :<Tab.Screen name='Home' component={Home}  
+      <Tab.Screen name='Home' component={Home}  
           listeners = {{tabPress: () => homeAnimation.current?.play()}} 
           options={{
             tabBarIcon: ({size, focused}) => focused
@@ -99,9 +100,8 @@ export default function App() {
             source={require('./assets/animations/home.json')}
             />
              
-          }}/>}
+          }}/>
           
-
           <Tab.Screen name='Searching' component={SearchinPage} 
           listeners = {{tabPress: () => searchAnimation.current?.play(0, 120)}}
           options = {{
@@ -179,6 +179,18 @@ export default function App() {
         }
           />
         </Tab.Navigator>
+
+        :
+
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen name = 'SignIn' component = {FirstPage}/>
+          <Stack.Screen name = 'InfoPage' component = {FirstPage}/>
+          <Stack.Screen name = 'NicknamePage' component = {NicknamePage}/>
+          <Stack.Screen name = 'FrequencyPage' component = {FrequencyPage} />
+        </Stack.Navigator> 
+        }
+
+        
       </NavigationContainer>
 
       
