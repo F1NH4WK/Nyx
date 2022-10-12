@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable, Button} from "react-native";
+import { View, Text, TextInput, Pressable, Image} from "react-native";
 import { Entypo } from '@expo/vector-icons';
-import { MotiView, MotiImage } from "moti";
+import { MotiView, MotiImage, MotiText } from "moti";
 import Lottie from 'lottie-react-native';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
@@ -13,35 +13,61 @@ import NextButton from "../../components/nextButton";
 export function FirstPage({navigation}){
     return(
 
-        <MotiView 
-        from = {{opacity: 0}}
-        animate = {{opacity: 1}}
-        transition = {{type: 'spring', delay: 500}}
-        style = {styles.container}>
-            
+        <MotiView style = {styles.container}>
+        
             <MotiImage 
             from = {{opacity: 0}}
             animate = {{opacity: 1}}
+            transition = {{duration: 800, delay: 1000, type: 'timing'}}
             style = {styles.logoDisplay}
             source={require('../../../assets/OnlyNyxLogo.png')}/>
-            <Text style = {styles.title}>Welcome to Nyx!</Text>
-            <Text style = {styles.descriptions}>Read the infos below, they will explain about the app.</Text>
 
-            <MotiView style = {styles.infosView}>
-                <MotiImage 
+            <MotiText 
+            from = {{opacity: 0, translateX: -100}}
+            animate = {{opacity: 1, translateX: 0}}
+            delay = {300}
+            style = {styles.title}>Welcome to Nyx!</MotiText>
+
+            <MotiText 
+            from = {{opacity: 0}}
+            animate = {{opacity: 1}}
+            delay = {300}
+            style = {styles.descriptions}>Read the infos below, they will explain about the app.</MotiText>
+
+            <MotiView 
+            from = {{opacity: 0}}
+            animate = {{opacity: 1}}
+            delay = {500}
+            style = {styles.infosView}>
+                <Image 
                 style = {styles.iconsStyle}
                 source = {require('../../../assets/questionGradient.png')} />
                 <Text style = {styles.subQuestion}>What's Nyx?</Text>
             </MotiView>
-            <Text style = {styles.subDescription}>Nyx is an app made to find players that fits with your conditions.</Text>
+
+            <MotiText 
+            from = {{opacity: 0}}
+            animate = {{opacity: 1}}
+            delay = {500}
+            style = {styles.subDescription}>Nyx is an app made to find players that fits with your conditions.</MotiText>
             
-            <MotiView style = {styles.infosView}>
-                <MotiImage 
+            <MotiView 
+            from = {{opacity: 0}}
+            animate = {{opacity: 1}}
+            delay = {700}
+            style = {styles.infosView}>
+                <Image 
                 style = {styles.iconsStyle}
                 source = {require('../../../assets/InfoGradient.png')} />
                 <Text style = {styles.subQuestion}>What infos should I pass?</Text>
             </MotiView>
-            <Text style = {styles.subDescription}>You only need to pass your League of Legends’ nickname and the frequency you play. Simple, right? You can change them whenever you want.</Text>
+
+            <MotiText 
+            from = {{opacity: 0}}
+            animate = {{opacity: 1}}
+            delay = {700}
+            style = {styles.subDescription}>You only need to pass your League of Legends’ nickname and the frequency you play. Simple, right? You can change them whenever you want.</MotiText>
+
             <NextButton title = "LET'S START!" to = {() => navigation.push('NicknamePage')} done/>
         </MotiView>
     )
@@ -54,14 +80,30 @@ export function NicknamePage({navigation}){
     return(
         <View style = {styles.container}>
             
-            <Text style = {styles.questionTitle}>My nickname is</Text>
-            <TextInput 
-            style = {styles.textInput} placeholder="Nickname"
-            onEndEditing = {() => setDone(true)}
-            />
+            <MotiText 
+            from = {{opacity: 0, transform: [{scale: 0.5}]}}
+            animate = {{opacity: 1, transform: [{scale: 1}]}}
+            transition = {{delay: 200, type: 'spring'}}
+            style = {styles.questionTitle}>My nickname is</MotiText>
 
-            <Text style = {{...styles.descriptions, fontStyle: 'italic', textAlign: 'left', fontSize: 13}}>Example: O Azir {'\n'}
-            This will be used to search your profile and catch infos about you. You will not be able to change it.</Text>
+            <MotiView
+            style = {{width: '100%', height: '10%', marginBottom: 10}}
+            from = {{opacity: 0}}
+            animate = {{opacity: 1}}>
+                <TextInput 
+                style = {styles.textInput} placeholder="Nickname"
+                onEndEditing = {() => setDone(true)}
+                />
+
+            </MotiView>
+
+            <MotiText 
+            from = {{opacity: 0}}
+            animate = {{opacity: 1}}
+            delay = {500}
+            style = {{...styles.descriptions, fontStyle: 'italic', textAlign: 'left', fontSize: 13}}>Example: O Azir {'\n'}
+            This will be used to search your profile and catch infos about you. You will not be able to change it.</MotiText>
+
             <Lottie
             source={require('../../../assets/animations/khazix.json')}
             style = {styles.animation}
@@ -121,11 +163,20 @@ export function FrequencyPage({navigation, route}){
     return(
 
         <View style = {styles.container}>
-        <Text style = {styles.questionTitle}>Your gameplay frequency</Text>
-        <MotiView style = {styles.infosView}>
+        <MotiText 
+        from = {{opacity: 0, scale: 0.5}}
+        animate = {{opacity: 1, scale: 1}}
+        transition = {{delay: 300}}
+        style = {styles.questionTitle}>Your gameplay frequency</MotiText>
+        <MotiView 
+        from = {{translateX: -200}}
+        animate = {{translateX: 0}}
+        delay = {200}
+        style = {styles.infosView}>
             <MotiImage
             source={require('../../../assets/clockGradient.png')}
             style = {styles.iconsStyle} />
+            
             <View style = {styles.hoursWrapper}>
                 <Pressable onPress={() => showTime(1)}>
                     <Text  style = {styles.optionsChose}>{time1.getHours().toString() + " : " + time1.getMinutes().toString()}</Text>
@@ -135,9 +186,14 @@ export function FrequencyPage({navigation, route}){
                     <Text style = {styles.optionsChose}>{time2.getHours().toString() + " : " + time2.getMinutes().toString()}</Text>
                 </Pressable>
             </View>
+            
         </MotiView>
 
-        <MotiView style = {styles.infosView}>
+        <MotiView 
+        from = {{translateX: -200}}
+        animate = {{translateX: 0}}
+        delay = {200}
+        style = {styles.infosView}>
             <MotiImage
             source={require('../../../assets/calendarGradient.png')}
             style = {styles.iconsStyle}/>
@@ -151,19 +207,24 @@ export function FrequencyPage({navigation, route}){
                 key={val.key}
                 style = {styles.weekdaysStyle}>
                     <MotiImage 
+                    from = {{scale: 1}}
+                    animate = {{scale: 1.02}}
+                    
+                    
                     style = {styles.selectedStyle}
                     source = {require('../../../assets/iconGradient.png')} />
                     <Text style = {styles.userInfos}>{val.label}</Text>
                 </Pressable>
                 :
-                <Pressable
-                onPress={() => setWeekdays(index)}
-                key={val.key}
-                style = {{...styles.weekdaysStyle, backgroundColor: '#A7A7A7'}}>
-                    <Text style = {styles.userInfos}>{val.label}</Text>
-                </Pressable>
+
+                    <Pressable
+                    key={val.key}
+                    onPress={() => setWeekdays(index)}
+                    style = {{...styles.weekdaysStyle, backgroundColor: '#A7A7A7'}}>
+                        <Text style = {styles.userInfos}>{val.label}</Text>
+                    </Pressable>
                 )}
-        </View>
+            </View>
         </MotiView>
         <NextButton title = "Finish" done to = {() => signed()}/>
     </View>

@@ -181,10 +181,10 @@ export default function App() {
 
         :
 
-        <Stack.Navigator screenOptions={{headerShown: false, animation: 'slide_from_right', animationTypeForReplace: 'push'}}>
+        <Stack.Navigator screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
           <Stack.Screen name = 'InfoPage' component = {FirstPage} />
           <Stack.Screen name = 'NicknamePage' component = {NicknamePage}/>
-          <Stack.Screen name = 'FrequencyPage' component = {FrequencyPage} initialParams = {{setIsSignedIn}}/>
+          <Stack.Screen name = 'FrequencyPage' component = {FrequencyPage} initialParams = {{setSignIn: setIsSignedIn}}/>
         </Stack.Navigator> 
         }
       </NavigationContainer>

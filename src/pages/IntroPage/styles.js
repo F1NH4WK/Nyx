@@ -40,16 +40,14 @@ const styles = StyleSheet.create({
     },
 
     textInput: {
-        fontSize: width * 0.050,
+        fontSize: width * 0.065,
         borderBottomColor: '#A7A7A7',
-        width: '95%',
-        height: '8%',
-        marginTop: 20,
-        alignItems: 'center',
+        width: '100%',
+        height: '80%',
+        marginTop: height * 0.01,
         borderBottomWidth: 2,
         borderBottomStartRadius: 10,
-        marginBottom: height * 0.01,
-        alignItems: 'center',
+        
     },
 
     animation: {
