@@ -1,18 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Image, Button } from 'react-native';
+import { Text, View, Image, Button, Dimensions } from 'react-native';
 import { MotiView, MotiImage } from 'moti';
 import Lottie from 'lottie-react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Dimensions, Animated } from 'react-native'; 
 import { useEffect, useState, useRef } from 'react';
 
 
 import requestLoL from './src/api/lolProfile';
 import SearchinPage from './src/pages/SearchingPage';
-import {FirstPage, NicknamePage, FrequencyPage} from './src/pages/IntroSlider';
+import {FirstPage, NicknamePage, FrequencyPage} from './src/pages/IntroPage';
 import ProfilePage from './src/pages/ProfilePage';
 
 
@@ -182,15 +181,12 @@ export default function App() {
 
         :
 
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-          <Stack.Screen name = 'SignIn' component = {FirstPage}/>
-          <Stack.Screen name = 'InfoPage' component = {FirstPage}/>
+        <Stack.Navigator screenOptions={{headerShown: false, animation: 'slide_from_right', animationTypeForReplace: 'push'}}>
+          <Stack.Screen name = 'InfoPage' component = {FirstPage} />
           <Stack.Screen name = 'NicknamePage' component = {NicknamePage}/>
-          <Stack.Screen name = 'FrequencyPage' component = {FrequencyPage} />
+          <Stack.Screen name = 'FrequencyPage' component = {FrequencyPage} initialParams = {{setIsSignedIn}}/>
         </Stack.Navigator> 
         }
-
-        
       </NavigationContainer>
 
       

@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable} from "react-native";
+import { View, Text, TextInput, Pressable, Button} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage } from "moti";
 import Lottie from 'lottie-react-native';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+
+// LOCAL IMPORTS
 import styles from "./styles";
+import NextButton from "../../components/nextButton";
 
 
-
-export function FirstPage(){
+export function FirstPage({navigation}){
     return(
+
         <MotiView 
         from = {{opacity: 0}}
         animate = {{opacity: 1}}
         transition = {{type: 'spring', delay: 500}}
         style = {styles.container}>
+            
             <MotiImage 
             from = {{opacity: 0}}
             animate = {{opacity: 1}}
@@ -38,20 +42,22 @@ export function FirstPage(){
                 <Text style = {styles.subQuestion}>What infos should I pass?</Text>
             </MotiView>
             <Text style = {styles.subDescription}>You only need to pass your League of Legends’ nickname and the frequency you play. Simple, right? You can change them whenever you want.</Text>
+            <NextButton title = "LET'S START!" to = {() => navigation.push('NicknamePage')} done/>
         </MotiView>
     )
 }
 
-export function NicknamePage(){
+export function NicknamePage({navigation}){
 
     const [done, setDone] = useState(false)
 
     return(
         <View style = {styles.container}>
+            
             <Text style = {styles.questionTitle}>My nickname is</Text>
             <TextInput 
             style = {styles.textInput} placeholder="Nickname"
-            onSubmitEditing={() => setDone(true)}
+            onEndEditing = {() => setDone(true)}
             />
 
             <Text style = {{...styles.descriptions, fontStyle: 'italic', textAlign: 'left', fontSize: 13}}>Example: O Azir {'\n'}
@@ -62,11 +68,16 @@ export function NicknamePage(){
             autoPlay
             autoSize
             loop/>
+
+            <NextButton 
+            title = "continue" 
+            to = {() => navigation.push('FrequencyPage')}
+            done = {done}/>
         </View>
     )
 }
 
-export function FrequencyPage(){
+export function FrequencyPage({navigation, route}){
 
     const [time1, setTime1] = useState(new Date())
     const [time2, setTime2] = useState(new Date())
@@ -82,7 +93,6 @@ export function FrequencyPage(){
 
 
     function setWeekdays(id){
-
         setDays(days.filter((i, index) => {
         index == id
         ? days[index].selected = !i.selected
@@ -102,7 +112,14 @@ export function FrequencyPage(){
     })
 
 
+    const  setIsSignedIn = route.params.setIsSignedIn
+    const signed = () => navigation.setOptions({
+        setSignIn: setIsSignedIn(true)
+    }, [navigation])
+
+
     return(
+
         <View style = {styles.container}>
         <Text style = {styles.questionTitle}>Your gameplay frequency</Text>
         <MotiView style = {styles.infosView}>
@@ -148,34 +165,12 @@ export function FrequencyPage(){
                 )}
         </View>
         </MotiView>
+        <NextButton title = "Finish" done to = {() => signed()}/>
     </View>
     )
 }
 
-function IntroSlider(route){
-
-    function _renderNextButton(){
-        return(
-            <MotiView style = {{...styles.nextButton, opacity: done? 1 : 0.5}}>
-                <Text style = {styles.textInside}>Continue</Text>
-                <MotiImage
-                style = {styles.nextButtonImage}
-                source={require('../../../assets/iconGradient.png')}/>
-            </MotiView>
-        )
-    }
-
-    function _renderDoneButton(){
-        return(
-            <MotiView
-            style = {styles.nextButton}>
-                <Text style = {styles.textInside}>Done</Text>
-                <MotiImage
-                style = {styles.nextButtonImage}
-                source={require('../../../assets/iconGradient.png')}/>
-            </MotiView>
-        )
-    }
+function IntroSlider(){
 
     function _renderPrevButton(){
         return(

@@ -12,28 +12,6 @@ const styles = StyleSheet.create({
 
     },
 
-    nextButton: {
-        width: width * 0.9,
-        height: height * 0.07,
-        borderRadius: width * 0.1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-
-    nextButtonImage: {
-        height: height * 0.07,
-        width: width * 0.9,
-        borderRadius: width * 0.1,
-        position: 'absolute',
-    },
-
-    textInside: {
-        zIndex: 2,
-        fontWeight: 'bold',
-        fontSize: 20,
-        textTransform: 'uppercase'
-    },
-
     title: {
         fontWeight: 'bold',
         fontSize: width * 0.075,
