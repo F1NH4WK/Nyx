@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     questionTitle: {
         fontSize: width * 0.12,
         textAlign: 'center',
-        marginTop: StatusBar.currentHeight + height * 0.01,
+        marginTop: StatusBar.currentHeight + height * 0.04,
     },
 
     textInput: {
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#A7A7A7',
         borderColor: 'black',
-        borderWidth: 0.5,
+        borderWidth: 0.1,
     },
 
     selectedStyle: {
@@ -124,6 +124,12 @@ const styles = StyleSheet.create({
         color: '#A7A7A7',
         fontSize: width * 0.045,
         textAlign: 'left',
+    },
+
+    goBack: {
+        position: 'absolute', 
+        top: 50, 
+        left: 10
     },
 })
 

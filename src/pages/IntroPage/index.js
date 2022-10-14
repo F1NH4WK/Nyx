@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { View, Text, TextInput, Pressable, Image} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage, MotiText } from "moti";
@@ -18,7 +18,7 @@ export function FirstPage({navigation}){
             <MotiImage 
             from = {{opacity: 0}}
             animate = {{opacity: 1}}
-            transition = {{duration: 800, delay: 1000, type: 'timing'}}
+            transition = {{duration: 600, delay: 1000, type: 'timing'}}
             style = {styles.logoDisplay}
             source={require('../../../assets/OnlyNyxLogo.png')}/>
 
@@ -79,11 +79,19 @@ export function NicknamePage({navigation}){
 
     return(
         <View style = {styles.container}>
+            <MotiView
+            from = {{translateX: -50, opacity: 0.5}} 
+            animate = {{translateX: 0, opacity: 1}}
+            delay = {800}
+            style = {styles.goBack} >
+                <Entypo name="chevron-thin-left" size = {28} color="white" 
+                onPress = {() => navigation.goBack()}/>
+             </MotiView>
             
             <MotiText 
-            from = {{opacity: 0, transform: [{scale: 0.5}]}}
-            animate = {{opacity: 1, transform: [{scale: 1}]}}
-            transition = {{delay: 200, type: 'spring'}}
+            from = {{opacity: 0, scale: 0.3}}
+            animate = {{opacity: 1, scale: 1}}
+            transition = {{delay: 300, type: 'spring'}}
             style = {styles.questionTitle}>My nickname is</MotiText>
 
             <MotiView
@@ -100,7 +108,7 @@ export function NicknamePage({navigation}){
             <MotiText 
             from = {{opacity: 0}}
             animate = {{opacity: 1}}
-            delay = {500}
+            transition = {{delay: 800, duration: 1000}}
             style = {{...styles.descriptions, fontStyle: 'italic', textAlign: 'left', fontSize: 13}}>Example: O Azir {'\n'}
             This will be used to search your profile and catch infos about you. You will not be able to change it.</MotiText>
 
@@ -163,10 +171,20 @@ export function FrequencyPage({navigation, route}){
     return(
 
         <View style = {styles.container}>
+
+            <MotiView
+            from = {{translateX: -50, opacity: 0.5}} 
+            animate = {{translateX: 0, opacity: 1}}
+            delay = {800}
+            style = {styles.goBack} >
+                <Entypo name="chevron-thin-left" size = {28} color="white" 
+                onPress = {() => navigation.goBack()}/>
+             </MotiView>
+
         <MotiText 
         from = {{opacity: 0, scale: 0.5}}
         animate = {{opacity: 1, scale: 1}}
-        transition = {{delay: 300}}
+        transition = {{delay: 500, type: 'spring'}}
         style = {styles.questionTitle}>Your gameplay frequency</MotiText>
         <MotiView 
         from = {{translateX: -200}}
@@ -186,20 +204,19 @@ export function FrequencyPage({navigation, route}){
                     <Text style = {styles.optionsChose}>{time2.getHours().toString() + " : " + time2.getMinutes().toString()}</Text>
                 </Pressable>
             </View>
-            
         </MotiView>
 
         <MotiView 
-        from = {{translateX: -200}}
-        animate = {{translateX: 0}}
-        delay = {200}
+        from = {{translateX: -300, opacity: 0}}
+        animate = {{translateX: 0, opacity: 1}}
+        delay = {300}
         style = {styles.infosView}>
             <MotiImage
             source={require('../../../assets/calendarGradient.png')}
             style = {styles.iconsStyle}/>
             <View style = {styles.weekdaysWrapper}>
-            {
-            days.map((val, index) => 
+                
+            { days.map((val, index) => 
             val.selected 
                ? 
                <Pressable
@@ -209,18 +226,15 @@ export function FrequencyPage({navigation, route}){
                     <MotiImage 
                     from = {{scale: 1}}
                     animate = {{scale: 1.02}}
-                    
-                    
                     style = {styles.selectedStyle}
                     source = {require('../../../assets/iconGradient.png')} />
                     <Text style = {styles.userInfos}>{val.label}</Text>
                 </Pressable>
                 :
-
                     <Pressable
                     key={val.key}
                     onPress={() => setWeekdays(index)}
-                    style = {{...styles.weekdaysStyle, backgroundColor: '#A7A7A7'}}>
+                    style = {styles.weekdaysStyle}>
                         <Text style = {styles.userInfos}>{val.label}</Text>
                     </Pressable>
                 )}
@@ -229,16 +243,4 @@ export function FrequencyPage({navigation, route}){
         <NextButton title = "Finish" done to = {() => signed()}/>
     </View>
     )
-}
-
-function IntroSlider(){
-
-    function _renderPrevButton(){
-        return(
-            <View style = {styles.container}>
-                <Entypo name="chevron-thin-left" size = {24} color="black" 
-                style = {{position: 'absolute', top: 50, left: 20}}/>
-            </View>
-        )
-    }
 }
