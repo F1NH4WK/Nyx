@@ -11,6 +11,8 @@ import NextButton from "../../components/nextButton";
 
 
 export function FirstPage({navigation}){
+
+
     return(
 
         <MotiView style = {styles.container}>
@@ -18,7 +20,7 @@ export function FirstPage({navigation}){
             <MotiImage 
             from = {{opacity: 0}}
             animate = {{opacity: 1}}
-            transition = {{duration: 600, delay: 1000, type: 'timing'}}
+            transition = {{duration: 600, delay: 800, type: 'timing'}}
             style = {styles.logoDisplay}
             source={require('../../../assets/OnlyNyxLogo.png')}/>
 
@@ -75,7 +77,7 @@ export function FirstPage({navigation}){
 
 export function NicknamePage({navigation}){
 
-    const [done, setDone] = useState(false)
+    const [nick, setNick] = useState('')
 
     return(
         <View style = {styles.container}>
@@ -100,9 +102,9 @@ export function NicknamePage({navigation}){
             animate = {{opacity: 1}}>
                 <TextInput 
                 style = {styles.textInput} placeholder="Nickname"
-                onEndEditing = {() => setDone(true)}
+                onChangeText={(text) => console.log(text)}
+                onEndEditing = {({}) => console.log(currentTarget)}
                 />
-
             </MotiView>
 
             <MotiText 
@@ -122,7 +124,7 @@ export function NicknamePage({navigation}){
             <NextButton 
             title = "continue" 
             to = {() => navigation.push('FrequencyPage')}
-            done = {done}/>
+            done />
         </View>
     )
 }
@@ -186,6 +188,7 @@ export function FrequencyPage({navigation, route}){
         animate = {{opacity: 1, scale: 1}}
         transition = {{delay: 500, type: 'spring'}}
         style = {styles.questionTitle}>Your gameplay frequency</MotiText>
+
         <MotiView 
         from = {{translateX: -200}}
         animate = {{translateX: 0}}
@@ -194,7 +197,6 @@ export function FrequencyPage({navigation, route}){
             <MotiImage
             source={require('../../../assets/clockGradient.png')}
             style = {styles.iconsStyle} />
-            
             <View style = {styles.hoursWrapper}>
                 <Pressable onPress={() => showTime(1)}>
                     <Text  style = {styles.optionsChose}>{time1.getHours().toString() + " : " + time1.getMinutes().toString()}</Text>
@@ -215,7 +217,7 @@ export function FrequencyPage({navigation, route}){
             source={require('../../../assets/calendarGradient.png')}
             style = {styles.iconsStyle}/>
             <View style = {styles.weekdaysWrapper}>
-                
+
             { days.map((val, index) => 
             val.selected 
                ? 
@@ -240,6 +242,8 @@ export function FrequencyPage({navigation, route}){
                 )}
             </View>
         </MotiView>
+
+        
         <NextButton title = "Finish" done to = {() => signed()}/>
     </View>
     )

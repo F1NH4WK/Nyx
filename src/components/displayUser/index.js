@@ -1,10 +1,11 @@
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, Dimensions } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import styles from "./styles";
 
-export default function SearchingPage(){
 
-    const nick = "O Azir"
+export default function DisplayUser(){
+
+    const nick = 'O Azir'
 
     return(
         <View style = {styles.container}>

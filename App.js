@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, Image, Button, Dimensions } from 'react-native';
+import { Text, View, Image, Dimensions, StatusBar } from 'react-native';
 import { MotiView, MotiImage } from 'moti';
 import Lottie from 'lottie-react-native'
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,7 +10,7 @@ import { useEffect, useState, useRef } from 'react';
 
 import requestLoL from './src/api/lolProfile';
 import SearchinPage from './src/pages/SearchingPage';
-import {FirstPage, NicknamePage, FrequencyPage} from './src/pages/IntroPage';
+import { FirstPage, NicknamePage, FrequencyPage } from './src/pages/IntroPage';
 import ProfilePage from './src/pages/ProfilePage';
 
 
@@ -28,24 +27,11 @@ export default function App() {
 
     )
   }
-    function Splash(){
 
       // useEffect(() => {
       //   requestLoL(setInfoProfile)
       //   console.log(infoProfile);
       // }, [])
-
-      return(
-        <View>
-          
-          <MotiView 
-          style = {{backgroundColor: '#232323', width: '100%', height: '100%', alignItems: 'center'}}>
-            <Text>Splash</Text> 
-            <Button title = "LOL"></Button>  
-          </MotiView>
-        </View>
-      )
-    }
 
     const Tab = createBottomTabNavigator();
     const Stack = createNativeStackNavigator()
@@ -56,11 +42,11 @@ export default function App() {
 
     
     return (
-      <NavigationContainer>
-        <StatusBar translucent style='auto'/>
+      <NavigationContainer >
+        <StatusBar translucent/>
 
         {isSignedIn ?
-        <Tab.Navigator initialRouteName = {'Home'} screenOptions = {{
+        <Tab.Navigator initialRouteName = {'Home'}  screenOptions = {{
           tabBarShowLabel: false,
           tabBarStyle: {
             backgroundColor: '#232323',
@@ -71,6 +57,7 @@ export default function App() {
             borderTopWidth: 0,
             backgroundColor: '#232323'
           },
+          
         }}>
       <Tab.Screen name='Home' component={Home}  
           listeners = {{tabPress: () => homeAnimation.current?.play()}} 
@@ -106,7 +93,7 @@ export default function App() {
           options = {{
 
             header: () => 
-              <View style = {{width: '100%', alignItems: 'center', paddingTop: 30, marginBottom: height * 0.02}}>
+              <View style = {{width: '100%', alignItems: 'center', paddingTop: StatusBar.currentHeight * 1.2, marginBottom: height * 0.02}}>
                 <Image
                 style = {{width: '100%', height: height * 0.05}}
                 resizeMode = {'contain'}
@@ -116,10 +103,14 @@ export default function App() {
             tabBarIcon: ({size, focused}) => focused
             ?
             <View style = {{width: size + 30, height: size + 30, justifyContent: 'center', alignItems: 'center'}}>
-              <Image 
+              
+              <MotiImage 
+              from = {{scale: 0, opacity: 0}}
+              animate = {{scale: 1, opacity: 1}}
               source={require('./assets/iconGradient.png')}
               style = {{width: size + 20, height: size + 20, borderRadius:60}}
               />
+
                <Lottie 
               ref = {searchAnimation}
               autoPlay = {false}
@@ -152,8 +143,8 @@ export default function App() {
             style = {{width: size + 30, height: size+ 30, justifyContent: 'center', alignItems: 'center'}}>
 
               <MotiImage 
-              from = {{transform: [{scale: 0}], opacity: 0}}
-              animate = {{transform: [{scale: 1}], opacity: 1}}
+              from = {{scale: 0, opacity: 0}}
+              animate = {{scale: 1, opacity: 1}}
               source={require('./assets/iconGradient.png')}
               style = {{width: size + 20, height: size + 20, borderRadius:60}}
               />
