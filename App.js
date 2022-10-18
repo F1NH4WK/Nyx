@@ -58,6 +58,7 @@ export default function App() {
             backgroundColor: '#232323'
           },
           
+          
         }}>
       <Tab.Screen name='Home' component={Home}  
           listeners = {{tabPress: () => homeAnimation.current?.play()}} 
@@ -111,7 +112,7 @@ export default function App() {
               style = {{width: size + 20, height: size + 20, borderRadius:60}}
               />
 
-               <Lottie 
+              <Lottie 
               ref = {searchAnimation}
               autoPlay = {false}
               loop = {false}
@@ -175,7 +176,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
           <Stack.Screen name = 'InfoPage' component = {FirstPage} />
           <Stack.Screen name = 'NicknamePage' component = {NicknamePage}/>
-          <Stack.Screen name = 'FrequencyPage' component = {FrequencyPage} initialParams = {{setSignIn: setIsSignedIn}}/>
+          <Stack.Screen name = 'FrequencyPage' component = {FrequencyPage} initialParams = {{setSignIn: () => setIsSignedIn(true)}}/>
         </Stack.Navigator> 
         }
       </NavigationContainer>

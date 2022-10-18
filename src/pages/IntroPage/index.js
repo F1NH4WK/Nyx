@@ -12,11 +12,8 @@ import NextButton from "../../components/nextButton";
 
 export function FirstPage({navigation}){
 
-
     return(
-
         <MotiView style = {styles.container}>
-        
             <MotiImage 
             from = {{opacity: 0}}
             animate = {{opacity: 1}}
@@ -102,8 +99,8 @@ export function NicknamePage({navigation}){
             animate = {{opacity: 1}}>
                 <TextInput 
                 style = {styles.textInput} placeholder="Nickname"
-                onChangeText={(text) => console.log(text)}
-                onEndEditing = {({}) => console.log(currentTarget)}
+                onChangeText={(text) => setNick(text)}
+                
                 />
             </MotiView>
 
@@ -124,7 +121,7 @@ export function NicknamePage({navigation}){
             <NextButton 
             title = "continue" 
             to = {() => navigation.push('FrequencyPage')}
-            done />
+            done = {nick != '' ? true : false}/>
         </View>
     )
 }
@@ -164,11 +161,7 @@ export function FrequencyPage({navigation, route}){
     })
 
 
-    const  setIsSignedIn = route.params.setIsSignedIn
-    const signed = () => navigation.setOptions({
-        setSignIn: setIsSignedIn(true)
-    }, [navigation])
-
+    const setIsSignedIn = route.params.setSignIn
 
     return(
 
@@ -243,8 +236,7 @@ export function FrequencyPage({navigation, route}){
             </View>
         </MotiView>
 
-        
-        <NextButton title = "Finish" done to = {() => signed()}/>
+        <NextButton title = "Finish" done to = {setIsSignedIn}/>
     </View>
     )
 }
