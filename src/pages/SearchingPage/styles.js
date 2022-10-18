@@ -15,28 +15,28 @@ const styles = StyleSheet.create({
     mainView: {
         width: '100%',
         height: '95%',
-        padding: width * 0.04
+        padding: width * 0.04,
+        alignItems: 'center'
     },
 
     displayChampion:{
         borderRadius: 20,
-        width: Dimensions.get('window').width - 15,
+        width: width - width * 0.05,
         position: 'absolute',
-        alignSelf: 'center',
-        height: Dimensions.get('window').height - 125,
+        height: height - height * 0.18,
     },
 
     displayInfos: {
-        width: Dimensions.get('window').width - 35,
-        paddingHorizontal: 5,
+        width: width - width * 0.09,
+        paddingHorizontal: width * 0.01,
         position: 'absolute',
         height: '30%',
-        top: Dimensions.get('window').height - 415,
+        top: height - height * 0.58,
         flex: 0.5,
         flexDirection: 'row',
         zIndex: 2,
         justifyContent: 'space-between',
-        opacity: 0.85
+        opacity: 0.78
     },
 
     containerTexts:{
@@ -84,11 +84,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         zIndex: 2,
         height: '20%',
-        bottom: 20,
+        bottom: height * 0.025,
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
-        paddingHorizontal: 30,
+        paddingHorizontal: width * 0.09,
         opacity: 0.75
 
     },

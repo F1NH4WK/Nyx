@@ -11,8 +11,8 @@ export default function SearchingPage(){
             <View style = {styles.mainView}>
 
                 <Image 
-                style = {{...styles.displayChampion, zIndex: 2}}
-                source = {require('../../../assets/EfeitoEscurecer.png')}
+                style = {{...styles.displayChampion, zIndex: 2, opacity: 0.95}}
+                source = {require('../../../assets/FadeEffect.png')}
                 />
 
                 <Image 
@@ -49,7 +49,6 @@ export default function SearchingPage(){
                         <Image 
                         source={require('../../../assets/Emblem_Gold.png')}
                         style = {styles.rankStyle}
-                        fadeDuration = {5}
                         resizeMode = {'cover'}/>
                         <Text style = {{fontStyle: 'italic'}}>45 PDL</Text>
                     </View>
