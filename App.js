@@ -7,8 +7,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState, useRef } from 'react';
 
-
-import requestLoL from './src/api/lolProfile';
 import SearchinPage from './src/pages/SearchingPage';
 import { FirstPage, NicknamePage, FrequencyPage } from './src/pages/IntroPage';
 import ProfilePage from './src/pages/ProfilePage';
@@ -17,22 +15,14 @@ import ProfilePage from './src/pages/ProfilePage';
 export default function App() {
 
   const {width, height} = Dimensions.get('window')
-  const [infoProfile, setInfoProfile] = useState({})
   const [isSignedIn, setIsSignedIn] = useState(false)
 
 
   function Home(){
     return(
       <Text>Home</Text>
-
     )
   }
-
-      // useEffect(() => {
-      //   requestLoL(setInfoProfile)
-      //   console.log(infoProfile);
-      // }, [])
-
     const Tab = createBottomTabNavigator();
     const Stack = createNativeStackNavigator()
 

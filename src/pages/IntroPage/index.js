@@ -80,10 +80,8 @@ export function NicknamePage({navigation}){
 
     useEffect(() => {console.log(info)},[info])
 
-    const searchNick = (nick) => 
-    requestLoL(setInfoProfile, nick)
-    .then(a => console.log(a))   
-    .catch(e => console.log(e))     
+    const searchNick = nick => requestLoL(nick)
+    .then(data => setInfoProfile(data))
     
     return(
         <View style = {styles.container}>

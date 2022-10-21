@@ -25,14 +25,14 @@ export default async function requestLoL(nick){
     }
     
     // GET THE SUMMONER ID TO MAKE OTHERS REQUESTS
-    async function getSumId(){
+    async function getSumId(nick){
         let response = await fetch(LOL_URL + `/summoner/v4/summoners/by-name/${nick}`, {headers: header})
         let data = await response.json();
         return data
     }
 
     
-    let id = await getSumId().then(data => {return data.id}); // 1s
+    let id = await getSumId(nick).then(data => {return data.id}); // 1s
     let rankInfo = await getEntries(id).then(data => {return {rank: data[0].tier, pdl: data[0].leaguePoints}}); // 2s
     let champions = await getChampions(id).then(data => data.map((i) => {return i.championId}));
 
