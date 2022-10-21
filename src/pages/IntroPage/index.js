@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useEffect, useState} from "react";
 import { View, Text, TextInput, Pressable, Image} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage, MotiText } from "moti";
@@ -8,6 +8,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 // LOCAL IMPORTS
 import styles from "./styles";
 import NextButton from "../../components/nextButton";
+import requestLoL from "../../api/lolProfile";
 
 
 export function FirstPage({navigation}){
@@ -75,7 +76,15 @@ export function FirstPage({navigation}){
 export function NicknamePage({navigation}){
 
     const [nick, setNick] = useState('')
+    const [info, setInfoProfile] = useState(null)
 
+    useEffect(() => {console.log(info)},[info])
+
+    const searchNick = (nick) => 
+    requestLoL(setInfoProfile, nick)
+    .then(a => console.log(a))   
+    .catch(e => console.log(e))     
+    
     return(
         <View style = {styles.container}>
             <MotiView
@@ -100,7 +109,7 @@ export function NicknamePage({navigation}){
                 <TextInput 
                 style = {styles.textInput} placeholder="Nickname"
                 onChangeText={(text) => setNick(text)}
-                
+                onSubmitEditing = {() => searchNick(nick)}
                 />
             </MotiView>
 
