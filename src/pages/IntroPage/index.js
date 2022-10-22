@@ -1,5 +1,5 @@
 import { useEffect, useState} from "react";
-import { View, Text, TextInput, Pressable, Image} from "react-native";
+import { View, Text, TextInput, Pressable, Image, Modal} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage, MotiText } from "moti";
 import Lottie from 'lottie-react-native';
@@ -77,8 +77,9 @@ export function NicknamePage({navigation}){
 
     const [nick, setNick] = useState('')
     const [info, setInfoProfile] = useState(null)
+    const [modal, setModal] = useState(false)
 
-    useEffect(() => {console.log(info)},[info])
+    useEffect(() => {console.log(info); setModal(false)},[info])
 
     const searchNick = nick => requestLoL(nick)
     .then(data => setInfoProfile(data))
@@ -107,7 +108,7 @@ export function NicknamePage({navigation}){
                 <TextInput 
                 style = {styles.textInput} placeholder="Nickname"
                 onChangeText={(text) => setNick(text)}
-                onSubmitEditing = {() => searchNick(nick)}
+                onSubmitEditing = {() => {searchNick(nick), setModal(!modal)}}
                 />
             </MotiView>
 
@@ -125,10 +126,25 @@ export function NicknamePage({navigation}){
             autoSize
             loop/>
 
+            <Modal 
+            animationType = "fade"
+            visible = {modal}
+            statusBarTranslucent
+            transparent>
+                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)'}}>
+                    <Lottie
+                    source={require('../../../assets/animations/loading.json')}
+                    style = {styles.animation}
+                    autoPlay
+                    autoSize
+                    loop />
+                </View>
+            </Modal>
+
             <NextButton 
             title = "continue" 
             to = {() => navigation.push('FrequencyPage')}
-            done = {nick != '' ? true : false}/>
+            done = {info != null ? true : false}/>
         </View>
     )
 }
