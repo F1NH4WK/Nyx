@@ -1,7 +1,7 @@
 export default async function requestLoL(nick){
 
     const LOL_URL = 'https://br1.api.riotgames.com/lol';
-    const header = {'X-Riot-Token': "RGAPI-4aaaaa91-2819-45c7-aab4-92d77f14eff1" }
+    const header = {'X-Riot-Token': "RGAPI-5741f159-2df6-445c-b991-d7678656e8fe" }
 
     // GET THE SUMMONER RANK AND THEIR POINTS
     async function getEntries(sumId){
@@ -34,9 +34,12 @@ export default async function requestLoL(nick){
     
     let id = await getSumId(nick).then(data => {return data.id}); // 1s
     let rankInfo = await getEntries(id).then(data => {
-        try{ return {rank: data[0].tier, pdl: data[0].leaguePoints} }
-        
-        catch{ return null }
+        try{ 
+            return {rank: data[0].tier, pdl: data[0].leaguePoints} 
+        }
+        catch{ 
+            return {rank: null, pdl: null}
+        }
     }); // 2s
     let champions = await getChampions(id).then(data => data.map((i) => {return i.championId}));
 
@@ -51,7 +54,8 @@ export default async function requestLoL(nick){
                     championName = value.id
                     return {
                         championName: championName,
-                        championSplash: `http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championName}_0.jpg`
+                        championSplash: `http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championName}_0.jpg`,
+                        championIcon: `http://ddragon.leagueoflegends.com/cdn/12.20.1/img/champion/${championName}.png`
                     }
                 }
             }})}) // 2s

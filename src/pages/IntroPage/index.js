@@ -1,5 +1,5 @@
 import { useEffect, useState} from "react";
-import { View, Text, TextInput, Pressable, Image, Modal} from "react-native";
+import { View, Text, TextInput, Pressable, Image, Modal, Button} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage, MotiText } from "moti";
 import Lottie from 'lottie-react-native';
@@ -75,11 +75,32 @@ export function FirstPage({navigation}){
 
 export function NicknamePage({navigation}){
 
-    const [nick, setNick] = useState('')
-    const [info, setInfoProfile] = useState(null)
-    const [modal, setModal] = useState(false)
 
-    useEffect(() => {console.log(info); setModal(false)},[info])
+    const infoTemp = {
+    champions: [{
+        championName: undefined,
+        championIcon: undefined
+        },
+        {
+        championName: undefined,
+        championIcon: undefined
+        },
+        {
+        championName: undefined,
+        championIcon: undefined
+        }],
+    
+    rankInfo: {
+        rank: undefined
+    }
+}
+    const [nick, setNick] = useState('')
+    const [done, setDone] = useState(false)
+    const [info, setInfoProfile] = useState(infoTemp)
+    const [modal, setModal] = useState(false)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {setLoading(false)},[info])
 
     const searchNick = nick => requestLoL(nick)
     .then(data => setInfoProfile(data))
@@ -108,7 +129,7 @@ export function NicknamePage({navigation}){
                 <TextInput 
                 style = {styles.textInput} placeholder="Nickname"
                 onChangeText={(text) => setNick(text)}
-                onSubmitEditing = {() => {searchNick(nick), setModal(!modal)}}
+                onSubmitEditing = {() => {searchNick(nick), setModal(true); setLoading(true)}}
                 />
             </MotiView>
 
@@ -131,29 +152,121 @@ export function NicknamePage({navigation}){
             visible = {modal}
             statusBarTranslucent
             transparent>
-                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)'}}>
+                <View style = {styles.modalStyle}>
+                    {
+                    loading
+                    ?
                     <Lottie
                     source={require('../../../assets/animations/loading.json')}
                     style = {styles.animation}
                     autoPlay
                     autoSize
                     loop />
+                    :
+                    <View style = {{width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+                        <MotiImage 
+                        from = {{opacity: 0}}
+                        animate = {{opacity: 1}}
+                        delay = {100}
+                        style = {{width: 200, height: 200, opacity: 0.85}}
+                        source={require('../../../assets/modalAsk.gif')} />
+
+                        <MotiText
+                        from = {{opacity: 0, translateY: -50}}
+                        animate = {{opacity: 1, translateY: 0}}
+                        transition = {{type: 'timing'}}
+                        
+                        style = {styles.modalQuestions}>Is that your account?</MotiText>
+
+                        <View style = {{ flexDirection: 'row', marginTop: 30}}>
+                            <View style = {{flex: 0.45, alignItems: 'center'}}>
+                                <MotiText
+                                from = {{opacity: 0, translateX: -20}}
+                                animate = {{opacity: 1, translateX: 0}} 
+                                style = {styles.modalQuestions}>Nick:</MotiText>
+
+                                <MotiText
+                                from = {{opacity: 0, translateX: -20}}
+                                animate = {{opacity: 1, translateX: 0}} 
+                                style = {styles.modalQuestions}>Champs:</MotiText>
+
+                                <MotiText 
+                                from = {{opacity: 0, translateX: -20}}
+                                animate = {{opacity: 1, translateX: 0}}
+                                style = {styles.modalQuestions}>Rank: </MotiText>
+                            </View>
+                            <View style = {{flex: 0.45, alignItems: 'center'}}>
+                                <MotiText
+                                from = {{opacity: 0, translateY: -20}}
+                                animate = {{opacity: 1, translateY: 0}} 
+                                style = {styles.modalAnswer}>{nick}</MotiText>
+
+                                <View style = {{flexDirection: 'row', width: '100%', marginBottom: 20, justifyContent: 'space-around'}}>
+                                {
+                                info.champions.map( (champion, index) => 
+                                    <MotiImage
+                                    from = {{opacity: 0, translateY: -20}}
+                                    animate = {{opacity: 1, translateY: 0}}
+                                    delay = {100}
+                                    key= {index} 
+                                    style = {{width: 40, height: 40, borderRadius: 200}}
+                                    source={{uri: champion.championIcon}}/>
+                                    )}
+                                </View>
+
+                                <MotiText
+                                from = {{opacity: 0, translateY: -20}}
+                                animate = {{opacity: 1, translateY: 0}} 
+                                style = {styles.modalAnswer}>{
+                                info.rankInfo.rank == null
+                                ? 'Unraked'
+                                : info.rankInfo.rank
+                                }
+                                </MotiText>
+                            </View>
+                        </View>
+                    
+                        <View style = {{width: '85%', flexDirection: 'row', justifyContent: 'space-around', marginTop: 60}}>
+                            <Pressable 
+                            onPress={() => {setModal(false); setDone(true)}}
+                            style = {{width: 100, height: 50}}>
+                                <MotiImage
+                                from = {{scale: 0}}
+                                animate = {{scale: 1}} 
+                                style = {{borderRadius: 200, width: 120, height: 40}}
+                                source={require('../../../assets/modalYes.png')} />
+                            </Pressable>
+
+                            <Pressable 
+                            onPress={() => {
+                                setModal(false); 
+                                alert('Type your nick again!')
+                                setInfoProfile(infoTemp);
+                                }}
+                            style = {{width: 100, height: 50}}>
+                                <MotiImage 
+                                from = {{scale: 0}}
+                                animate = {{scale: 1}}
+                                style = {{borderRadius: 200, width: 120, height: 40}}
+                                source={require('../../../assets/modalNo.png')} />
+                            </Pressable>
+                        </View>
+                </View>
+                }
                 </View>
             </Modal>
 
             <NextButton 
             title = "continue" 
             to = {() => navigation.push('FrequencyPage')}
-            done = {info != null ? true : false}/>
+            done = {done == true && info != infoTemp}/>
         </View>
     )
 }
 
 export function FrequencyPage({navigation, route}){
 
-    const [time1, setTime1] = useState(new Date())
-    const [time2, setTime2] = useState(new Date())
-    const [days, setDays] = useState([
+    const daysTemp = [
         {key: 0, label: 'SUN', value: 'Sunday', selected: false},
         {key: 1, label: 'MON', value: 'Monday', selected: false},
         {key: 2, label: 'TUE', value: 'Tuesday', selected: false},
@@ -161,8 +274,20 @@ export function FrequencyPage({navigation, route}){
         {key: 4, label: 'THU', value: 'Thursday', selected: false},
         {key: 5, label: 'FRI', value: 'Friday', selected: false},
         {key: 6, label: 'SAT', value: 'Saturday', selected: false}
-    ])
+    ]
 
+    const lanesTemp = [
+        {key: 0, value: require('../../../assets/lanes/Position_Diamond-Mid.png'), label: 'Mid', selected: false},
+        {key: 1, value: require('../../../assets/lanes/Position_Diamond-Top.png'), label: 'Top', selected: false},
+        {key: 2, value: require('../../../assets/lanes/Position_Diamond-Jungle.png'), label: 'Jungle', selected: false},
+        {key: 3, value: require('../../../assets/lanes/Position_Diamond-Bot.png'), label: 'ADC', selected: false},
+        {key: 4, value: require('../../../assets/lanes/Position_Diamond-Support.png'), label: 'Support', selected: false}
+    ]
+
+    const [time1, setTime1] = useState(new Date())
+    const [time2, setTime2] = useState(new Date())
+    const [days, setDays] = useState(daysTemp)
+    const [lanes, setLanes] = useState(lanesTemp)
 
     function setWeekdays(id){
         setDays(days.filter((i, index) => {
@@ -170,6 +295,15 @@ export function FrequencyPage({navigation, route}){
         ? days[index].selected = !i.selected
         : days[index].selected = i.selected
         return days[index]
+        }))
+    }
+
+    function defineLanes(id){
+        setLanes(lanes.filter((i, index) => {
+            index == id
+            ? lanes[index].selected = !i.selected
+            : lanes[index].selected = i.selected
+            return days[index]
         }))
     }
     
@@ -203,7 +337,7 @@ export function FrequencyPage({navigation, route}){
         from = {{opacity: 0, scale: 0.5}}
         animate = {{opacity: 1, scale: 1}}
         transition = {{delay: 500, type: 'spring'}}
-        style = {styles.questionTitle}>Your gameplay frequency</MotiText>
+        style = {styles.questionTitle}>About You</MotiText>
 
         <MotiView 
         from = {{translateX: -200}}
@@ -259,7 +393,28 @@ export function FrequencyPage({navigation, route}){
             </View>
         </MotiView>
 
-        <NextButton title = "Finish" done to = {setIsSignedIn}/>
+        <MotiView style = {{...styles.infosView, justifyContent: 'center'}}>
+            { lanes.map((val, index) => 
+            val.selected
+            ?
+            <Pressable key = {val.key} onPress = {() => defineLanes(index)}>
+                <MotiImage
+                from = {{scale: 1, opacity: 0.3}}
+                animate = {{scale: 1.1, opacity: 1}}
+                style = {styles.iconsStyle} 
+                source = {val.value}/>
+            </Pressable>
+            :
+            <Pressable key = {val.key} onPress = {() => defineLanes(index)}>
+                <Image
+                style = {{...styles.iconsStyle, opacity: 0.3}}
+                source = {val.value} />
+            </Pressable>
+            )}
+        </MotiView>
+
+        <NextButton title = "Finish" 
+        done = {lanes != lanesTemp && days != daysTemp} to = {setIsSignedIn}/>
     </View>
     )
 }

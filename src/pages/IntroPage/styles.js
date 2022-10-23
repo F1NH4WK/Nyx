@@ -29,14 +29,13 @@ const styles = StyleSheet.create({
         height: '8%',
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: width * 0.03
-        
+        marginVertical: width * 0.03,
     },
 
     questionTitle: {
         fontSize: width * 0.12,
         textAlign: 'center',
-        marginTop: StatusBar.currentHeight + height * 0.04,
+        marginTop: StatusBar.currentHeight + height * 0.03,
     },
 
     textInput: {
@@ -130,6 +129,38 @@ const styles = StyleSheet.create({
         position: 'absolute', 
         top: 50, 
         left: 10
+    },
+
+    modalStyle: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.9)'
+    },
+
+    modalQuestions: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        marginBottom: 20,
+        color: 'white'
+    },
+
+    modalQuestionsWrapper: {
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    },
+
+    modalAnswer: {
+        fontSize: 30,
+        color: '#A7A7A7',
+        opacity: 1,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textTransform: 'capitalize'
+        
     },
 })
 
