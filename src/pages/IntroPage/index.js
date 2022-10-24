@@ -1,5 +1,5 @@
 import { useEffect, useState} from "react";
-import { View, Text, TextInput, Pressable, Image, Modal, Button} from "react-native";
+import { View, Text, TextInput, Pressable, Image, Modal} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage, MotiText } from "moti";
 import Lottie from 'lottie-react-native';
@@ -9,7 +9,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import styles from "./styles";
 import NextButton from "../../components/nextButton";
 import requestLoL from "../../api/lolProfile";
-
+import pushData from "../../firebase";
 
 export function FirstPage({navigation}){
 
@@ -258,7 +258,7 @@ export function NicknamePage({navigation}){
 
             <NextButton 
             title = "continue" 
-            to = {() => navigation.push('FrequencyPage')}
+            to = {() => navigation.push('FrequencyPage', {infos: info, nick: nick})}
             done = {done == true && info != infoTemp}/>
         </View>
     )
@@ -317,8 +317,35 @@ export function FrequencyPage({navigation, route}){
         onChange: (event, date) => option == 1? setTime1(date) : setTime2(date)
     })
 
-
+    const infos = route.params.infos
     const setIsSignedIn = route.params.setSignIn
+    const nick = route.params.nick
+
+    function getData(){
+        const data = {
+            nick,
+            ...infos,
+            timePlaying: {timeStart: time1, timeEnd: time2},
+            weekPlay: daysPlaying,
+            mainLane: mainLanes
+        }
+        return data
+    }
+
+    let daysPlaying = []
+    days.forEach(i => 
+        i.selected
+        ? daysPlaying.push(i.label)
+        : null
+    )
+
+    let mainLanes = []
+    lanes.forEach(i =>
+        i.selected
+        ? mainLanes.push(i.label)
+        : null
+    )
+
 
     return(
 
@@ -331,7 +358,7 @@ export function FrequencyPage({navigation, route}){
             style = {styles.goBack} >
                 <Entypo name="chevron-thin-left" size = {28} color="white" 
                 onPress = {() => navigation.goBack()}/>
-             </MotiView>
+            </MotiView>
 
         <MotiText 
         from = {{opacity: 0, scale: 0.5}}
@@ -414,7 +441,7 @@ export function FrequencyPage({navigation, route}){
         </MotiView>
 
         <NextButton title = "Finish" 
-        done = {lanes != lanesTemp && days != daysTemp} to = {setIsSignedIn}/>
+        done = {lanes != lanesTemp && days != daysTemp} to = {() => pushData(getData())}/>
     </View>
     )
 }

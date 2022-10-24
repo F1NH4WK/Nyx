@@ -17,6 +17,7 @@
     "expo": "~46.0.9",
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
+    "firebase": "^9.12.1",
     "lottie-react-native": "5.1.3",
     "moti": "^0.18.0",
     "react": "18.0.0",
