@@ -1,7 +1,7 @@
 export default async function requestLoL(nick){
 
     const LOL_URL = 'https://br1.api.riotgames.com/lol';
-    const header = {'X-Riot-Token': "RGAPI-af0a9e68-2b63-407e-9b65-531ba678a7f5" }
+    const header = {'X-Riot-Token': "RGAPI-2ddbc855-2b7b-4bac-9a1e-1e0f225dfd4d" }
 
     // GET THE SUMMONER RANK AND THEIR POINTS
     async function getEntries(sumId){

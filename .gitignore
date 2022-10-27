@@ -13,3 +13,5 @@ web-build/
 .expo-shared/
 package-lock.json
 babel.config.js
+firebase/firebase.json
+*.json

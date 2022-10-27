@@ -4,6 +4,13 @@ import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage, MotiText } from "moti";
 import Lottie from 'lottie-react-native';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import * as WebBrowser from 'expo-web-browser';
+
+// AUTH
+import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import * as Google from 'expo-auth-session/providers/google';
+
 
 // LOCAL IMPORTS
 import styles from "./styles";
@@ -11,8 +18,36 @@ import NextButton from "../../components/nextButton";
 import requestLoL from "../../api/lolProfile";
 import pushData from "../../firebase";
 
+WebBrowser.maybeCompleteAuthSession();
+
 export function FirstPage({navigation}){
 
+        const [currentUser, setCurrentUser] = useState(null)
+        currentUser == null
+        ? null
+        : navigation.navigate('NicknamePage', {currentUser})
+
+        // OAUTH SESSION --------------
+        const { client_id } = require('../../auth/googleAuth.json')
+        const [request, response, promptAsync] = Google.useIdTokenAuthRequest({ clientId: client_id });
+          
+        useEffect(() => {
+            if (response?.type === 'success'){
+                const { id_token } = response.params;
+                const auth = getAuth(initializeApp(require('../../firebase/firebase.json')));
+                const credential = GoogleAuthProvider.credential(id_token)
+                signInWithCredential(auth, credential)
+                setCurrentUser({
+                    name: auth.currentUser.displayName,
+                    uid: auth.currentUser.uid,
+                    email: auth.currentUser.email,
+                    photo: auth.currentUser.photoURL
+                })
+            }
+        }, [response])
+
+        // ----------
+        
     return(
         <MotiView style = {styles.container}>
             <MotiImage 
@@ -68,13 +103,16 @@ export function FirstPage({navigation}){
             delay = {700}
             style = {styles.subDescription}>You only need to pass your League of Legends’ nickname and the frequency you play. Simple, right? You can change them whenever you want.</MotiText>
 
-            <NextButton title = "LET'S START!" to = {() => navigation.push('NicknamePage')} done/>
+            <NextButton title = "LET'S START!" to = { () => 
+            currentUser != null
+            ? navigation.navigate('NicknamePage', {currentUser})
+            : promptAsync() } 
+            done/>
         </MotiView>
     )
 }
 
-export function NicknamePage({navigation}){
-
+export function NicknamePage({navigation, route}){
 
     const infoTemp = {
     champions: [{
@@ -203,7 +241,7 @@ export function NicknamePage({navigation}){
 
                                 <View style = {{flexDirection: 'row', width: '100%', marginBottom: 20, justifyContent: 'space-around'}}>
                                 {
-                                info.champions.map( (champion, index) => 
+                                info.champions.map((champion, index) => 
                                     <MotiImage
                                     from = {{opacity: 0, translateY: -20}}
                                     animate = {{opacity: 1, translateY: 0}}
@@ -217,11 +255,7 @@ export function NicknamePage({navigation}){
                                 <MotiText
                                 from = {{opacity: 0, translateY: -20}}
                                 animate = {{opacity: 1, translateY: 0}} 
-                                style = {styles.modalAnswer}>{
-                                info.rankInfo.rank == null
-                                ? 'Unraked'
-                                : info.rankInfo.rank
-                                }
+                                style = {styles.modalAnswer}>{ info.rankInfo.rank }
                                 </MotiText>
                             </View>
                         </View>
@@ -240,8 +274,7 @@ export function NicknamePage({navigation}){
                             <Pressable 
                             onPress={() => {
                                 setModal(false); 
-                                alert('Type your nick again!')
-                                setInfoProfile(infoTemp);
+                                setInfoProfile(infoTemp)
                                 }}
                             style = {{width: 100, height: 50}}>
                                 <MotiImage 
@@ -258,7 +291,7 @@ export function NicknamePage({navigation}){
 
             <NextButton 
             title = "continue" 
-            to = {() => navigation.push('FrequencyPage', {infos: info, nick: nick})}
+            to = {() => navigation.push('FrequencyPage', {infos: info, nick: nick, user: route.params.currentUser})}
             done = {done == true && info != infoTemp}/>
         </View>
     )
@@ -320,9 +353,11 @@ export function FrequencyPage({navigation, route}){
     const infos = route.params.infos
     const setIsSignedIn = route.params.setSignIn
     const nick = route.params.nick
+    const user = route.params.user
 
     function getData(){
         const data = {
+            user,
             nick,
             ...infos,
             timePlaying: {timeStart: time1, timeEnd: time2},
