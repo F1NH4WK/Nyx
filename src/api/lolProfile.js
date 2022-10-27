@@ -30,7 +30,6 @@ export default async function requestLoL(nick){
         let data = await response.json();
         return data
     }
-
     
     let id = await getSumId(nick).then(data => {return data.id}); // 1s
     let rankInfo = await getEntries(id).then(data => {
@@ -38,7 +37,7 @@ export default async function requestLoL(nick){
             return {rank: data[0].tier, pdl: data[0].leaguePoints} 
         }
         catch{ 
-            return {rank: null, pdl: null}
+            return {rank: 'Unraked', pdl: 0}
         }
     }); // 2s
     let champions = await getChampions(id).then(data => data.map((i) => {return i.championId}));

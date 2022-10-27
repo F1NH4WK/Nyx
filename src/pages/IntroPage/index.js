@@ -16,7 +16,7 @@ import * as Google from 'expo-auth-session/providers/google';
 import styles from "./styles";
 import NextButton from "../../components/nextButton";
 import requestLoL from "../../api/lolProfile";
-import pushData from "../../firebase";
+import {pushData, getData} from "../../firebase";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -142,7 +142,9 @@ export function NicknamePage({navigation, route}){
 
     const searchNick = nick => requestLoL(nick)
     .then(data => setInfoProfile(data))
-    
+
+    const search = () => {searchNick(nick); setModal(true); setLoading(true)}
+
     return(
         <View style = {styles.container}>
             <MotiView
@@ -167,7 +169,13 @@ export function NicknamePage({navigation, route}){
                 <TextInput 
                 style = {styles.textInput} placeholder="Nickname"
                 onChangeText={(text) => setNick(text)}
-                onSubmitEditing = {() => {searchNick(nick), setModal(true); setLoading(true)}}
+                onSubmitEditing = { async() => {
+                    exists = await getData(nick)
+
+                    await exists
+                    ? alert("There's already an user signed with this account!")
+                    : search()
+                }}
                 />
             </MotiView>
 
