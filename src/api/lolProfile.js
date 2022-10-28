@@ -42,12 +42,8 @@ export default async function requestLoL(nick){
     
     try{
         let id = await getSumId(nick).then(data => {return data.id}); 
-    } // 1s
-    catch{
-        return undefined
-    }
-    
-    let rankInfo = await getEntries(id).then(data => {
+
+        let rankInfo = await getEntries(id).then(data => {
             try{ 
                 return {rank: data[0].tier, pdl: data[0].leaguePoints} 
             }
@@ -83,4 +79,11 @@ export default async function requestLoL(nick){
     
     return summonerData
      // 3s
+
+    } 
+    catch{
+        return undefined
+    }
+    
+    
 }

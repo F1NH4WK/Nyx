@@ -63,7 +63,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         borderBottomColor: '#A7A7A7',
         borderBottomWidth: 2,
-        opacity: 0.9
+        opacity: 0.9,
+        color: 'white'
     },
 
     iconsStyle: {
@@ -92,7 +93,8 @@ const styles = StyleSheet.create({
 
     userInfos: {
         fontWeight: 'bold',
-        fontSize: 10
+        fontSize: 10,
+        color: 'white'
     },
 
     weekdaysWrapper: {
