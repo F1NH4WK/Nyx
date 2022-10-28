@@ -9,11 +9,13 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight + height * 0.02,
         paddingHorizontal: width * 0.05,
         alignItems: 'center',
+        backgroundColor: '#272727'
 
     },
 
     title: {
         fontWeight: 'bold',
+        color: 'white',
         fontSize: width * 0.075,
         margin: height * 0.005
     },
@@ -36,6 +38,7 @@ const styles = StyleSheet.create({
         fontSize: width * 0.12,
         textAlign: 'center',
         marginTop: StatusBar.currentHeight + height * 0.03,
+        color: 'white',
     },
 
     textInput: {
@@ -46,6 +49,7 @@ const styles = StyleSheet.create({
         marginTop: height * 0.01,
         borderBottomWidth: 2,
         borderBottomStartRadius: 10,
+        color: 'white',
         
     },
 
@@ -117,6 +121,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: width * 0.045,
         margin: height * 0.005,
+        color: 'white'
     },
 
     subDescription: {
@@ -162,6 +167,17 @@ const styles = StyleSheet.create({
         textTransform: 'capitalize'
         
     },
+
+    modalImage: {
+        width: 200,
+        height: 200,
+        opacity: 0.85
+    },
+
+    modalCollumn: {
+        flex: 0.45,
+        alignItems: 'center',
+    }
 })
 
 export default styles;

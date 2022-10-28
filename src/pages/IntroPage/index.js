@@ -1,5 +1,5 @@
 import { useEffect, useState} from "react";
-import { View, Text, TextInput, Pressable, Image, Modal} from "react-native";
+import { View, Text, TextInput, Pressable, Image, Modal, Button} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage, MotiText } from "moti";
 import Lottie from 'lottie-react-native';
@@ -10,7 +10,6 @@ import * as WebBrowser from 'expo-web-browser';
 import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import * as Google from 'expo-auth-session/providers/google';
-
 
 // LOCAL IMPORTS
 import styles from "./styles";
@@ -29,22 +28,28 @@ export function FirstPage({navigation}){
 
         // OAUTH SESSION --------------
         const { client_id } = require('../../auth/googleAuth.json')
+        const auth = getAuth(initializeApp(require('../../firebase/firebase.json')))
         const [request, response, promptAsync] = Google.useIdTokenAuthRequest({ clientId: client_id });
           
         useEffect(() => {
+            
             if (response?.type === 'success'){
                 const { id_token } = response.params;
-                const auth = getAuth(initializeApp(require('../../firebase/firebase.json')));
                 const credential = GoogleAuthProvider.credential(id_token)
                 signInWithCredential(auth, credential)
-                setCurrentUser({
-                    name: auth.currentUser.displayName,
-                    uid: auth.currentUser.uid,
-                    email: auth.currentUser.email,
-                    photo: auth.currentUser.photoURL
-                })
             }
         }, [response])
+
+        async function signIn(){
+            await promptAsync()
+            setCurrentUser({
+                name: auth.currentUser.displayName,
+                uid: auth.currentUser.uid,
+                email: auth.currentUser.email,
+                photo: auth.currentUser.photoURL
+            })
+            navigation.navigate('NicknamePage', { currentUser })
+        }
 
         // ----------
         
@@ -103,10 +108,10 @@ export function FirstPage({navigation}){
             delay = {700}
             style = {styles.subDescription}>You only need to pass your League of Legends’ nickname and the frequency you play. Simple, right? You can change them whenever you want.</MotiText>
 
-            <NextButton title = "LET'S START!" to = { () => 
+            <NextButton title = "LET'S START!" to = { async() => 
             currentUser != null
             ? navigation.navigate('NicknamePage', {currentUser})
-            : promptAsync() } 
+            : await signIn() } 
             done/>
         </MotiView>
     )
@@ -168,10 +173,10 @@ export function NicknamePage({navigation, route}){
             animate = {{opacity: 1}}>
                 <TextInput 
                 style = {styles.textInput} placeholder="Nickname"
+                placeholderTextColor={'white'}
                 onChangeText={(text) => setNick(text)}
                 onSubmitEditing = { async() => {
                     exists = await getData(nick)
-
                     await exists
                     ? alert("There's already an user signed with this account!")
                     : search()
@@ -209,13 +214,16 @@ export function NicknamePage({navigation, route}){
                     autoSize
                     loop />
                     :
+                    
+                    info != null
+                    ?
                     <View style = {{width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
                         <MotiImage 
                         from = {{opacity: 0}}
                         animate = {{opacity: 1}}
                         delay = {100}
-                        style = {{width: 200, height: 200, opacity: 0.85}}
-                        source={require('../../../assets/modalAsk.gif')} />
+                        style = {styles.modalImage}
+                        source={require('../../../assets/gifs/modalAsk.gif')} />
 
                         <MotiText
                         from = {{opacity: 0, translateY: -50}}
@@ -225,7 +233,7 @@ export function NicknamePage({navigation, route}){
                         style = {styles.modalQuestions}>Is that your account?</MotiText>
 
                         <View style = {{ flexDirection: 'row', marginTop: 30}}>
-                            <View style = {{flex: 0.45, alignItems: 'center'}}>
+                            <View style = {styles.modalCollumn}>
                                 <MotiText
                                 from = {{opacity: 0, translateX: -20}}
                                 animate = {{opacity: 1, translateX: 0}} 
@@ -241,7 +249,7 @@ export function NicknamePage({navigation, route}){
                                 animate = {{opacity: 1, translateX: 0}}
                                 style = {styles.modalQuestions}>Rank: </MotiText>
                             </View>
-                            <View style = {{flex: 0.45, alignItems: 'center'}}>
+                            <View style = {styles.modalCollumn}>
                                 <MotiText
                                 from = {{opacity: 0, translateY: -20}}
                                 animate = {{opacity: 1, translateY: 0}} 
@@ -293,6 +301,14 @@ export function NicknamePage({navigation, route}){
                             </Pressable>
                         </View>
                 </View>
+                :
+                <View>
+                    <Text>Doesn't exist.</Text>
+                    <Button
+                    onPress={() => setModal(false)} 
+                    title="Return"/>
+                </View>
+                
                 }
                 </View>
             </Modal>
@@ -329,6 +345,7 @@ export function FrequencyPage({navigation, route}){
     const [time2, setTime2] = useState(new Date())
     const [days, setDays] = useState(daysTemp)
     const [lanes, setLanes] = useState(lanesTemp)
+    const [modal, setModal] = useState(false)
 
     function setWeekdays(id){
         setDays(days.filter((i, index) => {
@@ -375,6 +392,12 @@ export function FrequencyPage({navigation, route}){
         return data
     }
 
+    async function finish(){
+        setModal(true)
+        await pushData(getData())
+        setIsSignedIn();
+    }
+
     let daysPlaying = []
     days.forEach(i => 
         i.selected
@@ -393,7 +416,6 @@ export function FrequencyPage({navigation, route}){
     return(
 
         <View style = {styles.container}>
-
             <MotiView
             from = {{translateX: -50, opacity: 0.5}} 
             animate = {{translateX: 0, opacity: 1}}
@@ -484,7 +506,22 @@ export function FrequencyPage({navigation, route}){
         </MotiView>
 
         <NextButton title = "Finish" 
-        done = {lanes != lanesTemp && days != daysTemp} to = {() => pushData(getData())}/>
+        done = {lanes != lanesTemp && days != daysTemp} to = {() => finish()}/>
+
+            <Modal 
+            animationType = "fade"
+            visible = {modal}
+            statusBarTranslucent
+            transparent>
+                <View style = {styles.modalStyle}>
+                    <MotiImage 
+                    from = {{opacity: 0}}
+                    animate = {{opacity: 1}}
+                    delay = {100}    
+                    style = {styles.modalImage}
+                    source={require('../../../assets/gifs/processing.gif')}/>
+                </View>
+            </Modal>
     </View>
     )
 }

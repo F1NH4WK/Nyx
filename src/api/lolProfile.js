@@ -1,7 +1,7 @@
 export default async function requestLoL(nick){
 
     const LOL_URL = 'https://br1.api.riotgames.com/lol';
-    const header = {'X-Riot-Token': "RGAPI-2ddbc855-2b7b-4bac-9a1e-1e0f225dfd4d" }
+    const header = {'X-Riot-Token': "RGAPI-27b2391b-7d3a-44cd-a8a5-22b044c1acc3" }
 
     // GET THE SUMMONER RANK AND THEIR POINTS
     async function getEntries(sumId){
@@ -27,43 +27,60 @@ export default async function requestLoL(nick){
     // GET THE SUMMONER ID TO MAKE OTHERS REQUESTS
     async function getSumId(nick){
         let response = await fetch(LOL_URL + `/summoner/v4/summoners/by-name/${nick}`, {headers: header})
-        let data = await response.json();
-        return data
+        let res = response.status
+
+        if(res == 200){
+            
+            let data = await response.json();
+            return data
+        }
+        else{
+            return null
+        }
+        
     }
     
-    let id = await getSumId(nick).then(data => {return data.id}); // 1s
+    try{
+        let id = await getSumId(nick).then(data => {return data.id}); 
+    } // 1s
+    catch{
+        return undefined
+    }
+    
     let rankInfo = await getEntries(id).then(data => {
-        try{ 
-            return {rank: data[0].tier, pdl: data[0].leaguePoints} 
-        }
-        catch{ 
-            return {rank: 'Unraked', pdl: 0}
-        }
-    }); // 2s
-    let champions = await getChampions(id).then(data => data.map((i) => {return i.championId}));
+            try{ 
+                return {rank: data[0].tier, pdl: data[0].leaguePoints} 
+            }
+            catch { 
+                return {rank: 'Unraked', pdl: 0}
+            }
+        }); // 2s
 
+    let champions = await getChampions(id).then(data => data.map((i) => {return i.championId}));
+    
     let summonerChamps = await getChampionName().then(data => {
         return champions.map(championId => {
-
-            let championName = ''
-
-            for (const [key, value] of Object.entries(data['data'])){
-                
-                if (championId == value.key){
-                    championName = value.id
-                    return {
-                        championName: championName,
-                        championSplash: `http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championName}_0.jpg`,
-                        championIcon: `http://ddragon.leagueoflegends.com/cdn/12.20.1/img/champion/${championName}.png`
+    
+                let championName = ''
+    
+                for (const [key, value] of Object.entries(data['data'])){
+                    
+                    if (championId == value.key){
+                        championName = value.id
+                        return {
+                            championName: championName,
+                            championSplash: `http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championName}_0.jpg`,
+                            championIcon: `http://ddragon.leagueoflegends.com/cdn/12.20.1/img/champion/${championName}.png`
+                        }
                     }
-                }
-            }})}) // 2s
-
+                }})}) // 2s
+    
     const summonerData = {
-        id: id,                     // it'll be used to do some future changes
-        rankInfo: rankInfo,         // display rank
-        champions: summonerChamps   // display background champion
-    }
-
-    return summonerData // 3s
+            id: id,                     // it'll be used to do some future changes
+            rankInfo: rankInfo,         // display rank
+            champions: summonerChamps   // display background champion
+        }
+    
+    return summonerData
+     // 3s
 }
