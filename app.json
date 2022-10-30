@@ -2,8 +2,8 @@
   "expo": {
     "name": "Nyx",
     "slug": "Nyx",
-    "scheme": "Nyx",
-    "version": "1.0.0",
+    "scheme": "nyx",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "dark",
@@ -12,7 +12,6 @@
       "resizeMode": "cover",
       "backgroundColor": "#232323"
     },
-
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -26,11 +25,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.finhawk.nyx"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
-    "jsEngine": "hermes"
+    "jsEngine": "hermes",
+    "extra": {
+      "eas": {
+        "projectId": "f0ff3725-b31a-4c56-bff2-821b3afc87e0"
+      }
+    }
   }
 }

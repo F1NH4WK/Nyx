@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: width * 0.05,
         alignItems: 'center',
         backgroundColor: '#272727'
-
     },
 
     title: {
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
     },
 
     questionTitle: {
-        fontSize: width * 0.12,
+        fontSize: width * 0.11,
         textAlign: 'center',
         marginTop: StatusBar.currentHeight + height * 0.03,
         color: 'white',
@@ -68,15 +67,15 @@ const styles = StyleSheet.create({
     },
 
     iconsStyle: {
-        width: 40, 
-        height: 40,
-        marginRight: 15
+        width: width * 0.1, 
+        height: height * 0.05,
+        marginRight: width * 0.06
     },
 
     weekdaysStyle: {
-        width: 50,
-        height: 50,
-        borderRadius: 40,
+        width: width * 0.14,
+        height: height * 0.07,
+        borderRadius: 500,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#A7A7A7',
@@ -85,8 +84,8 @@ const styles = StyleSheet.create({
     },
 
     selectedStyle: {
-        width: 50,
-        height: 50,
+        width: width * 0.135,
+        height: height * 0.07,
         borderRadius: 40,
         position: 'absolute',
     },
@@ -114,8 +113,8 @@ const styles = StyleSheet.create({
     },
 
     logoDisplay: {
-        width: 150,
-        height: 150,
+        width: 0.4 *  width,
+        height: 0.2 * height,
         alignSelf: 'center',
     },
 
@@ -134,8 +133,8 @@ const styles = StyleSheet.create({
 
     goBack: {
         position: 'absolute', 
-        top: 50, 
-        left: 10
+        top: height * 0.065, 
+        left: width * 0.03
     },
 
     modalStyle: {
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         textAlign: 'left',
-        marginBottom: 20,
+        marginBottom: height * 0.025,
         color: 'white'
     },
 
@@ -165,21 +164,32 @@ const styles = StyleSheet.create({
         color: '#A7A7A7',
         opacity: 1,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: height * 0.025,
         textTransform: 'capitalize'
         
     },
 
     modalImage: {
-        width: 200,
-        height: 200,
+        width: width * 0.6,
+        height: height * 0.3,
         opacity: 0.85
     },
 
     modalCollumn: {
         flex: 0.45,
         alignItems: 'center',
-    }
+    },
+
+    modalYesNo:{
+        width: 120,
+        height: 40,
+        borderRadius: 200,
+    },
+
+    pressableYesNo:{
+        width: 100,
+        height: 50,
+    },
 })
 
 export default styles;

@@ -7,7 +7,8 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import * as WebBrowser from 'expo-web-browser';
 
 // AUTH
-import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithCredential, 
+    createUserWithEmailAndPassword } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import * as Google from 'expo-auth-session/providers/google';
 
@@ -15,45 +16,57 @@ import * as Google from 'expo-auth-session/providers/google';
 import styles from "./styles";
 import NextButton from "../../components/nextButton";
 import requestLoL from "../../api/lolProfile";
-import {pushData, getData} from "../../firebase";
+import { pushData, getData } from "../../firebase";
 
 WebBrowser.maybeCompleteAuthSession();
 
-export function FirstPage({navigation}){
+export function FirstPage({navigation, route}){
 
         const [currentUser, setCurrentUser] = useState(null)
+        const [modal, setModal] = useState(false)
         currentUser == null
         ? null
         : navigation.navigate('NicknamePage', {currentUser})
 
+        // const auth = getAuth(initializeApp(require('../../firebase/firebase.json')))
         // OAUTH SESSION --------------
-        const { client_id } = require('../../auth/googleAuth.json')
-        const auth = getAuth(initializeApp(require('../../firebase/firebase.json')))
-        const [request, response, promptAsync] = Google.useIdTokenAuthRequest({ clientId: client_id });
-          
-        useEffect(() => {
+        // const { client_id, android_client } = require('../../auth/googleAuth.json')
+        // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({ 
+        //     loginHint: 'youremail@gmail.com',
+        //     scopes: encodeURI('profile email'),
+        //     clientId: client_id,
+        //     androidClientId: android_client 
+        // });
+        
+        // useEffect(() => {
             
-            if (response?.type === 'success'){
-                const { id_token } = response.params;
-                const credential = GoogleAuthProvider.credential(id_token)
-                signInWithCredential(auth, credential)
-            }
-        }, [response])
+        //     if (response?.type === 'success'){
+        //         const { id_token } = response.params;
+        //         const credential = GoogleAuthProvider.credential(id_token)
+        //         signInWithCredential(auth, credential)
+        //     }
+        // }, [response])
 
-        async function signIn(){
-            await promptAsync()
-            setCurrentUser({
-                name: auth.currentUser.displayName,
-                uid: auth.currentUser.uid,
-                email: auth.currentUser.email,
-                photo: auth.currentUser.photoURL
-            })
-            navigation.navigate('NicknamePage', { currentUser })
-        }
+        // async function signIn(){
+        //     await promptAsync({
+        //         useProxy: false,
+        //     })
+        //     setCurrentUser({
+        //         name: auth.currentUser.displayName,
+        //         uid: auth.currentUser.uid,
+        //         email: auth.currentUser.email,
+        //         photo: auth.currentUser.photoURL
+        //     })
+        //     navigation.navigate('NicknamePage', { currentUser })
+        // }
 
         // ----------
+
+        // -------------- LOCAL SIGN UP -----------------
         
+        console.log(route.params.userData)
     return(
+ 
         <MotiView style = {styles.container}>
             <MotiImage 
             from = {{opacity: 0}}
@@ -108,10 +121,8 @@ export function FirstPage({navigation}){
             delay = {700}
             style = {styles.subDescription}>You only need to pass your League of Legends’ nickname and the frequency you play. Simple, right? You can change them whenever you want.</MotiText>
 
-            <NextButton title = "LET'S START!" to = { async() => 
-            currentUser != null
-            ? navigation.navigate('NicknamePage', {currentUser})
-            : await signIn() } 
+            <NextButton title = "LET'S START!" to = { () => 
+            navigation.navigate('NicknamePage', {currentUser})}
             done/>
         </MotiView>
     )
@@ -229,7 +240,6 @@ export function NicknamePage({navigation, route}){
                         from = {{opacity: 0, translateY: -50}}
                         animate = {{opacity: 1, translateY: 0}}
                         transition = {{type: 'timing'}}
-                        
                         style = {styles.modalQuestions}>Is that your account?</MotiText>
 
                         <View style = {{ flexDirection: 'row', marginTop: 30}}>
@@ -279,11 +289,11 @@ export function NicknamePage({navigation, route}){
                         <View style = {{width: '85%', flexDirection: 'row', justifyContent: 'space-around', marginTop: 60}}>
                             <Pressable 
                             onPress={() => {setModal(false); setDone(true)}}
-                            style = {{width: 100, height: 50}}>
+                            style = {styles.pressableYesNo}>
                                 <MotiImage
                                 from = {{scale: 0}}
                                 animate = {{scale: 1}} 
-                                style = {{borderRadius: 200, width: 120, height: 40}}
+                                style = {styles.modalYesNo}
                                 source={require('../../../assets/modalYes.png')} />
                             </Pressable>
 
@@ -292,11 +302,11 @@ export function NicknamePage({navigation, route}){
                                 setModal(false); 
                                 setInfoProfile(infoTemp)
                                 }}
-                            style = {{width: 100, height: 50}}>
+                            style = {styles.pressableYesNo}>
                                 <MotiImage 
                                 from = {{scale: 0}}
                                 animate = {{scale: 1}}
-                                style = {{borderRadius: 200, width: 120, height: 40}}
+                                style = {styles.modalYesNo}
                                 source={require('../../../assets/modalNo.png')} />
                             </Pressable>
                         </View>
@@ -395,7 +405,8 @@ export function FrequencyPage({navigation, route}){
     async function finish(){
         setModal(true)
         await pushData(getData())
-        setIsSignedIn();
+        alert("You're all done, thanks for supporting the Nyx Alpha!")
+        // setIsSignedIn();
     }
 
     let daysPlaying = []
