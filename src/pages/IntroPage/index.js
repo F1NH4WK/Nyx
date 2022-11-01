@@ -14,53 +14,10 @@ import { pushData, getData } from "../../firebase";
 
 export function FirstPage({navigation, route}){
 
-    console.log(route.params.userData)
+    alert(`Your email: ${route.params.userData.email}`)
+    const currentUser = route.params.userData
 
-        const [currentUser, setCurrentUser] = useState(null)
-        const [modal, setModal] = useState(false)
-        currentUser == null
-        ? null
-        : navigation.navigate('NicknamePage', {currentUser})
-
-        // const auth = getAuth(initializeApp(require('../../firebase/firebase.json')))
-        // OAUTH SESSION --------------
-        // const { client_id, android_client } = require('../../auth/googleAuth.json')
-        // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({ 
-        //     loginHint: 'youremail@gmail.com',
-        //     scopes: encodeURI('profile email'),
-        //     clientId: client_id,
-        //     androidClientId: android_client 
-        // });
-        
-        // useEffect(() => {
-            
-        //     if (response?.type === 'success'){
-        //         const { id_token } = response.params;
-        //         const credential = GoogleAuthProvider.credential(id_token)
-        //         signInWithCredential(auth, credential)
-        //     }
-        // }, [response])
-
-        // async function signIn(){
-        //     await promptAsync({
-        //         useProxy: false,
-        //     })
-        //     setCurrentUser({
-        //         name: auth.currentUser.displayName,
-        //         uid: auth.currentUser.uid,
-        //         email: auth.currentUser.email,
-        //         photo: auth.currentUser.photoURL
-        //     })
-        //     navigation.navigate('NicknamePage', { currentUser })
-        // }
-
-        // ----------
-
-        // -------------- LOCAL SIGN UP -----------------
-        
-        console.log(route.params.userData)
     return(
- 
         <MotiView style = {styles.container}>
             <MotiImage 
             from = {{opacity: 0}}
@@ -124,6 +81,8 @@ export function FirstPage({navigation, route}){
 
 export function NicknamePage({navigation, route}){
 
+    const currentUser = route.params.userData
+
     const infoTemp = {
     champions: [{
         championName: undefined,
@@ -153,6 +112,12 @@ export function NicknamePage({navigation, route}){
     const searchNick = nick => requestLoL(nick)
     .then(data => setInfoProfile(data))
 
+    async function isSummonerAuthenticated(){
+        return await getData(nick)
+        ? alert('This user is already authenticated!')
+        : search()
+    }
+
     const search = () => {searchNick(nick); setModal(true); setLoading(true)}
 
     return(
@@ -179,12 +144,10 @@ export function NicknamePage({navigation, route}){
                 <TextInput 
                 style = {styles.textInput} placeholder="Nickname"
                 placeholderTextColor={'white'}
+                value = {nick}
                 onChangeText={(text) => setNick(text)}
-                onSubmitEditing = { async() => {
-                    exists = await getData(nick)
-                    await exists
-                    ? alert("There's already an user signed with this account!")
-                    : search()
+                onEndEditing = { async() => {
+                    await isSummonerAuthenticated();
                 }}
                 />
             </MotiView>
@@ -282,7 +245,9 @@ export function NicknamePage({navigation, route}){
                     
                         <View style = {{width: '85%', flexDirection: 'row', justifyContent: 'space-around', marginTop: 60}}>
                             <Pressable 
-                            onPress={() => {setModal(false); setDone(true)}}
+                            onPress={() => {
+                                navigation.push('FrequencyPage', {infos: info, nick: nick, user: route.params.currentUser}); 
+                            }}
                             style = {styles.pressableYesNo}>
                                 <MotiImage
                                 from = {{scale: 0}}
@@ -319,8 +284,12 @@ export function NicknamePage({navigation, route}){
 
             <NextButton 
             title = "continue" 
-            to = {() => navigation.push('FrequencyPage', {infos: info, nick: nick, user: route.params.currentUser})}
-            done = {done == true && info != infoTemp}/>
+            to = {async () => {
+                nick != ''
+                ? await isSummonerAuthenticated()
+                : null
+            }}
+            done = {nick != ''}/>
         </View>
     )
 }
@@ -373,10 +342,11 @@ export function FrequencyPage({navigation, route}){
     DateTimePickerAndroid.open({
         value: option == 1? time1 : time2,
         mode: 'time',
-        display: 'spinner',
-        positiveButtonLabel: 'Set',
+        display: 'clock',
         minuteInterval: 15,
-        onChange: (event, date) => option == 1? setTime1(date) : setTime2(date)
+        positiveButtonLabel: 'Set',
+        negativeButtonLabel: 'Nop',
+        onChange: (event, date) => option == 1? setTime1(date) : setTime2(date),
     })
 
     const infos = route.params.infos

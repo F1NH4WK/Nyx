@@ -2,11 +2,13 @@ import { MotiView, MotiImage, MotiText } from "moti";
 import { useEffect, useState } from "react";
 import { Text, TextInput, View, Pressable, Image } from "react-native";
 import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
-import { getAuth, createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential, signInWithPopup } from 'firebase/auth';
+import { getAuth, 
+    createUserWithEmailAndPassword, signInWithEmailAndPassword, 
+    GoogleAuthProvider, 
+    signInWithCredential } from 'firebase/auth';
 import { initializeApp } from "firebase/app";
-import * as AuthSession from 'expo-auth-session'
 import * as Google from 'expo-auth-session/providers/google'
+import Lottie from 'lottie-react-native';
 
 // LOCAL IMPORTS
 import styles from "./styles";
@@ -17,7 +19,6 @@ export default function SignPage({navigation}){
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [userData, setUser] = useState(undefined)
     const [viewPassword, setViewPassword] = useState(true)
     const [isUserRegistred, setIsUserRegistred] = useState(false)
 
@@ -43,39 +44,61 @@ export default function SignPage({navigation}){
         const credential = GoogleAuthProvider.credential(id_token)
         await signInWithCredential(auth, credential)
 
-        setUser({
+        const userData = {
             name: auth.currentUser.displayName,
-        })
+            email: auth.currentUser.email
+        }
+        navigation.navigate('InfoPage', {userData})
     }
 
 
     async function signIn(){
         try{
-            await signInWithEmailAndPassword(auth, email, password)
+            const user = await signInWithEmailAndPassword(auth, email, password)
+            const userData = {
+                email: user.user.email
+            }
 
             // Use user.user.delete() to remove it from firebase auth
-
-            // navigation.navigate('InfoPage', {userData})
+            navigation.navigate('InfoPage', {userData})
         }
         catch(e){
-            alert(e)
+            alert(`Wrong password!`)
         }
     }
 
     async function signUp(){
         try{
-            await createUserWithEmailAndPassword(auth, email, password);
+           const user =  await createUserWithEmailAndPassword(auth, email, password);
             await addNewUser(email)
+            const userData = {
+                email: user.user.email,
+            }
 
-        // navigation.navigate('InfoPage', {userData})
+        navigation.navigate('InfoPage', {userData})
         }
         catch(e){
-            alert(e)
+            alert(`Looks like something went wrong! This is the error: \n${e}`)
         }
     }
 
     return(
         <View style = {styles.container}>
+            <Lottie
+            source={require('../../../assets/animations/background.json')}
+            loop
+            autoPlay
+            resizeMode="cover"
+            duration={3000}
+            />
+            <Lottie
+            source={require('../../../assets/animations/background.json')}
+            loop
+            autoPlay
+            resizeMode="cover"
+            duration={1500}
+            />
+
             <MotiImage 
             from = {{translateY: 0, scale: 1}}
             animate = {{translateY: 5, scale: 1.02}}
@@ -106,7 +129,9 @@ export default function SignPage({navigation}){
                         <View style = {styles.formInput}>
                         <TextInput
                             placeholder = "E-mail"
+                            clearButtonMode="while-editing"
                             selectionColor = {'#392190'}
+                            keyboardType = {'email-address'}
                             value = {email}
                             onEndEditing = {async () => {
                                 await isEmailAuthenticated(email) 
@@ -126,7 +151,9 @@ export default function SignPage({navigation}){
                             <TextInput
                             secureTextEntry = {viewPassword}
                             placeholder = "Password"
+                            keyboardType="twitter"
                             value={password}
+                            editable = {email != ''}
                             onChangeText = {(pass) => setPassword(pass)}
                             placeholderTextColor = '#A7A7A7'
                             selectionColor={'#392190'}
@@ -148,7 +175,9 @@ export default function SignPage({navigation}){
                         </View>
 
                     </View>
-                    <Pressable style = {{width: '100%', alignItems: 'flex-end', paddingHorizontal: 12}}>
+                    <Pressable 
+                    onPress={() => alert("Password reset's stil in development, sorry.")}
+                    style = {{width: '100%', alignItems: 'flex-end', paddingHorizontal: 12}}>
                         <Text style = {{color: '#A7A7A7', fontSize: 12}}>Forgot my password</Text>
                     </Pressable>
                 </MotiView>

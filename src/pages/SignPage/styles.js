@@ -12,17 +12,17 @@ const styles = StyleSheet.create({
     },
 
     formContainer: {
-        backgroundColor: '#222222',
+        backgroundColor: 'rgba(34, 34, 34, 0.9)',
         width: '90%',
         height: height * 0.55,
         shadowColor: 'red',
         shadowOffset: {width: -2, height: 4},
         shadowOpacity: 0.2,
         shadowRadius: 3,
-        borderRadius: 10,
+        borderRadius: 15,
         alignItems: 'center',
         padding: 10,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
 
     formHeaderWrapper: {
@@ -45,20 +45,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: 'white',
-
     },
     
     inputWrapper: {
         padding: 10,
         width: '100%',
         height: '50%',
-        // borderColor: 'blue',
-        // borderWidth: 2
     },
 
     inputGroup: {
-        borderColor: 'red',
-        borderWidth: 2,
         width: '100%',
         height: '100%'
     },
@@ -68,8 +63,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: height * 0.065,
         alignItems: 'center',
-        borderRadius: 200
-        
+        borderRadius: 60,
+        color: 'white',
     },
 
     formInputWrapper: {
@@ -86,7 +81,9 @@ const styles = StyleSheet.create({
         shadowColor: 'white',
         padding: 15,
         marginBottom: height * 0.03,
-        alignSelf: 'baseline'
+        alignSelf: 'baseline',
+        color: 'white',
+        
     },
 
     inputIcon: {
@@ -99,7 +96,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: height * 0.08,
         backgroundColor: '#303030',
-        borderRadius: 10,
+        borderRadius: 15,
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
@@ -109,7 +106,8 @@ const styles = StyleSheet.create({
 
     formButtonText: {
         fontSize: 16, 
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: 'white'
     },
 
     socialGroup: {
@@ -119,7 +117,7 @@ const styles = StyleSheet.create({
     },
 
     socialImage: {
-        opacity: 0.8,
+        opacity: 1,
         width: 20,
         height: 20,
     },
