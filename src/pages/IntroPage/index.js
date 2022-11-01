@@ -4,13 +4,6 @@ import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage, MotiText } from "moti";
 import Lottie from 'lottie-react-native';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import * as WebBrowser from 'expo-web-browser';
-
-// AUTH
-import { getAuth, GoogleAuthProvider, signInWithCredential, 
-    createUserWithEmailAndPassword } from 'firebase/auth';
-import { initializeApp } from 'firebase/app';
-import * as Google from 'expo-auth-session/providers/google';
 
 // LOCAL IMPORTS
 import styles from "./styles";
@@ -18,9 +11,10 @@ import NextButton from "../../components/nextButton";
 import requestLoL from "../../api/lolProfile";
 import { pushData, getData } from "../../firebase";
 
-WebBrowser.maybeCompleteAuthSession();
 
 export function FirstPage({navigation, route}){
+
+    console.log(route.params.userData)
 
         const [currentUser, setCurrentUser] = useState(null)
         const [modal, setModal] = useState(false)
@@ -406,6 +400,7 @@ export function FrequencyPage({navigation, route}){
         setModal(true)
         await pushData(getData())
         alert("You're all done, thanks for supporting the Nyx Alpha!")
+        setModal(false)
         // setIsSignedIn();
     }
 

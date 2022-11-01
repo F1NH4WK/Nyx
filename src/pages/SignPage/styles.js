@@ -6,30 +6,122 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: StatusBar.currentHeight + width * 0.05,
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#272727',
+        padding: width * 0.02
     },
 
-    title: {
-        fontWeight: 'bold',
+    formContainer: {
+        backgroundColor: '#222222',
+        width: '90%',
+        height: height * 0.55,
+        shadowColor: 'red',
+        shadowOffset: {width: -2, height: 4},
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        borderRadius: 10,
+        alignItems: 'center',
+        padding: 10,
+        justifyContent: 'space-between'
+    },
+
+    formHeaderWrapper: {
+        width: '100%',
+        height: '20%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    formHeader: {
         fontSize: 25,
-        textAlign: 'left',
-        alignSelf: 'flex-start',
-        marginLeft: width * 0.1,
-        marginBottom: height * 0.04
+        opacity: 0.9,
+        fontWeight: 'bold',
+        letterSpacing: 0.5,
+        color: 'white'
+    },
+
+    formSubHeader: {
+        opacity: 0.85,
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'white',
+
+    },
+    
+    inputWrapper: {
+        padding: 10,
+        width: '100%',
+        height: '50%',
+        // borderColor: 'blue',
+        // borderWidth: 2
+    },
+
+    inputGroup: {
+        borderColor: 'red',
+        borderWidth: 2,
+        width: '100%',
+        height: '100%'
+    },
+
+    formInput: {
+        flexDirection: 'row',
+        width: '100%',
+        height: height * 0.065,
+        alignItems: 'center',
+        borderRadius: 200
+        
+    },
+
+    formInputWrapper: {
+        height: height * 0.2,
+        justifyContent: 'space-around'
     },
 
     input: {
-        width: '80%',
+        width: '100%',
         borderColor: '#392190',
-        borderWidth: 1,
+        borderBottomWidth: 2,
         height: height * 0.065,
-        borderRadius: 200,
+        borderRadius: 20,
         shadowColor: 'white',
-        shadowOffset: {width: 2, height: 5},
-        shadowOpacity: 1,
-        shadowRadius: 1,
         padding: 15,
-        marginBottom: height * 0.03
+        marginBottom: height * 0.03,
+        alignSelf: 'baseline'
+    },
+
+    inputIcon: {
+        position: 'absolute',
+        right: 20,
+        opacity: 0.8
+    },
+
+    logButton: {
+        width: '100%',
+        height: height * 0.08,
+        backgroundColor: '#303030',
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        padding: 15,
+        opacity: 0.9
+    },
+
+    formButtonText: {
+        fontSize: 16, 
+        fontWeight: 'bold'
+    },
+
+    socialGroup: {
+        flexDirection: 'row',
+        width: width * 0.18,
+        justifyContent: 'space-between'
+    },
+
+    socialImage: {
+        opacity: 0.8,
+        width: 20,
+        height: 20,
     },
 
     logoDisplay: {
