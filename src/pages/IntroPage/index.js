@@ -1,5 +1,5 @@
 import { useEffect, useState} from "react";
-import { View, Text, TextInput, Pressable, Image, Modal, Button} from "react-native";
+import { View, Text, TextInput, Pressable, Image, Modal, Button, Dimensions} from "react-native";
 import { Entypo } from '@expo/vector-icons';
 import { MotiView, MotiImage, MotiText } from "moti";
 import Lottie from 'lottie-react-native';
@@ -9,7 +9,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import styles from "./styles";
 import NextButton from "../../components/nextButton";
 import requestLoL from "../../api/lolProfile";
-import { pushData, getData } from "../../firebase";
+import { pushData, getData, pushDataToEmail } from "../../firebase";
 
 
 export function FirstPage({navigation, route}){
@@ -80,7 +80,7 @@ export function FirstPage({navigation, route}){
 
 export function NicknamePage({navigation, route}){
 
-    const currentUser = route.params.userData
+    const currentUser = route.params.currentUser
 
     const infoTemp = {
     champions: [{
@@ -112,7 +112,6 @@ export function NicknamePage({navigation, route}){
 
     async function searchNick(nick){
         const data = await requestLoL(nick)
-        console.log(nick, data)
 
         if (data == undefined){
             setModal(false)
@@ -236,7 +235,16 @@ export function NicknamePage({navigation, route}){
                                 <MotiText
                                 from = {{opacity: 0, translateY: -20}}
                                 animate = {{opacity: 1, translateY: 0}} 
-                                style = {styles.modalAnswer}>{nick}</MotiText>
+                                style = {{
+                                    ...styles.modalAnswer,
+                                    fontSize: nick.length > 9
+                                    ? 19
+                                    : 30,
+                                    marginBottom: nick.length > 9
+                                    ? Dimensions.get('window').height * 0.045
+                                    : Dimensions.get('window').height * 0.025,
+                                    
+                                    }}>{nick}</MotiText>
 
                                 <View style = {{flexDirection: 'row', width: '100%', marginBottom: 20, justifyContent: 'space-around'}}>
                                 {
@@ -368,11 +376,11 @@ export function FrequencyPage({navigation, route}){
     const infos = route.params.infos
     const setIsSignedIn = route.params.setSignIn
     const nick = route.params.nick
-    const user = route.params.user
+    const currentUser = route.params.user
 
     function getData(){
         const data = {
-            user,
+            currentUser,
             nick,
             ...infos,
             timePlaying: {timeStart: time1, timeEnd: time2},
@@ -385,6 +393,7 @@ export function FrequencyPage({navigation, route}){
     async function finish(){
         setModal(true)
         await pushData(getData())
+        await pushDataToEmail(getData(), currentUser.email)
         alert("You're all done, thanks for supporting the Nyx Alpha!")
         setModal(false)
         // setIsSignedIn();

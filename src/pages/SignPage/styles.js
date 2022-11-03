@@ -6,10 +6,11 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: StatusBar.currentHeight + width * 0.05,
         flex: 1,
-        alignItems: 'center',
+        // alignItems: 'center',
         backgroundColor: '#272727',
         padding: width * 0.02
     },
+    
 
     formContainer: {
         backgroundColor: 'rgba(34, 34, 34, 0.9)',

@@ -18,6 +18,13 @@ export async function pushData(data){
     return true
 } // 1S
 
+export async function pushDataToEmail(data, email){
+    const docRef = doc(db,'emails', email)
+    console.log(data, email)
+    await setDoc(docRef, data)
+    return true
+}
+
 export async function getData(nick){
     const docRef = doc(db, 'profiles', nick)
     const docSnap = await getDoc(docRef)
