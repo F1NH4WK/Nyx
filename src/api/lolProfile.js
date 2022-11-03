@@ -1,7 +1,11 @@
+import { getAPIKey } from "../firebase";
+
 export default async function requestLoL(nick){
 
+    console.log(await getAPIKey())
+
     const LOL_URL = 'https://br1.api.riotgames.com/lol';
-    const header = {'X-Riot-Token': "RGAPI-07399d2f-f168-4ec9-b199-975381a636fe" }
+    const header = {'X-Riot-Token': `${await getAPIKey()}` }
 
     // GET THE SUMMONER RANK AND THEIR POINTS
     async function getEntries(sumId){
@@ -30,7 +34,6 @@ export default async function requestLoL(nick){
         let res = response.status
 
         if(res == 200){
-            
             let data = await response.json();
             return data
         }
@@ -84,6 +87,4 @@ export default async function requestLoL(nick){
     catch{
         return undefined
     }
-    
-    
-}
+}   

@@ -38,7 +38,6 @@ export default function SignPage({navigation}){
       }, [response])
       
     
-    
     async function signWithGoogle(){
         const { id_token } = response.params
         const credential = GoogleAuthProvider.credential(id_token)
@@ -75,7 +74,7 @@ export default function SignPage({navigation}){
                 email: user.user.email,
             }
 
-        navigation.navigate('InfoPage', {userData})
+            navigation.navigate('InfoPage', {userData})
         }
         catch(e){
             alert(`Looks like something went wrong! This is the error: \n${e}`)

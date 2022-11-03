@@ -7,6 +7,12 @@ const app = initializeApp(firebaseConfig)
 // Initializing the Cloud
 const db = getFirestore(app);
 
+export async function getAPIKey(){
+    const docRef = doc(db, 'API', 'apikey')
+    const key = await getDoc(docRef)
+    return key.data().key
+}
+
 export async function pushData(data){
     await setDoc(doc(db, 'profiles', data.nick), data)
     return true

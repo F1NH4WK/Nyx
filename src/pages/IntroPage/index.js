@@ -14,7 +14,6 @@ import { pushData, getData } from "../../firebase";
 
 export function FirstPage({navigation, route}){
 
-    alert(`Your email: ${route.params.userData.email}`)
     const currentUser = route.params.userData
 
     return(
@@ -63,7 +62,7 @@ export function FirstPage({navigation, route}){
                 <Image 
                 style = {styles.iconsStyle}
                 source = {require('../../../assets/InfoGradient.png')} />
-                <Text style = {styles.subQuestion}>What infos should I pass?</Text>
+                <Text style = {styles.subQuestion}>What infos should I give?</Text>
             </MotiView>
 
             <MotiText 
@@ -102,15 +101,28 @@ export function NicknamePage({navigation, route}){
     }
 }
     const [nick, setNick] = useState('')
-    const [done, setDone] = useState(false)
     const [info, setInfoProfile] = useState(infoTemp)
     const [modal, setModal] = useState(false)
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {setLoading(false)},[info])
+    useEffect(() => {
+        setLoading(false)
+    },[info])
 
-    const searchNick = nick => requestLoL(nick)
-    .then(data => setInfoProfile(data))
+
+    async function searchNick(nick){
+        const data = await requestLoL(nick)
+        console.log(nick, data)
+
+        if (data == undefined){
+            setModal(false)
+            alert("This summoner doesn't exist!")
+        }
+        else{
+            setInfoProfile(data)
+        }
+        
+    }
 
     async function isSummonerAuthenticated(){
         return await getData(nick)
@@ -118,7 +130,11 @@ export function NicknamePage({navigation, route}){
         : search()
     }
 
-    const search = () => {searchNick(nick); setModal(true); setLoading(true)}
+    const search = async() => {
+        setModal(true)
+        setLoading(true)
+        await searchNick(nick)
+    }
 
     return(
         <View style = {styles.container}>
@@ -246,7 +262,7 @@ export function NicknamePage({navigation, route}){
                         <View style = {{width: '85%', flexDirection: 'row', justifyContent: 'space-around', marginTop: 60}}>
                             <Pressable 
                             onPress={() => {
-                                navigation.push('FrequencyPage', {infos: info, nick: nick, user: route.params.currentUser}); 
+                                navigation.push('FrequencyPage', {infos: info, nick: nick, user: currentUser}); 
                             }}
                             style = {styles.pressableYesNo}>
                                 <MotiImage

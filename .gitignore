@@ -12,5 +12,4 @@ web-build/
 .vscode/
 .expo-shared/
 package-lock.json
-babel.config.js
-*.json
+*json
