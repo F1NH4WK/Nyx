@@ -3,7 +3,7 @@
     "name": "Nyx",
     "slug": "Nyx",
     "scheme": "nyx",
-    "version": "1.2.1",
+    "version": "1.2.5",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "dark",

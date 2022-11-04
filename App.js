@@ -12,7 +12,6 @@ import { FirstPage, NicknamePage, FrequencyPage } from './src/pages/IntroPage';
 import ProfilePage from './src/pages/ProfilePage';
 import SignPage from './src/pages/SignPage';
 
-
 export default function App() {
 
   const {width, height} = Dimensions.get('window')
@@ -165,7 +164,7 @@ export default function App() {
         :
 
         <Stack.Navigator screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
-          <Stack.Screen name = 'SignPage' component =  {SignPage} />
+          <Stack.Screen name = 'SignPage' component =  {SignPage} initialParams = {{setSignIn: () => setIsSignedIn(true)}}/>
           <Stack.Screen name = 'InfoPage' component =  {FirstPage} />
           <Stack.Screen name = 'NicknamePage' component = {NicknamePage}/>
           <Stack.Screen name = 'FrequencyPage' component = {FrequencyPage} initialParams = {{setSignIn: () => setIsSignedIn(true)}}/>

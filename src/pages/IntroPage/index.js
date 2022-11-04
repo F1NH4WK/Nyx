@@ -270,6 +270,7 @@ export function NicknamePage({navigation, route}){
                         <View style = {{width: '85%', flexDirection: 'row', justifyContent: 'space-around', marginTop: 60}}>
                             <Pressable 
                             onPress={() => {
+                                setModal(false)
                                 navigation.push('FrequencyPage', {infos: info, nick: nick, user: currentUser}); 
                             }}
                             style = {styles.pressableYesNo}>
@@ -383,7 +384,7 @@ export function FrequencyPage({navigation, route}){
             currentUser,
             nick,
             ...infos,
-            timePlaying: {timeStart: time1, timeEnd: time2},
+            timePlaying: { timeStart: time1, timeEnd: time2 },
             weekPlay: daysPlaying,
             mainLane: mainLanes
         }
@@ -394,9 +395,10 @@ export function FrequencyPage({navigation, route}){
         setModal(true)
         await pushData(getData())
         await pushDataToEmail(getData(), currentUser.email)
-        alert("You're all done, thanks for supporting the Nyx Alpha!")
-        setModal(false)
-        // setIsSignedIn();
+
+        // alert("You're all done, thanks for supporting the Nyx Alpha!")
+        // setModal(false)
+        setIsSignedIn();
     }
 
     let daysPlaying = []

@@ -15,7 +15,7 @@ import styles from "./styles";
 import { isEmailAuthenticated, addNewUser } from "../../firebase";
 
 
-export default function SignPage({navigation}){
+export default function SignPage({navigation, route}){
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -47,7 +47,7 @@ export default function SignPage({navigation}){
             name: auth.currentUser.displayName,
             email: auth.currentUser.email
         }
-        navigation.navigate('InfoPage', {userData})
+        navigation.navigate('InfoPage', { userData })
     }
 
 
@@ -58,25 +58,27 @@ export default function SignPage({navigation}){
                 email: user.user.email
             }
             console.log(userData)
+            const signUser = route.params.setSignIn
+            signUser()
 
             // Use user.user.delete() to remove it from firebase auth
-            navigation.navigate('InfoPage', {userData})
+
         }
         catch(e){
-            alert(`Wrong password!`)
+            alert(`Wrong password! ${e}`)
         }
     }
 
     async function signUp(){
         try{
-           const user =  await createUserWithEmailAndPassword(auth, email, password);
+            const user =  await createUserWithEmailAndPassword(auth, email, password);
             await addNewUser(email)
             const userData = {
                 email: user.user.email,
             }
             console.log(userData)
 
-            navigation.navigate('InfoPage', {userData})
+            navigation.navigate('InfoPage', { userData })
         }
         catch(e){
             alert(`Looks like something went wrong! This is the error: \n${e}`)
@@ -139,9 +141,16 @@ export default function SignPage({navigation}){
                                 keyboardType = {'email-address'}
                                 value = {email}
                                 onEndEditing = {async () => {
-                                    await isEmailAuthenticated(email) 
-                                    ? setIsUserRegistred(true)
-                                    : setIsUserRegistred(false)
+                                    if (email.includes('@gmail.com'))
+                                    {
+                                        try{
+                                            await isEmailAuthenticated(email) 
+                                            setIsUserRegistred(true)
+                                        }
+                                        catch{
+                                            setIsUserRegistred(false)
+                                        }
+                                    }
                                 }}
                                 onChangeText = {(text) => setEmail(text)}
                                 placeholderTextColor = '#A7A7A7'
