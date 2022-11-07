@@ -375,7 +375,7 @@ export function FrequencyPage({navigation, route}){
     })
 
     const infos = route.params.infos
-    const setIsSignedIn = route.params.setSignIn
+    const signUser = route.params.setCurrentUser
     const nick = route.params.nick
     const currentUser = route.params.user
 
@@ -397,8 +397,8 @@ export function FrequencyPage({navigation, route}){
         await pushDataToEmail(getData(), currentUser.email)
 
         // alert("You're all done, thanks for supporting the Nyx Alpha!")
-        // setModal(false)
-        setIsSignedIn();
+        setModal(false)
+        signUser(currentUser);
     }
 
     let daysPlaying = []

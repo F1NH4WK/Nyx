@@ -53,7 +53,6 @@ export default function SearchingPage(){
                         <Text style = {{fontStyle: 'italic'}}>45 PDL</Text>
                     </View>
                 </View>
-                
             </View>
 
             <View style = {styles.displayLikes}>

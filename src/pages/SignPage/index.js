@@ -13,10 +13,13 @@ import Lottie from 'lottie-react-native';
 // LOCAL IMPORTS
 import styles from "./styles";
 import { isEmailAuthenticated, addNewUser } from "../../firebase";
+import { sin } from "react-native-reanimated";
 
 
 export default function SignPage({navigation, route}){
+    const signUser = route.params.setCurrentUser
 
+    // STATES
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [viewPassword, setViewPassword] = useState(true)
@@ -57,10 +60,7 @@ export default function SignPage({navigation, route}){
             const userData = {
                 email: user.user.email
             }
-            console.log(userData)
-            const signUser = route.params.setSignIn
-            signUser()
-
+            signUser(userData)
             // Use user.user.delete() to remove it from firebase auth
 
         }
@@ -76,7 +76,6 @@ export default function SignPage({navigation, route}){
             const userData = {
                 email: user.user.email,
             }
-            console.log(userData)
 
             navigation.navigate('InfoPage', { userData })
         }
