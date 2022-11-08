@@ -1,5 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
+import { 
+    getFirestore, setDoc, doc, getDoc, 
+    collection, getDocs, query } from "firebase/firestore";
 
 const firebaseConfig = require('./firebase.json')
 const app = initializeApp(firebaseConfig)
@@ -40,4 +42,15 @@ export async function isEmailAuthenticated(email){
 export async function addNewUser(email){
     await setDoc(doc(db, 'emails', email), {email: email})
     return true
+}
+
+export async function getSummoner(){
+    const q = query(collection(db, 'profiles'))
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(doc => {
+        console.log(doc.id + ' = ' + doc.data())
+    })
+
 }

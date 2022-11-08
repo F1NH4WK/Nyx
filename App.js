@@ -54,6 +54,7 @@ export default function App() {
             listeners = {{tabPress: () => homeAnimation.current?.play()}} 
             options={{
               headerShown: false,
+              tabBarStyle: {display: 'none'}, // TEMP
               tabBarIcon: ({size, focused}) => focused
               ?
               <View style = {{width: size + 30, height: size + 30, justifyContent: 'center', alignItems: 'center'}}>
