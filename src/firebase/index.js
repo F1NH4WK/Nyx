@@ -40,7 +40,7 @@ export async function isEmailAuthenticated(email){
 }
 
 export async function addNewUser(email){
-    await setDoc(doc(db, 'emails', email), {email: email})
+    await setDoc(doc(db, 'emails', email), { email: email })
     return true
 }
 
