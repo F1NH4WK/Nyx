@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
         width: width * 0.3,
         justifyContent: 'space-evenly',
         alignItems: 'center',
+        
     },
     
     laneAndTime: {
@@ -57,21 +58,23 @@ const styles = StyleSheet.create({
 
     daysWrapperStyle: {
         width: width * 0.65,
+        // borderColor: 'red',
+        // borderWidth: 2,
         height: height * 0.05,
         alignItems: 'center',
-        justifyContent: 'space-between',
         flexDirection: 'row',
+        justifyContent: 'space-between',
     },
 
     daysStyle: {
         borderRadius: 30,
         height: height * 0.03,
-        width: width * 0.11,
+        width: width  * 0.6 / 7,
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1,
         borderColor: '#A7A7A7',
-        opacity: 0.7,
+        opacity: 1,
     },
 
     likesStyle: {

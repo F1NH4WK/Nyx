@@ -143,8 +143,6 @@ export default function HomePage(){
     }
 
     function HighlightChampion({ item, animation, translateFrame, tier }){
-        
-        console.log(tier)
         let frameTier = '';
         
         switch(tier){
@@ -185,7 +183,6 @@ export default function HomePage(){
                     // transform: [{translateY: translateFrame}] 
                 }}
                 source = { frameTier } />
-
                 <Animated.Image
                 style = {styles.highlightChampion}
                 source={{uri: item}}/>
@@ -195,13 +192,23 @@ export default function HomePage(){
 
     function DaysPlaying({ weekPlay }){
 
+        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+
         return(
             <View style = {styles.daysWrapperStyle}>
-                { weekPlay.map((day, index) => {
+                { days.map((day, index) => {
 
+                    if (weekPlay.includes(day)){
+                        return (
+                        <View key = {index} style = {{...styles.daysStyle, backgroundColor: '#707070'}}>
+                            <Text style = {{fontSize: 9, color: 'white', fontWeight: 'bold'}}>{day}</Text>
+                        </View>
+                        )
+                    }
+                    
                     return(
                         <View key = {index} style = {styles.daysStyle}>
-                            <Text style = {{fontSize: 11, color: 'white', fontWeight: 'bold'}}>{day}</Text>
+                            <Text style = {{fontSize: 9, color: 'white'}}>{day}</Text>
                         </View>
                     )
                 })}
