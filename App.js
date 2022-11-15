@@ -21,10 +21,7 @@ export default function App() {
   }
 
     const { width, height } = Dimensions.get('window')
-    const [currentUser, setCurrentUser] = useState({
-      user: 'Finhawk',
-      email: 'araujoplayer@gmail.com'
-    })
+    const [currentUser, setCurrentUser] = useState(userTemp)
 
     const Tab = createBottomTabNavigator();
     const Stack = createNativeStackNavigator()

@@ -44,13 +44,22 @@ export async function addNewUser(email){
     return true
 }
 
+export async function getSummonerInfos(summoner){
+    const docRef = doc(db, 'profiles', summoner)
+    const docSnap = await getDoc(docRef)
+    console.log(docSnap)
+}
+
 export async function getSummoner(){
     const q = query(collection(db, 'profiles'))
+    const profiles = []
 
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach(doc => {
-        console.log(doc.id + ' = ' + doc.data())
+        profiles.push(doc.data())
     })
 
+    // recomendo dar um slice aqui, vai ajudar dps
+    return profiles;
 }

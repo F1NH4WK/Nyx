@@ -4,10 +4,12 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import MaskedView from '@react-native-masked-view/masked-view';
 import Svg, { Rect } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MotiImage } from 'moti';
 
 // LOCAL IMPORTS
 import styles from './styles'
 import { getSummoner } from '../../firebase';
+import { or } from 'react-native-reanimated';
 
 
 // FIXED VALUES
@@ -16,6 +18,7 @@ const { width, height } = Dimensions.get('window')
 const ITEM_SIZE = width * 0.72
 const SPACER_ITEM_SIZE = ( width - ITEM_SIZE ) / 2
 const BACKDROP_HEIGHT = height  * 0.85
+
 
 const tempData = [
 
@@ -87,16 +90,18 @@ function Backdrop({ champions, scrollX }){
             keyExtractor = {({ index }) => index } 
             renderItem = {({ item, index }) => {
 
+                if (!item.id){ return null}
+                
                 const opacity = scrollX.interpolate({
                     inputRange: [(index - 2) * ITEM_SIZE, (index - 1) * ITEM_SIZE],
                     outputRange: [0, 1],
                   })
                 
-                  const splash = item.splash
+                const splash = item.champions[0].championSplash
+                const tier = item.rankInfo.rank
+                
+                return <BackdropImage opacity = { opacity } splash = { splash }/>
 
-                return item.id
-                ? <BackdropImage opacity = { opacity } splash = { splash }/>
-                : null
 
             }} />
 
@@ -108,11 +113,26 @@ function Backdrop({ champions, scrollX }){
     )
 }
 
+
 export default function HomePage(){
 
 
+    const [summoners, setSummoners] = useState([])
+    async function getUsers(){
+        const someProfiles = await getSummoner();
+        return setSummoners(someProfiles)
+    }
+
+    useEffect(() => {
+        const user = async() => {
+            await getUsers()
+        }
+        user();
+    }, [])
+    
+
     // ANIMATION
-    const scrollX = useRef(new Animated.Value(0)).current
+    const scrollX = useRef(new Animated.Value(0)).current;
     // [space, ...data, space]
 
 
@@ -122,13 +142,62 @@ export default function HomePage(){
         )
     }
 
-    function DaysPlaying(props){
+    function HighlightChampion({ item, animation, translateFrame, tier }){
+        
+        console.log(tier)
+        let frameTier = '';
+        
+        switch(tier){
+            case 'IRON' || 'Unraked':
+                frameTier = require('../../../assets/frames/ironFrame.png');
+                break
+            case 'BRONZE':
+                frameTier = require('../../../assets/frames/bronzeFrame.png');
+                break
+            case 'SILVER':
+                frameTier = require('../../../assets/frames/silverFrame.png');
+                break
+            case 'GOLD':
+                frameTier = require('../../../assets/frames/goldFrame.png');
+                break
+            case 'PLATINUM':
+                frameTier = require('../../../assets/frames/PlatinumFrame.png');
+                break
+            case 'DIAMOND':
+                frameTier = require('../../../assets/frames/DiamondFrame.png');
+                break
+            case 'MASTER':
+                frameTier = require('../../../assets/frames/MasterFrame.png');
+                break
+            case 'GRANDMASTER':
+                frameTier = require('../../../assets/frames/GrandmasterFrame.png');
+                break
+            case 'CHALLENGER':
+                frameTier = require('../../../assets/frames/ChallengerFrame.png');
+                break
+        }
 
-        const days = props.days
+        return(
+            <View>
+                {/* ARRUMAR PARA OS ELOS: bronze, prata e gold */}
+                <Animated.Image
+                style = {{...styles.tierBackImage, opacity: animation, 
+                    // transform: [{translateY: translateFrame}] 
+                }}
+                source = { frameTier } />
+
+                <Animated.Image
+                style = {styles.highlightChampion}
+                source={{uri: item}}/>
+            </View>
+        )
+    }
+
+    function DaysPlaying({ weekPlay }){
 
         return(
             <View style = {styles.daysWrapperStyle}>
-                { days.map((day, index) => {
+                { weekPlay.map((day, index) => {
 
                     return(
                         <View key = {index} style = {styles.daysStyle}>
@@ -146,16 +215,15 @@ export default function HomePage(){
             <View style = {styles.timePlayingWrapper}>
                 <AntDesign name="clockcircleo" size={17} color="white" />
                 <Text style = {styles.hoursText}>
-                    {time}
+                    {time.timeStart + ' - ' + time.timeEnd}
                 </Text>
             </View>
         )
     }
 
-    function SummonerLanes({lanes, tier}){
-
+    function SummonerLanes({lanes}){
         return(
-            <View style = {{...styles.timePlayingWrapper, borderColor: '#E1C156'}}>
+            <View style = {{...styles.timePlayingWrapper, borderColor: '#C8AA6E', opacity: 0.9}}>
                 { lanes.map((i, index) => {
 
                     let LaneRender = () => {
@@ -165,8 +233,7 @@ export default function HomePage(){
                         return(
                             <Image
                             style = {styles.lanesStyle}
-                            key = {index}
-                            source = {require('../../../assets/lanes/Position_Gold-Support.png')}
+                            source = {require('../../../assets/lanes/Support.png')}
                             />
                         )
 
@@ -174,8 +241,7 @@ export default function HomePage(){
                         return(
                             <Image
                             style = {styles.lanesStyle}
-                            key = {index}
-                            source = {require('../../../assets/lanes/Position_Gold-Bot.png')}
+                            source = {require('../../../assets/lanes/Bot.png')}
                             />
                         )
 
@@ -183,8 +249,7 @@ export default function HomePage(){
                         return(
                             <Image
                             style = {styles.lanesStyle}
-                            key = {index}
-                            source = {require('../../../assets/lanes/Position_Gold-Jungle.png')}
+                            source = {require('../../../assets/lanes/Jungle.png')}
                             />
                         )
 
@@ -192,8 +257,7 @@ export default function HomePage(){
                         return(
                             <Image
                             style = {styles.lanesStyle}
-                            key = {index}
-                            source = {require('../../../assets/lanes/Position_Gold-Top.png')}
+                            source = {require('../../../assets/lanes/Top.png')}
                             />
                         )
 
@@ -201,14 +265,13 @@ export default function HomePage(){
                         return(
                             <Image
                             style = {styles.lanesStyle}
-                            key = {index}
-                            source = {require('../../../assets/lanes/Position_Gold-Mid.png')}
+                            source = {require('../../../assets/lanes/Mid.png')}
                             />   
                         )
                     }
                 }
                     return(
-                        <LaneRender/>
+                        <LaneRender key = {index}/>
                     )
                 }
             )
@@ -218,8 +281,16 @@ export default function HomePage(){
     }
 
     const Loading = () => {
+
         return(
-            <View/>
+            <View style = {styles.modalStyle}>
+                    <MotiImage 
+                    from = {{opacity: 0}}
+                    animate = {{opacity: 1}}
+                    delay = {100}    
+                    style = {styles.modalImage}
+                    source={require('../../../assets/gifs/processing.gif')}/>
+                </View>
         )
     }
 
@@ -238,32 +309,42 @@ export default function HomePage(){
         })
 
         const translateOpacity = scrollX.interpolate({
-            inputRange: inputRange,
-            outputRange: [0, 1, 0],
+            inputRange,
+            outputRange: [0, 0.9, 0],
         })
-    
 
+        // const translateFrame = scrollX.interpolate({
+        //     inputRange,
+        //     outputRange: [-20, 0, 30]
+        // })
+
+        const splash = item.champions[0].championSplash
+        const tier = item.rankInfo.rank
+    
         return(
             <View style = {{width: ITEM_SIZE, marginTop: height * 0.15,}}>
                 <Animated.View style = {{...styles.suggestedWrapper,
                 transform: [{translateY: translateY}]}}>
-
-                    <Image
-                    style = {styles.highlightChampion}
-                    source={{uri: item.splash}}/>
+                    
+                    <HighlightChampion 
+                    item = { splash }
+                    animation = { translateOpacity }
+                    tier = { tier }
+                    // translateFrame = { translateFrame }
+                    />
                     
                     <Animated.View
                     style = {{...styles.suggestedWrapper, opacity: translateOpacity}}>
                         <Text style = {styles.nickStyle}>
-                            {item.text}
+                            { item.nick }
                         </Text>
                         
                         <View style = {styles.laneAndTime}>
-                            <TimePlaying time = {item.timePlaying}/>
-                            <SummonerLanes lanes = {item.lanes} tier = {item.tier} key = {index}/>
+                            <TimePlaying time = { item.timePlaying }/>
+                            <SummonerLanes lanes = { item.mainLane } tier = { item.rankInfo.rank }/>
                         </View>
 
-                        <DaysPlaying days = {item.days}/>
+                        <DaysPlaying weekPlay = {item.weekPlay}/>
 
                         <View style = {styles.likesStyle}>
                             <Pressable onPress={async() => {}}>
@@ -272,7 +353,10 @@ export default function HomePage(){
                                 source={require('../../../assets/LikeGradient.png')}/>
                             </Pressable>
 
-                            <Pressable onPress={async() => {}}>
+                            <Pressable onPress = { async() => {
+                                // const summoner = await getSummoner();
+                                // console.log(summoner[1])
+                            }}>
                                 <Image
                                 style = {styles.likesImageStyle}
                                 source={require('../../../assets/DislikeGradient.png')}/>
@@ -288,38 +372,44 @@ export default function HomePage(){
         {
             key: 'left-spacer',
         },
-        ...tempData.slice(0, 3).reverse(),
+        ...summoners,
         {
             key: 'right-spacer'
         }
 ]
 
-    return(
-        <View style = {styles.container}>
-            <StatusBar translucent/>
-            <Ionicons name="close" size = {30} color = "white" style  = {styles.returnStyle} />
-            <Backdrop champions = { champions } scrollX = { scrollX }/>
 
-            <Animated.FlatList
-            renderToHardwareTextureAndroid
-            snapToInterval = { ITEM_SIZE }
-            bounces = {false}
-            decelerationRate = {0.8}
-            keyExtractor = {item => item.id}
-            horizontal
-            contentContainerStyle = {{alignItems: 'center'}}
-            scrollEventThrottle = {16}
-            showsHorizontalScrollIndicator = {false}
-            data = { champions }
-            onScroll = { Animated.event(
-                [{ nativeEvent: { contentOffset: { x: scrollX }}}],
-                { useNativeDriver: true }
-            )}
-            renderItem = { ({ item, index }) => 
-            item.id
-            ? <RenderSummoner item = {item} index = {index} />
-            : <Spacer/>
-            }/>
-        </View>
-    )
+    if (summoners.length != 0){
+        return(
+            <View style = {styles.container}>
+                <StatusBar translucent/>
+                <Ionicons name="close" size = {30} color = "white" style  = {styles.returnStyle} />
+                <Backdrop champions = { champions } scrollX = { scrollX }/>
+                
+                <Animated.FlatList
+                renderToHardwareTextureAndroid
+                snapToInterval = { ITEM_SIZE }
+                bounces = {false}
+                decelerationRate = {0.8}
+                keyExtractor = { item => item.id }
+                horizontal
+                contentContainerStyle = {{alignItems: 'center'}}
+                scrollEventThrottle = {16}
+                showsHorizontalScrollIndicator = {false}
+                data = { champions }
+                onScroll = { Animated.event(
+                    [{ nativeEvent: { contentOffset: { x: scrollX }}}],
+                    { useNativeDriver: true }
+                )}
+                renderItem = { ({ item, index }) => 
+                item.id
+                ? <RenderSummoner item = {item} index = {index} />
+                : <Spacer/>
+                }/>
+            </View>
+        )
+    }
+    else{
+        return <Loading/>
+    }
 }

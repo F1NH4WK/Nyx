@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
     },
 
     lanesStyle: {
-        width: width * 0.06,
-        height: width * 0.06,
+        width: width * 0.05,
+        height: width * 0.052,
     },
 
     daysWrapperStyle: {
@@ -96,10 +96,9 @@ const styles = StyleSheet.create({
     highlightChampion: {
         width: width * 0.62, 
         height: height * 0.55, 
-        borderRadius: 40, 
+        borderRadius: 5, 
         borderColor: 'rgba(39, 39, 39, 0.6)',
         marginBottom: height * 0.01,
-        borderWidth: 8
     },
 
     returnStyle: {
@@ -134,6 +133,30 @@ const styles = StyleSheet.create({
         height: height, 
         width: width,
         overflow: 'hidden'
+    },
+
+    tierBackImage:{
+        width: width * 0.666, 
+        height: height * 0.6, 
+        resizeMode: 'stretch', 
+        position: 'absolute',
+        zIndex: 2, 
+        top: -27, 
+        alignSelf: 'center', 
+        left: -11,
+    },
+
+    modalStyle: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.9)'
+    },
+
+    modalImage: {
+        width: width * 0.6,
+        height: height * 0.3,
+        opacity: 0.85
     },
 
 })
