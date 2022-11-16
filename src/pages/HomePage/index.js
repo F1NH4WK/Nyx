@@ -10,14 +10,12 @@ import { MotiView } from 'moti';
 import styles from './styles'
 import { getSummoner } from '../../firebase';
 import Loading from '../../components/loading';
-import { async } from '@firebase/util';
 
 // FIXED VALUES
 const { width, height } = Dimensions.get('window')
 const ITEM_SIZE = width * 0.72
 const SPACER_ITEM_SIZE = ( width - ITEM_SIZE ) / 2
 const BACKDROP_HEIGHT = height  * 0.85
-
 
 function BackdropImage({ splash, opacity }){
 
@@ -69,18 +67,15 @@ function Backdrop({ champions, scrollX }){
 
 export default function HomePage({ navigation }){
 
-
-    // INDEX TO GO
-    let [currentIndex, setCurrentIndex] = useState(0)
-
     // SUMMONERS TO BE DISPLAYED
     const [summoners, setSummoners] = useState([])
     async function getUsers(){
-        const someProfiles = await getSummoner();
+        const someProfiles = await getSummoner(0, 3);
         return setSummoners(someProfiles)
     }
 
     const now = useRef()
+    let [currentIndex, setCurrentIndex] = useState(0) 
 
     useEffect(() => {
         const user = async() => {
@@ -277,7 +272,16 @@ export default function HomePage({ navigation }){
 
         const splash = item.champions[0].championSplash
         const tier = item.rankInfo.rank
-    
+
+        useEffect(() => {
+            now.current?.scrollToIndex({
+                index: currentIndex,
+                animated: true,
+                viewOffset: SPACER_ITEM_SIZE,
+            })
+        }, [currentIndex])
+        
+        
         return(
             <View style = {{width: ITEM_SIZE, marginTop: height * 0.15,}}>
                 <Animated.View style = {{...styles.suggestedWrapper,
@@ -308,32 +312,16 @@ export default function HomePage({ navigation }){
                         <DaysPlaying weekPlay = { item.weekPlay }/>
 
                         <View style = {styles.likesStyle}>
-                            <Pressable onPressIn = { async () => {
-                                now.current.scrollToIndex({ index: index++ + 1, animated: true, viewOffset: SPACER_ITEM_SIZE});
-                                
-                                if(index++ + 1 == champions.length - 3){
-                                    const prevSummoners = summoners.filter((i, index) => {
-                                        return index == 0 || index == 1
-                                        ? null
-                                        : i
-                                    })
-                                    const newSummoners = await getSummoner();
-                                    setSummoners([
-                                        ...prevSummoners,
-                                        ...newSummoners
-                                    ])
-                                }
-
-                                
-                                
+                            <Pressable onPressIn = { () => {    
+                                setCurrentIndex(currentIndex++)
                             }}>
                                 <Image
                                 style = {styles.likesImageStyle}
                                 source={require('../../../assets/LikeGradient.png')}/>
                             </Pressable>
 
-                            <Pressable onPress = { async() => {
-                                now.current.scrollToIndex({ index: 1, animated: true, viewOffset: SPACER_ITEM_SIZE });
+                            <Pressable onPressIn = { () => {
+                                setCurrentIndex(1)
                             }}>
                                 <Image
                                 style = {styles.likesImageStyle}
@@ -343,8 +331,8 @@ export default function HomePage({ navigation }){
                     </Animated.View>
                 </Animated.View>
         </View>
-    )
-}   
+        )
+    }   
 
     const champions = [
         {
@@ -356,14 +344,12 @@ export default function HomePage({ navigation }){
         }
     ]
 
-
     if (summoners.length != 0){
         return(
             <MotiView
             from = {{opacity: 0}}
             animate = {{opacity: 1}}
             transition = {{delay: 300}}
-
             style = {styles.container}>
                 <StatusBar translucent/>
                 <Ionicons 
@@ -378,10 +364,11 @@ export default function HomePage({ navigation }){
                 snapToInterval = { ITEM_SIZE }
                 bounces = { false }
                 // decelerationRate = {0}
-                keyExtractor = { item => item.id }
+                keyExtractor = { (item, index) => item.id + '-' + index }
                 horizontal
                 ref = { now }
-                scrollEnabled = {false}
+                initialScrollIndex = { currentIndex }
+                // scrollEnabled = {false}
                 contentContainerStyle = {{alignItems: 'center'}}
                 scrollEventThrottle = {16}
                 showsHorizontalScrollIndicator = {false}

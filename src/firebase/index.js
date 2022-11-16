@@ -61,5 +61,5 @@ export async function getSummoner(){
     })
 
     // recomendo dar um slice aqui, vai ajudar dps
-    return profiles;
+    return profiles.slice(0, 4);
 }
