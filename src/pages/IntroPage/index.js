@@ -9,6 +9,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import styles from "./styles";
 import NextButton from "../../components/nextButton";
 import requestLoL from "../../api/lolProfile";
+import Loading from "../../components/loading";
 import { pushData, getData, pushDataToEmail } from "../../firebase";
 
 
@@ -322,21 +323,21 @@ export function NicknamePage({navigation, route}){
 export function FrequencyPage({navigation, route}){
 
     const daysTemp = [
-        {key: 0, label: 'SUN', value: 'Sunday', selected: false},
-        {key: 1, label: 'MON', value: 'Monday', selected: false},
-        {key: 2, label: 'TUE', value: 'Tuesday', selected: false},
-        {key: 3, label: 'WED', value: 'Wednesday', selected: false},
-        {key: 4, label: 'THU', value: 'Thursday', selected: false},
-        {key: 5, label: 'FRI', value: 'Friday', selected: false},
-        {key: 6, label: 'SAT', value: 'Saturday', selected: false}
+        {key: 0, label: 'SUN', selected: false},
+        {key: 1, label: 'MON', selected: false},
+        {key: 2, label: 'TUE', selected: false},
+        {key: 3, label: 'WED', selected: false},
+        {key: 4, label: 'THU', selected: false},
+        {key: 5, label: 'FRI', selected: false},
+        {key: 6, label: 'SAT', selected: false}
     ]
 
     const lanesTemp = [
-        {key: 0, value: require('../../../assets/lanes/Position_Diamond-Mid.png'), label: 'Mid', selected: false},
-        {key: 1, value: require('../../../assets/lanes/Position_Diamond-Top.png'), label: 'Top', selected: false},
-        {key: 2, value: require('../../../assets/lanes/Position_Diamond-Jungle.png'), label: 'Jungle', selected: false},
-        {key: 3, value: require('../../../assets/lanes/Position_Diamond-Bot.png'), label: 'ADC', selected: false},
-        {key: 4, value: require('../../../assets/lanes/Position_Diamond-Support.png'), label: 'Support', selected: false}
+        {key: 0, value: require('../../../assets/lanes/Mid.png'), label: 'Mid', selected: false},
+        {key: 1, value: require('../../../assets/lanes/Top.png'), label: 'Top', selected: false},
+        {key: 2, value: require('../../../assets/lanes/Jungle.png'), label: 'Jungle', selected: false},
+        {key: 3, value: require('../../../assets/lanes/Bot.png'), label: 'ADC', selected: false},
+        {key: 4, value: require('../../../assets/lanes/Support.png'), label: 'Support', selected: false}
     ]
 
     const [time1, setTime1] = useState(new Date())
@@ -384,7 +385,7 @@ export function FrequencyPage({navigation, route}){
             currentUser,
             nick,
             ...infos,
-            timePlaying: { timeStart: time1, timeEnd: time2 },
+            timePlaying: { timeStart: time1.getHours().toString(), timeEnd: time2.getHours().toString() },
             weekPlay: daysPlaying,
             mainLane: mainLanes
         }
@@ -417,7 +418,6 @@ export function FrequencyPage({navigation, route}){
 
 
     return(
-
         <View style = {styles.container}>
             <MotiView
             from = {{translateX: -50, opacity: 0.5}} 
@@ -516,14 +516,7 @@ export function FrequencyPage({navigation, route}){
             visible = {modal}
             statusBarTranslucent
             transparent>
-                <View style = {styles.modalStyle}>
-                    <MotiImage 
-                    from = {{opacity: 0}}
-                    animate = {{opacity: 1}}
-                    delay = {100}    
-                    style = {styles.modalImage}
-                    source={require('../../../assets/gifs/processing.gif')}/>
-                </View>
+                <Loading/>
             </Modal>
     </View>
     )

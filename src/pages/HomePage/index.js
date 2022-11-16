@@ -4,64 +4,19 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import MaskedView from '@react-native-masked-view/masked-view';
 import Svg, { Rect } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MotiImage } from 'moti';
+import { MotiView } from 'moti';
 
 // LOCAL IMPORTS
 import styles from './styles'
 import { getSummoner } from '../../firebase';
-import { or } from 'react-native-reanimated';
-
+import Loading from '../../components/loading';
+import { async } from '@firebase/util';
 
 // FIXED VALUES
 const { width, height } = Dimensions.get('window')
-
 const ITEM_SIZE = width * 0.72
 const SPACER_ITEM_SIZE = ( width - ITEM_SIZE ) / 2
 const BACKDROP_HEIGHT = height  * 0.85
-
-
-const tempData = [
-
-    {
-    id: 1,
-    text: 'O Azir',
-    days: ['SUN', 'FRI', 'MON', 'SAT', 'WED'],
-    timePlaying: '14:00 - 21:00',
-    lanes: ['Top', 'Bot', 'Mid'],
-    tier: 'Gold',
-    splash: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Azir_0.jpg'
-    },
-
-    {
-    id: 2,
-    text: 'M4jorzin',
-    days: ['SAT', 'TUE', 'WED'],
-    timePlaying: '10:00 - 20:00',
-    lanes: ['Mid', 'Top'],
-    tier: 'Diamond',
-    splash: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Ryze_0.jpg'
-    },
-
-    {
-    id: 3,
-    text: 'M4jorzin',
-    days: ['SAT', 'TUE', 'WED'],
-    timePlaying: '10:00 - 20:00',
-    lanes: ['Mid', 'Top'],
-    tier: 'Diamond',
-    splash: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aatrox_0.jpg'
-    },
-
-    {
-    id: 4,
-    text: 'GabrielBlack',
-    days: ['SAT', 'TUE', 'WED', 'SUN'],
-    timePlaying: '10:00 - 20:00',
-    lanes: ['Mid', 'Top'],
-    tier: 'Diamond',
-    splash: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Anivia_0.jpg'
-    },
-]
 
 
 function BackdropImage({ splash, opacity }){
@@ -98,10 +53,8 @@ function Backdrop({ champions, scrollX }){
                   })
                 
                 const splash = item.champions[0].championSplash
-                const tier = item.rankInfo.rank
                 
                 return <BackdropImage opacity = { opacity } splash = { splash }/>
-
 
             }} />
 
@@ -114,14 +67,20 @@ function Backdrop({ champions, scrollX }){
 }
 
 
-export default function HomePage(){
+export default function HomePage({ navigation }){
 
 
+    // INDEX TO GO
+    let [currentIndex, setCurrentIndex] = useState(0)
+
+    // SUMMONERS TO BE DISPLAYED
     const [summoners, setSummoners] = useState([])
     async function getUsers(){
         const someProfiles = await getSummoner();
         return setSummoners(someProfiles)
     }
+
+    const now = useRef()
 
     useEffect(() => {
         const user = async() => {
@@ -133,7 +92,6 @@ export default function HomePage(){
 
     // ANIMATION
     const scrollX = useRef(new Animated.Value(0)).current;
-    // [space, ...data, space]
 
 
     function Spacer(){
@@ -143,6 +101,7 @@ export default function HomePage(){
     }
 
     function HighlightChampion({ item, animation, translateFrame, tier }){
+
         let frameTier = '';
         
         switch(tier){
@@ -218,11 +177,16 @@ export default function HomePage(){
     }
 
     function TimePlaying({ time }){
+
+        const timeStart = time.timeStart;
+        const timeEnd = time.timeEnd;
+
         return(
             <View style = {styles.timePlayingWrapper}>
-                <AntDesign name="clockcircleo" size={17} color="white" />
+                <AntDesign name="clockcircleo" size = { 17 } color="white" />
+                
                 <Text style = {styles.hoursText}>
-                    {time.timeStart + ' - ' + time.timeEnd}
+                    { timeStart + ' - ' + timeEnd }
                 </Text>
             </View>
         )
@@ -287,20 +251,6 @@ export default function HomePage(){
         )
     }
 
-    const Loading = () => {
-
-        return(
-            <View style = {styles.modalStyle}>
-                    <MotiImage 
-                    from = {{opacity: 0}}
-                    animate = {{opacity: 1}}
-                    delay = {100}    
-                    style = {styles.modalImage}
-                    source={require('../../../assets/gifs/processing.gif')}/>
-                </View>
-        )
-    }
-
     function RenderSummoner({ item, index }){
 
         const inputRange = [
@@ -342,27 +292,48 @@ export default function HomePage(){
                     
                     <Animated.View
                     style = {{...styles.suggestedWrapper, opacity: translateOpacity}}>
-                        <Text style = {styles.nickStyle}>
+                        <Text style = {{...styles.nickStyle, 
+                        fontSize: item.nick.length > 9
+                        ? 25
+                        : 30
+                        }}>
                             { item.nick }
                         </Text>
                         
-                        <View style = {styles.laneAndTime}>
+                        <View style = { styles.laneAndTime }>
                             <TimePlaying time = { item.timePlaying }/>
                             <SummonerLanes lanes = { item.mainLane } tier = { item.rankInfo.rank }/>
                         </View>
 
-                        <DaysPlaying weekPlay = {item.weekPlay}/>
+                        <DaysPlaying weekPlay = { item.weekPlay }/>
 
                         <View style = {styles.likesStyle}>
-                            <Pressable onPress={async() => {}}>
+                            <Pressable onPressIn = { async () => {
+                                now.current.scrollToIndex({ index: index++ + 1, animated: true, viewOffset: SPACER_ITEM_SIZE});
+                                
+                                if(index++ + 1 == champions.length - 3){
+                                    const prevSummoners = summoners.filter((i, index) => {
+                                        return index == 0 || index == 1
+                                        ? null
+                                        : i
+                                    })
+                                    const newSummoners = await getSummoner();
+                                    setSummoners([
+                                        ...prevSummoners,
+                                        ...newSummoners
+                                    ])
+                                }
+
+                                
+                                
+                            }}>
                                 <Image
                                 style = {styles.likesImageStyle}
                                 source={require('../../../assets/LikeGradient.png')}/>
                             </Pressable>
 
                             <Pressable onPress = { async() => {
-                                // const summoner = await getSummoner();
-                                // console.log(summoner[1])
+                                now.current.scrollToIndex({ index: 1, animated: true, viewOffset: SPACER_ITEM_SIZE });
                             }}>
                                 <Image
                                 style = {styles.likesImageStyle}
@@ -383,23 +354,34 @@ export default function HomePage(){
         {
             key: 'right-spacer'
         }
-]
+    ]
 
 
     if (summoners.length != 0){
         return(
-            <View style = {styles.container}>
+            <MotiView
+            from = {{opacity: 0}}
+            animate = {{opacity: 1}}
+            transition = {{delay: 300}}
+
+            style = {styles.container}>
                 <StatusBar translucent/>
-                <Ionicons name="close" size = {30} color = "white" style  = {styles.returnStyle} />
+                <Ionicons 
+                name="close" size = {30} color = "white" 
+                style  = {styles.returnStyle}
+                onPress = {() => navigation.navigate('ProfilePage')} />
+
                 <Backdrop champions = { champions } scrollX = { scrollX }/>
                 
                 <Animated.FlatList
                 renderToHardwareTextureAndroid
                 snapToInterval = { ITEM_SIZE }
-                bounces = {false}
-                decelerationRate = {0.8}
+                bounces = { false }
+                // decelerationRate = {0}
                 keyExtractor = { item => item.id }
                 horizontal
+                ref = { now }
+                scrollEnabled = {false}
                 contentContainerStyle = {{alignItems: 'center'}}
                 scrollEventThrottle = {16}
                 showsHorizontalScrollIndicator = {false}
@@ -413,7 +395,7 @@ export default function HomePage(){
                 ? <RenderSummoner item = {item} index = {index} />
                 : <Spacer/>
                 }/>
-            </View>
+            </MotiView>
         )
     }
     else{

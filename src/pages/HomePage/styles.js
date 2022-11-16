@@ -149,19 +149,6 @@ const styles = StyleSheet.create({
         left: -11,
     },
 
-    modalStyle: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.9)'
-    },
-
-    modalImage: {
-        width: width * 0.6,
-        height: height * 0.3,
-        opacity: 0.85
-    },
-
 })
 
 export default styles

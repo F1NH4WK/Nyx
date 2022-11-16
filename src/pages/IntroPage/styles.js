@@ -137,12 +137,6 @@ const styles = StyleSheet.create({
         left: width * 0.03
     },
 
-    modalStyle: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.9)'
-    },
 
     modalQuestions: {
         fontSize: 30,
@@ -167,12 +161,6 @@ const styles = StyleSheet.create({
         marginBottom: height * 0.025,
         textTransform: 'capitalize'
         
-    },
-
-    modalImage: {
-        width: width * 0.6,
-        height: height * 0.3,
-        opacity: 0.85
     },
 
     modalCollumn: {
