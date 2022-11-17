@@ -17,8 +17,6 @@ const ITEM_SIZE = width * 0.72
 const SPACER_ITEM_SIZE = ( width - ITEM_SIZE ) / 2
 const BACKDROP_HEIGHT = height  * 0.85;
 
-let teste = 0
-
 function BackdropImage({ splash, opacity }){
 
     return(
@@ -235,7 +233,31 @@ export default function HomePage({ navigation }){
         return setSummoners(someProfiles)
     }
 
+
     const now = useRef()
+
+    // ANIMATION
+    const likePress = useRef(new Animated.Value(1)).current
+    const dislikePress = useRef(new Animated.Value(1)).current
+
+    const pressAnimation = (pressIn, target) => {
+        pressIn
+        // pressIn
+        ? Animated.timing(target, {
+            toValue: 0.93,
+            duration: 200,
+            useNativeDriver: true,
+        }).start()
+
+        // pressOut
+        : Animated.timing(target, {
+            toValue: 1,
+            duration: 200,
+            useNativeDriver: true
+        }).start()
+    }
+
+    const scrollX = useRef(new Animated.Value(0)).current;   
 
     useEffect(() => {
         const user = async() => {
@@ -244,8 +266,8 @@ export default function HomePage({ navigation }){
         user();
     }, [])
     
-    // ANIMATION
-    const scrollX = useRef(new Animated.Value(0)).current;   
+ 
+    
 
     const champions = [
         {
@@ -298,7 +320,6 @@ export default function HomePage({ navigation }){
                     item = { splash }
                     animation = { translateOpacity }
                     tier = { tier }
-                    // translateFrame = { translateFrame }
                     />
                     
                     <Animated.View
@@ -319,20 +340,27 @@ export default function HomePage({ navigation }){
                         <DaysPlaying weekPlay = { item.weekPlay }/>
     
                         <View style = {styles.likesStyle}>
-                            <Pressable onPress = { () => { 
-                                console.log(currentIndex)
+                            <Pressable 
+                            onPressIn = { () => pressAnimation(true, likePress)}
+                            onPressOut = { () => {
+                                pressAnimation(false, likePress)
                                 return setCurrentIndex(currentIndex + 1)
-                            }}>
-                                <Image
-                                style = {styles.likesImageStyle}
+                            }}
+                            >                            
+                                <Animated.Image
+                                style = {{...styles.likesImageStyle, transform: [{scale: likePress}]}}
                                 source={require('../../../assets/LikeGradient.png')}/>
                             </Pressable>
     
-                            <Pressable onPressIn = { () => {
+                            <Pressable 
+                            onPressIn = { () => pressAnimation(true, dislikePress)}
+                            onPressOut = { () => {
+                                pressAnimation(false, dislikePress)
                                 return setCurrentIndex(1)
-                            }}>
-                                <Image
-                                style = {styles.likesImageStyle}
+                            }}
+                            >
+                                <Animated.Image
+                                style = {{...styles.likesImageStyle, transform: [{scale: dislikePress}]}}
                                 source={require('../../../assets/DislikeGradient.png')}/>
                             </Pressable>
                         </View>
