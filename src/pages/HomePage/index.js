@@ -15,7 +15,9 @@ import Loading from '../../components/loading';
 const { width, height } = Dimensions.get('window')
 const ITEM_SIZE = width * 0.72
 const SPACER_ITEM_SIZE = ( width - ITEM_SIZE ) / 2
-const BACKDROP_HEIGHT = height  * 0.85
+const BACKDROP_HEIGHT = height  * 0.85;
+
+let teste = 0
 
 function BackdropImage({ splash, opacity }){
 
@@ -64,8 +66,167 @@ function Backdrop({ champions, scrollX }){
     )
 }
 
+function TimePlaying({ time }){
+
+    const timeStart = time.timeStart;
+    const timeEnd = time.timeEnd;
+
+    return(
+        <View style = {styles.timePlayingWrapper}>
+            <AntDesign name="clockcircleo" size = { 17 } color="white" />
+            
+            <Text style = {styles.hoursText}>
+                { timeStart + ' - ' + timeEnd }
+            </Text>
+        </View>
+    )
+}
+
+function HighlightChampion({ item, animation, translateFrame, tier }){
+
+    let frameTier = '';
+    
+    switch(tier){
+        case 'IRON' || 'Unraked':
+            frameTier = require('../../../assets/frames/ironFrame.png');
+            break
+        case 'BRONZE':
+            frameTier = require('../../../assets/frames/bronzeFrame.png');
+            break
+        case 'SILVER':
+            frameTier = require('../../../assets/frames/silverFrame.png');
+            break
+        case 'GOLD':
+            frameTier = require('../../../assets/frames/goldFrame.png');
+            break
+        case 'PLATINUM':
+            frameTier = require('../../../assets/frames/PlatinumFrame.png');
+            break
+        case 'DIAMOND':
+            frameTier = require('../../../assets/frames/DiamondFrame.png');
+            break
+        case 'MASTER':
+            frameTier = require('../../../assets/frames/MasterFrame.png');
+            break
+        case 'GRANDMASTER':
+            frameTier = require('../../../assets/frames/GrandmasterFrame.png');
+            break
+        case 'CHALLENGER':
+            frameTier = require('../../../assets/frames/ChallengerFrame.png');
+            break
+    }
+
+    return(
+        <View>
+            {/* ARRUMAR PARA OS ELOS: bronze, prata e gold */}
+            <Animated.Image
+            style = {{...styles.tierBackImage, opacity: animation, 
+                // transform: [{translateY: translateFrame}] 
+            }}
+            source = { frameTier } />
+            <Animated.Image
+            style = {styles.highlightChampion}
+            source={{uri: item}}/>
+        </View>
+    )
+}
+
+function Spacer(){
+    return(
+        <View style = {{ width: SPACER_ITEM_SIZE }}/>
+    )
+}
+
+function DaysPlaying({ weekPlay }){
+
+    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+
+    return(
+        <View style = {styles.daysWrapperStyle}>
+            { days.map((day, index) => {
+
+                if (weekPlay.includes(day)){
+                    return (
+                    <View key = {index} style = {{...styles.daysStyle, backgroundColor: '#707070'}}>
+                        <Text style = {{fontSize: 9, color: 'white', fontWeight: 'bold'}}>{day}</Text>
+                    </View>
+                    )
+                }
+                
+                return(
+                    <View key = {index} style = {styles.daysStyle}>
+                        <Text style = {{fontSize: 9, color: 'white'}}>{day}</Text>
+                    </View>
+                )
+            })}
+            
+        </View>
+    )
+}
+
+function SummonerLanes({lanes}){
+    return(
+        <View style = {{...styles.timePlayingWrapper, borderColor: '#C8AA6E', opacity: 0.9}}>
+            { lanes.map((i, index) => {
+
+                let LaneRender = () => {
+                
+                switch(i){
+                    case 'Support': 
+                    return(
+                        <Image
+                        style = {styles.lanesStyle}
+                        source = {require('../../../assets/lanes/Support.png')}
+                        />
+                    )
+
+                    case 'Bot': 
+                    return(
+                        <Image
+                        style = {styles.lanesStyle}
+                        source = {require('../../../assets/lanes/Bot.png')}
+                        />
+                    )
+
+                    case 'Jungle': 
+                    return(
+                        <Image
+                        style = {styles.lanesStyle}
+                        source = {require('../../../assets/lanes/Jungle.png')}
+                        />
+                    )
+
+                    case 'Top': 
+                    return(
+                        <Image
+                        style = {styles.lanesStyle}
+                        source = {require('../../../assets/lanes/Top.png')}
+                        />
+                    )
+
+                    case 'Mid': 
+                    return(
+                        <Image
+                        style = {styles.lanesStyle}
+                        source = {require('../../../assets/lanes/Mid.png')}
+                        />   
+                    )
+                }
+            }
+                return(
+                    <LaneRender key = {index}/>
+                )
+            }
+        )
+    }
+        </View>
+    )
+}
+
 
 export default function HomePage({ navigation }){
+
+    let [currentIndex, setCurrentIndex] = useState(0) 
 
     // SUMMONERS TO BE DISPLAYED
     const [summoners, setSummoners] = useState([])
@@ -75,7 +236,6 @@ export default function HomePage({ navigation }){
     }
 
     const now = useRef()
-    let [currentIndex, setCurrentIndex] = useState(0) 
 
     useEffect(() => {
         const user = async() => {
@@ -84,167 +244,27 @@ export default function HomePage({ navigation }){
         user();
     }, [])
     
-
     // ANIMATION
-    const scrollX = useRef(new Animated.Value(0)).current;
+    const scrollX = useRef(new Animated.Value(0)).current;   
 
-
-    function Spacer(){
-        return(
-            <View style = {{ width: SPACER_ITEM_SIZE }}/>
-        )
-    }
-
-    function HighlightChampion({ item, animation, translateFrame, tier }){
-
-        let frameTier = '';
-        
-        switch(tier){
-            case 'IRON' || 'Unraked':
-                frameTier = require('../../../assets/frames/ironFrame.png');
-                break
-            case 'BRONZE':
-                frameTier = require('../../../assets/frames/bronzeFrame.png');
-                break
-            case 'SILVER':
-                frameTier = require('../../../assets/frames/silverFrame.png');
-                break
-            case 'GOLD':
-                frameTier = require('../../../assets/frames/goldFrame.png');
-                break
-            case 'PLATINUM':
-                frameTier = require('../../../assets/frames/PlatinumFrame.png');
-                break
-            case 'DIAMOND':
-                frameTier = require('../../../assets/frames/DiamondFrame.png');
-                break
-            case 'MASTER':
-                frameTier = require('../../../assets/frames/MasterFrame.png');
-                break
-            case 'GRANDMASTER':
-                frameTier = require('../../../assets/frames/GrandmasterFrame.png');
-                break
-            case 'CHALLENGER':
-                frameTier = require('../../../assets/frames/ChallengerFrame.png');
-                break
+    const champions = [
+        {
+            key: 'left-spacer',
+        },
+        ...summoners,
+        {
+            key: 'right-spacer'
         }
+    ]
 
-        return(
-            <View>
-                {/* ARRUMAR PARA OS ELOS: bronze, prata e gold */}
-                <Animated.Image
-                style = {{...styles.tierBackImage, opacity: animation, 
-                    // transform: [{translateY: translateFrame}] 
-                }}
-                source = { frameTier } />
-                <Animated.Image
-                style = {styles.highlightChampion}
-                source={{uri: item}}/>
-            </View>
-        )
-    }
+    useEffect(() => {
+        now.current?.scrollToIndex({
+            index: currentIndex,
+            animated: true,
+            viewOffset: SPACER_ITEM_SIZE,
+        })
+    }, [currentIndex])
 
-    function DaysPlaying({ weekPlay }){
-
-        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
-
-        return(
-            <View style = {styles.daysWrapperStyle}>
-                { days.map((day, index) => {
-
-                    if (weekPlay.includes(day)){
-                        return (
-                        <View key = {index} style = {{...styles.daysStyle, backgroundColor: '#707070'}}>
-                            <Text style = {{fontSize: 9, color: 'white', fontWeight: 'bold'}}>{day}</Text>
-                        </View>
-                        )
-                    }
-                    
-                    return(
-                        <View key = {index} style = {styles.daysStyle}>
-                            <Text style = {{fontSize: 9, color: 'white'}}>{day}</Text>
-                        </View>
-                    )
-                })}
-                
-            </View>
-        )
-    }
-
-    function TimePlaying({ time }){
-
-        const timeStart = time.timeStart;
-        const timeEnd = time.timeEnd;
-
-        return(
-            <View style = {styles.timePlayingWrapper}>
-                <AntDesign name="clockcircleo" size = { 17 } color="white" />
-                
-                <Text style = {styles.hoursText}>
-                    { timeStart + ' - ' + timeEnd }
-                </Text>
-            </View>
-        )
-    }
-
-    function SummonerLanes({lanes}){
-        return(
-            <View style = {{...styles.timePlayingWrapper, borderColor: '#C8AA6E', opacity: 0.9}}>
-                { lanes.map((i, index) => {
-
-                    let LaneRender = () => {
-                    
-                    switch(i){
-                        case 'Support': 
-                        return(
-                            <Image
-                            style = {styles.lanesStyle}
-                            source = {require('../../../assets/lanes/Support.png')}
-                            />
-                        )
-
-                        case 'Bot': 
-                        return(
-                            <Image
-                            style = {styles.lanesStyle}
-                            source = {require('../../../assets/lanes/Bot.png')}
-                            />
-                        )
-
-                        case 'Jungle': 
-                        return(
-                            <Image
-                            style = {styles.lanesStyle}
-                            source = {require('../../../assets/lanes/Jungle.png')}
-                            />
-                        )
-
-                        case 'Top': 
-                        return(
-                            <Image
-                            style = {styles.lanesStyle}
-                            source = {require('../../../assets/lanes/Top.png')}
-                            />
-                        )
-
-                        case 'Mid': 
-                        return(
-                            <Image
-                            style = {styles.lanesStyle}
-                            source = {require('../../../assets/lanes/Mid.png')}
-                            />   
-                        )
-                    }
-                }
-                    return(
-                        <LaneRender key = {index}/>
-                    )
-                }
-            )
-        }
-            </View>
-        )
-    }
 
     function RenderSummoner({ item, index }){
 
@@ -253,33 +273,20 @@ export default function HomePage({ navigation }){
              (index - 1) * ITEM_SIZE,
              index * ITEM_SIZE, 
         ]
-
+    
         const translateY = scrollX.interpolate({
             inputRange,
             outputRange: [30, -20, 30],
             extrapolate: 'clamp'
         })
-
+    
         const translateOpacity = scrollX.interpolate({
             inputRange,
             outputRange: [0, 0.9, 0],
         })
-
-        // const translateFrame = scrollX.interpolate({
-        //     inputRange,
-        //     outputRange: [-20, 0, 30]
-        // })
-
+    
         const splash = item.champions[0].championSplash
         const tier = item.rankInfo.rank
-
-        useEffect(() => {
-            now.current?.scrollToIndex({
-                index: currentIndex,
-                animated: true,
-                viewOffset: SPACER_ITEM_SIZE,
-            })
-        }, [currentIndex])
         
         
         return(
@@ -308,20 +315,21 @@ export default function HomePage({ navigation }){
                             <TimePlaying time = { item.timePlaying }/>
                             <SummonerLanes lanes = { item.mainLane } tier = { item.rankInfo.rank }/>
                         </View>
-
+    
                         <DaysPlaying weekPlay = { item.weekPlay }/>
-
+    
                         <View style = {styles.likesStyle}>
-                            <Pressable onPressIn = { () => {    
-                                setCurrentIndex(currentIndex++)
+                            <Pressable onPress = { () => { 
+                                console.log(currentIndex)
+                                return setCurrentIndex(currentIndex + 1)
                             }}>
                                 <Image
                                 style = {styles.likesImageStyle}
                                 source={require('../../../assets/LikeGradient.png')}/>
                             </Pressable>
-
+    
                             <Pressable onPressIn = { () => {
-                                setCurrentIndex(1)
+                                return setCurrentIndex(1)
                             }}>
                                 <Image
                                 style = {styles.likesImageStyle}
@@ -332,17 +340,7 @@ export default function HomePage({ navigation }){
                 </Animated.View>
         </View>
         )
-    }   
-
-    const champions = [
-        {
-            key: 'left-spacer',
-        },
-        ...summoners,
-        {
-            key: 'right-spacer'
-        }
-    ]
+    }
 
     if (summoners.length != 0){
         return(
@@ -350,11 +348,11 @@ export default function HomePage({ navigation }){
             from = {{opacity: 0}}
             animate = {{opacity: 1}}
             transition = {{delay: 300}}
-            style = {styles.container}>
+            style = { styles.container }>
                 <StatusBar translucent/>
                 <Ionicons 
-                name="close" size = {30} color = "white" 
-                style  = {styles.returnStyle}
+                name = "close" size = { 30 } color = "white" 
+                style  = { styles.returnStyle }
                 onPress = {() => navigation.navigate('ProfilePage')} />
 
                 <Backdrop champions = { champions } scrollX = { scrollX }/>
@@ -369,6 +367,7 @@ export default function HomePage({ navigation }){
                 ref = { now }
                 initialScrollIndex = { currentIndex }
                 // scrollEnabled = {false}
+                pagingEnabled = {true}
                 contentContainerStyle = {{alignItems: 'center'}}
                 scrollEventThrottle = {16}
                 showsHorizontalScrollIndicator = {false}
@@ -379,7 +378,7 @@ export default function HomePage({ navigation }){
                 )}
                 renderItem = { ({ item, index }) => 
                 item.id
-                ? <RenderSummoner item = {item} index = {index} />
+                ? <RenderSummoner item = { item } index = { index }/>
                 : <Spacer/>
                 }/>
             </MotiView>
