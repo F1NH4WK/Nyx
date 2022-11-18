@@ -53,7 +53,6 @@ export async function getSummonerInfos(summoner){
 export async function getSummoner(){
     const q = query(collection(db, 'profiles'))
     const profiles = []
-
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach(doc => {
@@ -61,5 +60,5 @@ export async function getSummoner(){
     })
 
     // recomendo dar um slice aqui, vai ajudar dps
-    return profiles.slice(0, 4);
+    return profiles
 }

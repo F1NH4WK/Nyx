@@ -15,7 +15,13 @@ import Loading from '../../components/loading';
 const { width, height } = Dimensions.get('window')
 const ITEM_SIZE = width * 0.72
 const SPACER_ITEM_SIZE = ( width - ITEM_SIZE ) / 2
-const BACKDROP_HEIGHT = height  * 0.85;
+const BACKDROP_HEIGHT = height  * 0.9;
+
+
+
+const getItemLayout = (data, index) => (
+    { length: ITEM_SIZE, offset: ITEM_SIZE * index, index}
+  );
 
 function BackdropImage({ splash, opacity }){
 
@@ -80,7 +86,7 @@ function TimePlaying({ time }){
     )
 }
 
-function HighlightChampion({ item, animation, translateFrame, tier }){
+function HighlightChampion({ item, animation,tier }){
 
     let frameTier = '';
     
@@ -224,21 +230,16 @@ function SummonerLanes({lanes}){
 
 export default function HomePage({ navigation }){
 
-    let [currentIndex, setCurrentIndex] = useState(0) 
-
     // SUMMONERS TO BE DISPLAYED
     const [summoners, setSummoners] = useState([])
-    async function getUsers(){
-        const someProfiles = await getSummoner(0, 3);
-        return setSummoners(someProfiles)
-    }
+    let currentIndex = 0
 
-
-    const now = useRef()
-
-    // ANIMATION
+    // ---------ANIMATION----------
+    
     const likePress = useRef(new Animated.Value(1)).current
     const dislikePress = useRef(new Animated.Value(1)).current
+    const now = useRef()
+    const scrollX = useRef(new Animated.Value(0)).current;
 
     const pressAnimation = (pressIn, target) => {
         pressIn
@@ -255,37 +256,33 @@ export default function HomePage({ navigation }){
             duration: 200,
             useNativeDriver: true
         }).start()
-    }
+    }   
 
-    const scrollX = useRef(new Animated.Value(0)).current;   
-
-    useEffect(() => {
-        const user = async() => {
-            await getUsers()
-        }
-        user();
-    }, [])
-    
- 
-    
-
-    const champions = [
-        {
-            key: 'left-spacer',
-        },
-        ...summoners,
-        {
-            key: 'right-spacer'
-        }
-    ]
-
-    useEffect(() => {
+    function userPress(){
+        currentIndex = currentIndex + 1
         now.current?.scrollToIndex({
             index: currentIndex,
             animated: true,
-            viewOffset: SPACER_ITEM_SIZE,
         })
-    }, [currentIndex])
+    }
+
+    // ---------------------------------------
+
+    useEffect(() => {
+        const setEnviroment = async() => {
+            let allSummoners = await getSummoner();
+            return setSummoners([{ key: 'left-spacer' }, ...allSummoners, { key: 'right-spacer' }])
+        }
+        setEnviroment()
+    }, [])
+
+    // useEffect(() => {
+    //     now.current?.scrollToIndex({
+    //         index: currentIndex,
+    //         animated: true,
+    //         // viewOffset: SPACER_ITEM_SIZE
+    //     })
+    // }, [currentIndex])
 
 
     function RenderSummoner({ item, index }){
@@ -309,7 +306,6 @@ export default function HomePage({ navigation }){
     
         const splash = item.champions[0].championSplash
         const tier = item.rankInfo.rank
-        
         
         return(
             <View style = {{width: ITEM_SIZE, marginTop: height * 0.15,}}>
@@ -342,25 +338,25 @@ export default function HomePage({ navigation }){
                         <View style = {styles.likesStyle}>
                             <Pressable 
                             onPressIn = { () => pressAnimation(true, likePress)}
-                            onPressOut = { () => {
+                            onPressOut = { () => { 
                                 pressAnimation(false, likePress)
-                                return setCurrentIndex(currentIndex + 1)
-                            }}
+                                userPress()
+                             }}  
                             >                            
                                 <Animated.Image
-                                style = {{...styles.likesImageStyle, transform: [{scale: likePress}]}}
-                                source={require('../../../assets/LikeGradient.png')}/>
+                                style = {{...styles.likesImageStyle, transform: [{ scale: likePress}]}}
+                                source = {require('../../../assets/LikeGradient.png')}/>
                             </Pressable>
     
                             <Pressable 
                             onPressIn = { () => pressAnimation(true, dislikePress)}
                             onPressOut = { () => {
-                                pressAnimation(false, dislikePress)
-                                return setCurrentIndex(1)
+                                pressAnimation(false, dislikePress )
+                                userPress()
                             }}
                             >
                                 <Animated.Image
-                                style = {{...styles.likesImageStyle, transform: [{scale: dislikePress}]}}
+                                style = {{...styles.likesImageStyle, transform: [{ scale: dislikePress }]}}
                                 source={require('../../../assets/DislikeGradient.png')}/>
                             </Pressable>
                         </View>
@@ -378,28 +374,31 @@ export default function HomePage({ navigation }){
             transition = {{delay: 300}}
             style = { styles.container }>
                 <StatusBar translucent/>
-                <Ionicons 
+                <Ionicons
                 name = "close" size = { 30 } color = "white" 
                 style  = { styles.returnStyle }
                 onPress = {() => navigation.navigate('ProfilePage')} />
 
-                <Backdrop champions = { champions } scrollX = { scrollX }/>
+                <Backdrop champions = { summoners } scrollX = { scrollX }/>
                 
                 <Animated.FlatList
                 renderToHardwareTextureAndroid
                 snapToInterval = { ITEM_SIZE }
                 bounces = { false }
-                // decelerationRate = {0}
+                initialNumToRender = { 3 }
+                decelerationRate = { 0 }
+                maxToRenderPerBatch = { 5 }
+                windowSize = { 5 }
                 keyExtractor = { (item, index) => item.id + '-' + index }
                 horizontal
                 ref = { now }
-                initialScrollIndex = { currentIndex }
-                // scrollEnabled = {false}
-                pagingEnabled = {true}
-                contentContainerStyle = {{alignItems: 'center'}}
-                scrollEventThrottle = {16}
-                showsHorizontalScrollIndicator = {false}
-                data = { champions }
+                getItemLayout = { getItemLayout }
+                initialScrollIndex = { 0 }
+                scrollEnabled = { false }
+                contentContainerStyle = {{ alignItems: 'center' }}
+                scrollEventThrottle = { 16 }
+                showsHorizontalScrollIndicator = { false }
+                data = { summoners }
                 onScroll = { Animated.event(
                     [{ nativeEvent: { contentOffset: { x: scrollX }}}],
                     { useNativeDriver: true }
