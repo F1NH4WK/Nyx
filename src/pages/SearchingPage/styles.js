@@ -1,102 +1,154 @@
 import { StyleSheet, Dimensions, StatusBar } from "react-native";
 
-const {width, height} = Dimensions.get('window')
+const { width, height} = Dimensions.get('window')
+const STATUSBAR_HEIGHT = StatusBar.currentHeight
+const ITEM_SIZE = width * 0.72
+const SPACER_ITEM_SIZE = ( width - ITEM_SIZE ) / 2
+const BACKDROP_HEIGHT = height  * 0.85
 
 const styles = StyleSheet.create({
-    
     container: {
         flex: 1,
         alignItems: 'center',
-        paddingHorizontal: width * 0.05,
-        backgroundColor: '#232323',
-        paddingTop: StatusBar.currentHeight * 0.2
-    },
-
-    mainView: {
-        width: '100%',
-        height: '95%',
-        padding: width * 0.04,
-        alignItems: 'center'
-    },
-
-    displayChampion:{
-        borderRadius: 20,
-        width: width - width * 0.05,
-        position: 'absolute',
-        height: height - height * 0.18,
-    },
-
-    displayInfos: {
-        width: width - width * 0.09,
-        paddingHorizontal: width * 0.01,
-        position: 'absolute',
-        height: '30%',
-        top: height - height * 0.58,
-        flex: 0.5,
-        flexDirection: 'row',
-        zIndex: 2,
-        justifyContent: 'space-between',
-        opacity: 0.78
-    },
-
-    containerTexts:{
-        height: '80%',
-        alignSelf: 'center',
-        justifyContent: 'space-evenly',
-        width: '60%'
-    },
-
-    containerRank: {
-        alignItems: 'center',
-        width: '45%',
-        justifyContent: 'space-evenly',
+        backgroundColor: '#232323'
+        // paddingTop: STATUSBAR_HEIGHT + height * 0.13,
     },
     
+    suggestedWrapper: {
+        marginHorizontal: 10,
+        padding: 5,
+        alignItems: 'center',
+        // backgroundColor: 'red',
+        
+    },
+
     nickStyle: {
-        fontSize: 40,
         fontWeight: 'bold',
-        marginRight: 10,
-        maxWidth: '80%'
+        fontSize: 30,
+        marginBottom: height * 0.01,
+        color: 'white'
+        // AJUSTAR PARA NICKS GRANDES
     },
 
-    laneStyle: {
-        width: '20%',
-        height: '100%'
-    },
-
-    infoIcons: {
+    timePlayingWrapper: {
         flexDirection: 'row',
+        borderColor: '#A7A7A7',
+        borderWidth: 1.5,
+        borderRadius: 30,
+        height: height * 0.045,
+        width: width * 0.3,
+        justifyContent: 'space-evenly',
         alignItems: 'center',
+        
     },
-
-    iconsSpacing: {
-        marginRight: 10
-    },
-
-    rankStyle: {
-        width: '80%', 
-        height: '80%', 
-        opacity: 0.75
-    },
-
-    displayLikes: {
-        width: '100%',
-        position: 'absolute',
-        zIndex: 2,
-        height: '20%',
-        bottom: height * 0.025,
+    
+    laneAndTime: {
+        width: width * 0.65,
+        flexDirection: 'row',
         justifyContent: 'space-between',
+        height: height * 0.05,
+        alignItems: 'center',
+
+    },
+
+    lanesStyle: {
+        width: width * 0.05,
+        height: width * 0.052,
+    },
+
+    daysWrapperStyle: {
+        width: width * 0.65,
+        // borderColor: 'red',
+        // borderWidth: 2,
+        height: height * 0.05,
         alignItems: 'center',
         flexDirection: 'row',
-        paddingHorizontal: width * 0.09,
-        opacity: 0.75
+        justifyContent: 'space-between',
+    },
+
+    daysStyle: {
+        borderRadius: 30,
+        height: height * 0.03,
+        width: width  * 0.6 / 7,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: '#A7A7A7',
+        opacity: 1,
+    },
+
+    likesStyle: {
+        // position: 'absolute',
+        flexDirection: 'row',
+        // bottom: height * 0.04,
+        width: width * 0.75,
+        height: height * 0.1,
+        marginTop: height * 0.02,
+        // left: width * 0.12,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
 
     },
 
-    likeStyle: {
-        width: 75,
-        height: 75,
+    likesImageStyle: {
+        width: 70,
+        height: 70,
     },
+
+    highlightChampion: {
+        width: width * 0.62, 
+        height: height * 0.55, 
+        borderRadius: 5, 
+        borderColor: 'rgba(39, 39, 39, 0.6)',
+        marginBottom: height * 0.01,
+    },
+
+    returnStyle: {
+        position: 'absolute', 
+        top: 35, 
+        left: 20, 
+        zIndex: 2, 
+        opacity: 0.8
+    },
+
+    hoursText: {
+        fontSize: 11, 
+        fontWeight: 'bold', 
+        color: 'white'
+    },
+
+    fadeGradient: {
+        width: width, 
+        height: BACKDROP_HEIGHT , 
+        position: 'absolute', 
+        bottom: 0
+    },
+
+    backdropView: {
+        position: 'absolute', 
+        width: width, 
+        height: BACKDROP_HEIGHT
+    },
+
+    backdropImage: {
+        position: 'absolute', 
+        height: height, 
+        width: width,
+        overflow: 'hidden'
+    },
+
+    tierBackImage:{
+        width: width * 0.666, 
+        height: height * 0.6, 
+        resizeMode: 'stretch', 
+        position: 'absolute',
+        zIndex: 2, 
+        top: -27, 
+        alignSelf: 'center', 
+        left: -11,
+    },
+
 })
 
-export default styles;
+export default styles

@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.9)'
+        backgroundColor: '#232323'
     },
 
     modalImage: {

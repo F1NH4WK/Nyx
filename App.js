@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState, useRef } from 'react';
 
-import SearchinPage from './src/pages/SearchingPage';
+import SearchingPage from './src/pages/SearchingPage';
 import { FirstPage, NicknamePage, FrequencyPage } from './src/pages/IntroPage';
 import ProfilePage from './src/pages/ProfilePage';
 import SignPage from './src/pages/SignPage';
@@ -45,16 +45,16 @@ export default function App() {
               paddingBottom: 15,
               borderTopWidth: 0,
             },
+            headerShown: false,
             style: {
               borderTopWidth: 0,
               backgroundColor: '#232323'
             },
           }}>
-        <Tab.Screen name='Home' component={HomePage}  
+        <Tab.Screen name='Home' component = { HomePage }  
             listeners = {{tabPress: () => homeAnimation.current?.play()}} 
             options={{
-              headerShown: false,
-              tabBarStyle: {display: 'none'}, // TEMP
+              // headerShown: false,
               tabBarIcon: ({size, focused}) => focused
               ?
               <View style = {{width: size + 30, height: size + 30, justifyContent: 'center', alignItems: 'center'}}>
@@ -81,10 +81,12 @@ export default function App() {
               
             }}/>
             
-            <Tab.Screen name='Searching' component={SearchinPage} 
+            <Tab.Screen name='Searching' component = { SearchingPage } 
             listeners = {{tabPress: () => searchAnimation.current?.play(0, 120)}}
             options = {{
-
+              headerShown: false,
+              tabBarShowLabel: false,
+              // tabBarStyle: {display: 'none'},
               header: () => 
                 <View style = {{width: '100%', alignItems: 'center', paddingTop: StatusBar.currentHeight * 1.2, marginBottom: height * 0.02}}>
                   <Image
@@ -125,7 +127,7 @@ export default function App() {
             }}/>
 
 
-            <Tab.Screen name='ProfilePage' component={ProfilePage}  
+            <Tab.Screen name = 'ProfilePage' component = { ProfilePage }  
             listeners = {{
               tabPress: () => profileAnimation.current?.play(20, 55)}} 
             options = {{
