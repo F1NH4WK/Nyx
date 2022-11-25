@@ -12,11 +12,9 @@ import Lottie from 'lottie-react-native';
 
 // LOCAL IMPORTS
 import styles from "./styles";
-import { isEmailAuthenticated, addNewUser } from "../../firebase";
-import { sin } from "react-native-reanimated";
+import { isEmailAuthenticated, addNewUser, getDataByEmail } from "../../firebase";
 
-
-export default function SignPage({navigation, route}){
+export default function SignPage({ navigation, route }){
     const signUser = route.params.setCurrentUser
 
     // STATES
@@ -50,15 +48,20 @@ export default function SignPage({navigation, route}){
             name: auth.currentUser.displayName,
             email: auth.currentUser.email
         }
-        navigation.navigate('InfoPage', { userData })
+        console.log(userData)
+        // navigation.navigate('InfoPage', { userData })
     }
 
 
     async function signIn(){
         try{
             const user = await signInWithEmailAndPassword(auth, email, password)
+            const userEmail = user.user.email
+            const currentUserInfos = await getDataByEmail(userEmail)
+            
             const userData = {
-                email: user.user.email
+                email: userEmail,
+                currentUserInfos: currentUserInfos
             }
             signUser(userData)
             // Use user.user.delete() to remove it from firebase auth
@@ -100,8 +103,8 @@ export default function SignPage({navigation, route}){
                 source={require('../../../assets/animations/background.json')}
                 loop
                 autoPlay
-                resizeMode="cover"
-                duration={1500}
+                resizeMode = "cover"
+                duration = {1500}
                 />
 
                 <MotiImage 
@@ -134,19 +137,22 @@ export default function SignPage({navigation, route}){
                             <View style = {styles.formInput}>
                             <TextInput
                                 placeholder = "E-mail"
-                                clearButtonMode="while-editing"
+                                clearButtonMode = "while-editing"
                                 selectTextOnFocus
                                 selectionColor = {'#392190'}
                                 keyboardType = {'email-address'}
-                                value = {email}
+                                value = { email }
                                 onEndEditing = {async () => {
+                                    console.log('terminou fi')
                                     if (email.includes('@gmail.com'))
                                     {
                                         try{
-                                            await isEmailAuthenticated(email) 
-                                            setIsUserRegistred(true)
+                                            await isEmailAuthenticated(email)
+                                            ? setIsUserRegistred(true)
+                                            : setIsUserRegistred(false)
                                         }
-                                        catch{
+                                        catch(e){
+                                            console.log(e)
                                             setIsUserRegistred(false)
                                         }
                                     }
@@ -165,11 +171,11 @@ export default function SignPage({navigation, route}){
                                 secureTextEntry = {viewPassword}
                                 placeholder = "Password"
                                 keyboardType="twitter"
-                                value={password}
+                                value = {password}
                                 editable = {email != ''}
                                 onChangeText = {(pass) => setPassword(pass)}
                                 placeholderTextColor = '#A7A7A7'
-                                selectionColor={'#392190'}
+                                selectionColor = {'#392190'}
                                 style = {styles.input}/>
                             {
                                 !viewPassword

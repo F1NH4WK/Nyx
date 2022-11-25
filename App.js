@@ -38,7 +38,8 @@ export default function App() {
         { currentUser != userTemp
           ?
           <Tab.Navigator 
-          initialRouteName = {'Home'}  screenOptions = {{
+          initialRouteName = {'Home'}  
+          screenOptions = {{
             tabBarShowLabel: false,
             tabBarStyle: {
               backgroundColor: '#232323',
@@ -49,12 +50,15 @@ export default function App() {
             style: {
               borderTopWidth: 0,
               backgroundColor: '#232323'
-            },
+            }
           }}>
-        <Tab.Screen name='Home' component = { HomePage }  
-            listeners = {{tabPress: () => homeAnimation.current?.play()}} 
-            options={{
-              // headerShown: false,
+
+        <Tab.Screen 
+        name='Home'
+        initialParams = { currentUser } 
+        component = { HomePage }  
+        listeners = {{tabPress: () => homeAnimation.current?.play()}} 
+        options={{
               tabBarIcon: ({size, focused}) => focused
               ?
               <View style = {{width: size + 30, height: size + 30, justifyContent: 'center', alignItems: 'center'}}>
@@ -84,9 +88,7 @@ export default function App() {
             <Tab.Screen name='Searching' component = { SearchingPage } 
             listeners = {{tabPress: () => searchAnimation.current?.play(0, 120)}}
             options = {{
-              headerShown: false,
-              tabBarShowLabel: false,
-              // tabBarStyle: {display: 'none'},
+              tabBarStyle: {display: 'none'},
               header: () => 
                 <View style = {{width: '100%', alignItems: 'center', paddingTop: StatusBar.currentHeight * 1.2, marginBottom: height * 0.02}}>
                   <Image
@@ -127,11 +129,12 @@ export default function App() {
             }}/>
 
 
-            <Tab.Screen name = 'ProfilePage' component = { ProfilePage }  
-            listeners = {{
-              tabPress: () => profileAnimation.current?.play(20, 55)}} 
+            <Tab.Screen 
+            name = 'ProfilePage' 
+            initialParams = { currentUser } 
+            component = { ProfilePage }  
+            listeners = {{ tabPress: () => profileAnimation.current?.play(20, 55) }} 
             options = {{
-              headerShown: false,
               tabBarIcon: ({size, focused}) => focused
               ? 
               
@@ -156,11 +159,11 @@ export default function App() {
                 </MotiView>
               : 
               <Lottie 
-                autoPlay = {false}
-                loop = {false}
-                style = {{width: size , height: size }}
-                source={require('./assets/animations/tabBar.json')}
-                />
+              autoPlay = {false}
+              loop = {false}
+              style = {{width: size , height: size }}
+              source={require('./assets/animations/tabBar.json')}
+              />
             }
           }
             />
@@ -168,10 +171,10 @@ export default function App() {
         :
 
         <Stack.Navigator screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
-          <Stack.Screen name = 'SignPage' component =  {SignPage} initialParams = {{setCurrentUser}}/>
-          <Stack.Screen name = 'InfoPage' component =  {FirstPage} />
-          <Stack.Screen name = 'NicknamePage' component = {NicknamePage}/>
-          <Stack.Screen name = 'FrequencyPage' component = {FrequencyPage} initialParams = {{setCurrentUser}}/>
+          <Stack.Screen name = 'SignPage' component =  { SignPage } initialParams = {{setCurrentUser}}/>
+          <Stack.Screen name = 'InfoPage' component =  { FirstPage } />
+          <Stack.Screen name = 'NicknamePage' component = { NicknamePage }/>
+          <Stack.Screen name = 'FrequencyPage' component = { FrequencyPage } initialParams = {{setCurrentUser}}/>
         </Stack.Navigator> 
         }
       </NavigationContainer>

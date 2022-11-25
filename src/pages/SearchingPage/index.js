@@ -267,21 +267,30 @@ export default function SearchingPage({ navigation }){
 
     // ---------------------------------------
 
-    useEffect(() => {
-        const setEnviroment = async() => {
-            let allSummoners = await getSummoner();
-            return setSummoners([{ key: 'left-spacer' }, ...allSummoners, { key: 'right-spacer' }])
+    async function getAllSummoners(){
+        let allSummoners = await getSummoner();
+        let summonersShuffled = allSummoners
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+        if (summoners.length > 0){
+        
         }
-        setEnviroment()
-    }, [])
+        setSummoners([{ key: 'left-spacer' }, ...summonersShuffled, { key: 'right-spacer' }])
+        
+        return currentIndex = 0
+    }
 
-    // useEffect(() => {
-    //     now.current?.scrollToIndex({
-    //         index: currentIndex,
-    //         animated: true,
-    //         // viewOffset: SPACER_ITEM_SIZE
-    //     })
-    // }, [currentIndex])
+    useEffect(() => {
+            try{
+                getAllSummoners()
+            }
+            catch(e){
+                console.log(e)
+                alert('Something went wrong: ' + e )
+                setSummoners([])
+            }
+    }, [])
 
 
     function RenderSummoner({ item, index }){
@@ -321,7 +330,7 @@ export default function SearchingPage({ navigation }){
                     style = {{...styles.suggestedWrapper, opacity: translateOpacity}}>
                         <Text style = {{...styles.nickStyle, 
                         fontSize: item.nick.length > 9
-                        ? 25
+                        ? 23
                         : 30
                         }}>
                             { item.nick }
@@ -392,12 +401,14 @@ export default function SearchingPage({ navigation }){
                 horizontal
                 ref = { now }
                 getItemLayout = { getItemLayout }
-                initialScrollIndex = { 0 }
+                initialScrollIndex = { currentIndex }
                 scrollEnabled = { false }
                 contentContainerStyle = {{ alignItems: 'center' }}
                 scrollEventThrottle = { 16 }
                 showsHorizontalScrollIndicator = { false }
                 data = { summoners }
+                onEndReached = { async() => await getAllSummoners() }
+                onEndReachedThreshold = { 1 }
                 onScroll = { Animated.event(
                     [{ nativeEvent: { contentOffset: { x: scrollX }}}],
                     { useNativeDriver: true }

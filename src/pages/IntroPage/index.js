@@ -159,7 +159,7 @@ export function NicknamePage({navigation, route}){
             animate = {{opacity: 1}}>
                 <TextInput 
                 style = {styles.textInput} placeholder="Nickname"
-                placeholderTextColor={'white'}
+                placeholderTextColor = {'white'}
                 value = {nick}
                 onChangeText={(text) => setNick(text)}
                 onEndEditing = { async() => {
@@ -385,7 +385,10 @@ export function FrequencyPage({navigation, route}){
             currentUser,
             nick,
             ...infos,
-            timePlaying: { timeStart: time1.getHours().toString(), timeEnd: time2.getHours().toString() },
+            timePlaying: { 
+                timeStart: time1.getHours().toString() + ':' + time1.getMinutes().toString(), 
+                timeEnd: time2.getHours().toString()  + ':' + time2.getMinutes().toString()
+            },
             weekPlay: daysPlaying,
             mainLane: mainLanes
         }
@@ -452,12 +455,19 @@ export function FrequencyPage({navigation, route}){
                 </Pressable>
             </View>
         </MotiView>
+        <MotiText 
+        from = {{opacity: 0}}
+        animate = {{opacity: 1}}
+        transition = {{delay: 800, duration: 1000}}
+        style = {styles.infosAboutYou}>
+            The interval you often play. Example: I play all day, so I can not use this app :(
+        </MotiText>
 
         <MotiView 
         from = {{translateX: -300, opacity: 0}}
         animate = {{translateX: 0, opacity: 1}}
         delay = {300}
-        style = {styles.infosView}>
+        style = {{...styles.infosView, marginBottom: 10}}>
             <MotiImage
             source={require('../../../assets/calendarGradient.png')}
             style = {styles.iconsStyle}/>
@@ -468,7 +478,7 @@ export function FrequencyPage({navigation, route}){
                ? 
                <Pressable
                 onPress={() => setWeekdays(index)}
-                key={val.key}
+                key = {val.key}
                 style = {styles.weekdaysStyle}>
                     <MotiImage 
                     from = {{scale: 1}}
@@ -478,15 +488,22 @@ export function FrequencyPage({navigation, route}){
                     <Text style = {styles.userInfos}>{val.label}</Text>
                 </Pressable>
                 :
-                    <Pressable
-                    key={val.key}
-                    onPress={() => setWeekdays(index)}
-                    style = {styles.weekdaysStyle}>
-                        <Text style = {styles.userInfos}>{val.label}</Text>
-                    </Pressable>
+                <Pressable
+                key = {val.key}
+                onPress={() => setWeekdays(index)}
+                style = {styles.weekdaysStyle}>
+                    <Text style = {styles.userInfos}>{val.label}</Text>
+                </Pressable>
                 )}
             </View>
         </MotiView>
+        <MotiText 
+        from = {{opacity: 0}}
+        animate = {{opacity: 1}}
+        transition = {{delay: 800, duration: 1000}}
+        style = {styles.infosAboutYou}>
+            The weekdays you often play. Example: Here I can select it all :)
+        </MotiText>
 
         <MotiView style = {{...styles.infosView, justifyContent: 'center'}}>
             { lanes.map((val, index) => 

@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#272727',
         padding: width * 0.02
     },
-    
 
     formContainer: {
         backgroundColor: 'rgba(34, 34, 34, 0.9)',

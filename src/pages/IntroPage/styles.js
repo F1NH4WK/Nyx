@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         height: '8%',
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: width * 0.03,
+        marginTop: width * 0.03,
     },
 
     questionTitle: {
@@ -78,9 +78,9 @@ const styles = StyleSheet.create({
         borderRadius: 500,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#A7A7A7',
-        borderColor: 'black',
-        borderWidth: 0.1,
+        backgroundColor: '#282828',
+        borderColor: '#a7a7a7',
+        borderWidth: 1,
     },
 
     selectedStyle: {
@@ -146,6 +146,19 @@ const styles = StyleSheet.create({
         color: 'white'
     },
 
+    modalStyle: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.9)'
+    },
+
+    modalImage: {
+        width: width * 0.6,
+        height: height * 0.3,
+        opacity: 0.85
+    },
+
     modalQuestionsWrapper: {
         flexDirection: 'row',
         width: '100%',
@@ -177,6 +190,15 @@ const styles = StyleSheet.create({
     pressableYesNo:{
         width: 100,
         height: 50,
+    },
+
+    infosAboutYou: {
+        color: '#A7A7A7',
+        textAlign: 'left',
+        fontStyle: 'italic',
+        fontSize: 13,
+        marginBottom: height * 0.015,
+        alignSelf: 'flex-start'
     },
 })
 

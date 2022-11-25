@@ -1,11 +1,13 @@
-import { View } from "react-native";
+import { Text, View, Image, Dimensions, ImageBackground } from "react-native";
 
 // LOCAL IMPORTS
 import styles from "./styles";
 
-export default function HomePage(){
+const { width, height } = Dimensions.get('window') 
+
+export default function HomePage({ navigation, route }){
 
     return(
-        <View style = {styles.container}/>
+        <View style = {styles.container} />
     )
 }

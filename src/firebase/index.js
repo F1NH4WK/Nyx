@@ -47,7 +47,7 @@ export async function addNewUser(email){
 export async function getSummonerInfos(summoner){
     const docRef = doc(db, 'profiles', summoner)
     const docSnap = await getDoc(docRef)
-    console.log(docSnap)
+    return docSnap
 }
 
 export async function getSummoner(){
@@ -61,4 +61,10 @@ export async function getSummoner(){
 
     // recomendo dar um slice aqui, vai ajudar dps
     return profiles
+}
+
+export async function getDataByEmail(email){
+    const docRef = doc(db, 'emails', email);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data()
 }
