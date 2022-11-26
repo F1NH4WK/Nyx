@@ -6,12 +6,18 @@ import * as SplashScreen from 'expo-splash-screen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState, useRef } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import SearchingPage from './src/pages/SearchingPage';
 import { FirstPage, NicknamePage, FrequencyPage } from './src/pages/IntroPage';
-import ProfilePage from './src/pages/ProfilePage';
+import { ProfilePage, Account, AboutYou, HowDisplayed } from './src/pages/ProfilePage';
 import SignPage from './src/pages/SignPage';
 import HomePage from './src/pages/HomePage';
+
+// CONSTS
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator()
+
 
 export default function App() {
 
@@ -23,14 +29,62 @@ export default function App() {
     const { width, height } = Dimensions.get('window')
     const [currentUser, setCurrentUser] = useState(userTemp)
 
-    const Tab = createBottomTabNavigator();
-    const Stack = createNativeStackNavigator()
-
     const profileAnimation = useRef(0);
     const searchAnimation = useRef(0);
     const homeAnimation = useRef(0);
 
     
+  // NESTED NAVIGATORS
+  function Profile(){
+    return(
+        <Stack.Navigator>
+
+          <Stack.Screen
+          name = 'Profile'
+          component = { ProfilePage }
+          options = {{headerShown: false, animation: 'slide_from_right'}}
+          initialParams = { currentUser }
+          />
+
+          <Stack.Screen
+          name = 'Account'
+          component = { Account }
+          options = {{
+          animation: 'fade_from_bottom', 
+          headerStyle: {backgroundColor: '#181818'},
+          headerTintColor: 'white',
+          headerTitleStyle: {fontWeight: 'bold'},
+          }}
+          />
+
+          <Stack.Screen
+          name = 'AboutYou'
+          component = { AboutYou }
+          options = {{
+          title: 'About You',
+          animation: 'fade_from_bottom', 
+          headerStyle: {backgroundColor: '#181818'},
+          headerTintColor: 'white'}}
+          />
+
+          <Stack.Screen
+          name = 'HowDisplayed'
+          component = { HowDisplayed }
+          options = {{
+          title: 'Display', 
+          animation: 'fade_from_bottom', 
+          headerStyle: {backgroundColor: '#181818'},
+          headerTintColor: 'white',
+          headerShown: false,
+          headerTitleStyle: {fontWeight: 'bold'},
+          }}
+          />
+        </Stack.Navigator>
+    )
+  }
+  
+
+
     return (
       <NavigationContainer >
         <StatusBar translucent/>
@@ -43,14 +97,13 @@ export default function App() {
             tabBarShowLabel: false,
             tabBarStyle: {
               backgroundColor: '#232323',
-              paddingBottom: 15,
+              paddingBottom: 5,
               borderTopWidth: 0,
+              height: 55,
+              alignItems: 'center',
+              justifyContent: 'center'
             },
             headerShown: false,
-            style: {
-              borderTopWidth: 0,
-              backgroundColor: '#232323'
-            }
           }}>
 
         <Tab.Screen 
@@ -71,7 +124,7 @@ export default function App() {
                   autoPlay = {false}
                   loop = {false}
                   duration = {500}
-                  style = {{width: size + 10 , height: size + 10, position: 'absolute'}}
+                  style = {{width: size + 15 , height: size + 15, position: 'absolute'}}
                   source={require('./assets/animations/home.json')}
                   />
               </View>
@@ -89,13 +142,6 @@ export default function App() {
             listeners = {{tabPress: () => searchAnimation.current?.play(0, 120)}}
             options = {{
               tabBarStyle: {display: 'none'},
-              header: () => 
-                <View style = {{width: '100%', alignItems: 'center', paddingTop: StatusBar.currentHeight * 1.2, marginBottom: height * 0.02}}>
-                  <Image
-                  style = {{width: '100%', height: height * 0.05}}
-                  resizeMode = {'contain'}
-                  source={require('./assets/LogoHeader.png')}/>
-                </View>,
 
               tabBarIcon: ({size, focused}) => focused
               ?
@@ -128,11 +174,9 @@ export default function App() {
               />
             }}/>
 
-
             <Tab.Screen 
             name = 'ProfilePage' 
-            initialParams = { currentUser } 
-            component = { ProfilePage }  
+            component = { Profile }  
             listeners = {{ tabPress: () => profileAnimation.current?.play(20, 55) }} 
             options = {{
               tabBarIcon: ({size, focused}) => focused
@@ -153,7 +197,7 @@ export default function App() {
                 autoPlay = {false}
                 loop = {false}
                 duration = {1500}
-                style = {{width: size , height: size , position: 'absolute'}}
+                style = {{width: size + 5 , height: size + 5 , position: 'absolute'}}
                 source={require('./assets/animations/tabBar.json')}
                 />
                 </MotiView>

@@ -52,7 +52,6 @@ export default function SignPage({ navigation, route }){
         // navigation.navigate('InfoPage', { userData })
     }
 
-
     async function signIn(){
         try{
             const user = await signInWithEmailAndPassword(auth, email, password)
