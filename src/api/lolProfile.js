@@ -3,7 +3,7 @@ import { getAPIKey } from "../firebase";
 export default async function requestLoL(nick){
 
     const LOL_URL = 'https://br1.api.riotgames.com/lol';
-    const header = {'X-Riot-Token': `${await getAPIKey()}` }
+    const header = {'X-Riot-Token': `${ await getAPIKey() }` }
 
     // GET THE SUMMONER RANK AND THEIR POINTS
     async function getEntries(sumId){
@@ -42,8 +42,9 @@ export default async function requestLoL(nick){
     }
     
     try{
-        let id = await getSumId(nick).then(data => {return data.id}); 
-
+        let response = await getSumId(nick)
+        let id = response.id
+        
         let rankInfo = await getEntries(id).then(data => {
             try{ 
                 return {rank: data[0].tier, pdl: data[0].leaguePoints} 
@@ -52,12 +53,14 @@ export default async function requestLoL(nick){
                 return {rank: 'Unraked', pdl: 0}
             }
         }); // 2s
+    
+    let summonerIconId = `http://ddragon.leagueoflegends.com/cdn/12.22.1/img/profileicon/${response.profileIconId}.png`
 
     let champions = await getChampions(id).then(data => data.map((i) => {return i.championId}));
     
     let summonerChamps = await getChampionName().then(data => {
         return champions.map(championId => {
-    
+
                 let championName = ''
     
                 for (const [key, value] of Object.entries(data['data'])){
@@ -67,15 +70,18 @@ export default async function requestLoL(nick){
                         return {
                             championName: championName,
                             championSplash: `http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championName}_0.jpg`,
-                            championIcon: `http://ddragon.leagueoflegends.com/cdn/12.20.1/img/champion/${championName}.png`
+                            championIcon: `http://ddragon.leagueoflegends.com/cdn/12.20.1/img/champion/${championName}.png`,
+                            championBanner: `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${championName}_0.jpg`
                         }
                     }
                 }})}) // 2s
+
     
     const summonerData = {
             id: id,                     // it'll be used to do some future changes
             rankInfo: rankInfo,         // display rank
-            champions: summonerChamps   // display background champion
+            champions: summonerChamps,
+            profileIcon: summonerIconId   // display background champion
         }
     
     return summonerData

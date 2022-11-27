@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#232323',
-        padding: 20
+        padding: 25
     },
     
     header: {
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         // borderColor: 'red',
         // borderWidth: 2,
         justifyContent: 'center',
-        marginBottom: 20
+        marginBottom: 10
     },
 
     accountInfos: {

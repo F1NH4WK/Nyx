@@ -16,6 +16,7 @@ import { pushData, getData, pushDataToEmail } from "../../firebase";
 export function FirstPage({navigation, route}){
 
     const currentUser = route.params.userData
+    console.log('1 - ' + currentUser)
 
     return(
         <MotiView style = {styles.container}>
@@ -82,6 +83,7 @@ export function FirstPage({navigation, route}){
 export function NicknamePage({navigation, route}){
 
     const currentUser = route.params.currentUser
+    console.log('2 - ' + currentUser)
 
     const infoTemp = {
     champions: [{
@@ -379,6 +381,8 @@ export function FrequencyPage({navigation, route}){
     const signUser = route.params.setCurrentUser
     const nick = route.params.nick
     const currentUser = route.params.user
+    console.log('3 - ' + currentUser)
+    console.log(infos)
 
     function getData(){
         const data = {
@@ -397,12 +401,13 @@ export function FrequencyPage({navigation, route}){
 
     async function finish(){
         setModal(true)
-        await pushData(getData())
+        const summonerData = getData()
+        await pushData(summonerData)
         await pushDataToEmail(getData(), currentUser.email)
 
         // alert("You're all done, thanks for supporting the Nyx Alpha!")
         setModal(false)
-        signUser(currentUser);
+        signUser({ email: currentUser, currentUserInfos: summonerData });
     }
 
     let daysPlaying = []

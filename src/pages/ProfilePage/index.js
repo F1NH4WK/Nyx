@@ -21,25 +21,26 @@ export function ProfilePage({ navigation, route }){
     const days = currentSummoner.weekPlay
     const rank = currentSummoner.rankInfo
     const nick = currentSummoner.nick
+    const icon = currentSummoner.profileIcon
 
     return(
         <View style = {styles.container}>
             <View style = {styles.header}>
                 <MotiImage
-                style = {{width: width, height: height * 0.25}}
+                style = {{width: width, height: height * 0.28}}
                 resizeMode = 'cover'
                 blurRadius = {10}
-                source = {{uri: 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Azir_0.jpg'}}
+                source = {{uri: champions[0].championBanner}}
                  />
                 <MotiImage
-                style = {{width: 80, height: 80, borderColor: '#232323', borderWidth: 5, borderRadius: 100, position: 'absolute', alignSelf: 'center', zIndex: 2}}
-                source = {{uri: 'http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/Azir.png'}}
+                style = {{width: 85, height: 85, borderColor: '#232323', borderWidth: 2, borderRadius: 50, position: 'absolute', alignSelf: 'center', zIndex: 2}}
+                source = {{uri: icon}}
                  />
 
-                <MotiText style = {{position: 'absolute', bottom: -5, fontSize: 25, fontWeight: 'bold', zIndex: 2, alignSelf: 'center', color: 'white'}}>O Azir</MotiText>
+                <MotiText style = {{position: 'absolute', bottom: -10, fontSize: 25, fontWeight: 'bold', zIndex: 2, alignSelf: 'center', color: 'white'}}>{nick}</MotiText>
                 <LinearGradient 
                 colors={['rgba(0, 0, 0, 0)', '#232323']}
-                style = {{position: 'absolute', bottom: -20, width: width, height: height * 0.22}}
+                style = {{position: 'absolute', bottom: -30, width: width, height: height * 0.22}}
                 />
             </View>
 
