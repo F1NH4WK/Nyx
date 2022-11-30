@@ -149,6 +149,17 @@ const styles = StyleSheet.create({
         left: -11,
     },
 
+    backdropStyle: {
+        width: width, 
+        height: BACKDROP_HEIGHT , 
+        resizeMode: 'cover'
+    },
+
+    backdropFlatlist: {
+        width: width,
+        height: BACKDROP_HEIGHT
+    }
+
 })
 
 export default styles

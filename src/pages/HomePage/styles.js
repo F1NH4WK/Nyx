@@ -7,7 +7,22 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#232323',
-        padding: 20
+        padding: 20,
+    },
+
+    containerNoMatches: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#232323',
+        padding: 20,
+        justifyContent: 'center'
+    },
+
+    noMatches: {
+        width: width * 0.5,
+        height: height * 0.5,
+        resizeMode: 'contain',
+        opacity: 0.5
     }
 })
 

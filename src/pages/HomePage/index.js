@@ -1,3 +1,4 @@
+import { MotiImage, MotiText, MotiView } from "moti";
 import { Text, View, Image, Dimensions, ImageBackground } from "react-native";
 
 // LOCAL IMPORTS
@@ -7,8 +8,31 @@ const { width, height } = Dimensions.get('window')
 
 export default function HomePage({ navigation, route }){
 
-    console.log(route.params)
-    return(
-        <View style = {styles.container} />
-    )
+    const matches = [{}]
+
+    
+    if (matches.length == 0){
+        return(
+            <MotiView style = {styles.container}>
+
+            </MotiView>
+        )
+    }
+
+    else{
+        return(
+            <MotiView style = {styles.containerNoMatches}>
+                <MotiImage
+                style = {styles.noMatches}
+                source = {require('../../../assets/gifs/noMatches.gif')}
+                 />
+                <MotiText
+                style = {{color: 'gray', fontSize: 16}}
+                numberOfLines = {2}
+                lineBreakMode = {'tail'}>
+                    Looks like you don't have any matches yet :(
+                </MotiText>
+            </MotiView>
+        )
+    }
 }

@@ -47,10 +47,14 @@ export function ProfilePage({ navigation, route }){
             <View style = {styles.accountInfos}>
     
                 <TouchableNativeFeedback
-                background={TouchableNativeFeedback.Ripple('#505050')}
+                background = { TouchableNativeFeedback.Ripple('#505050') }
                 onPress = {() => navigation.navigate('Account', {email, lanes, champions, rank})}
                 >
-                    <MotiView style = {styles.infosView}>
+                    <MotiView
+                    from = {{opacity: 0, translateX: -20}}
+                    animate = {{opacity: 1, translateX: 0}}
+                    transition = {{delay: 200, type: 'timing'}} 
+                    style = {styles.infosView}>
                         <View style = {{width: '20%',  height: height * 0.08, alignItems: 'flex-start', justifyContent: 'center'}}>
                             <MaterialIcons name="account-box" size={27} color="#959595" />
                         </View>
@@ -67,10 +71,13 @@ export function ProfilePage({ navigation, route }){
 
 
                 <TouchableNativeFeedback
-                background={TouchableNativeFeedback.Ripple('#505050')}
+                background = { TouchableNativeFeedback.Ripple('#505050') }
                 onPress = {() => navigation.navigate('AboutYou', { time, days })}
                 >
-                    <MotiView style = {styles.infosView}>
+                    <MotiView style = {styles.infosView}
+                    from = {{opacity: 0, translateX: -20}}
+                    animate = {{opacity: 1, translateX: 0}}
+                    transition = {{delay: 400, type: 'timing'}}>
                         <View style = {{width: '20%',  height: height * 0.08, alignItems: 'flex-start', justifyContent: 'center'}}>
                             <MaterialCommunityIcons name="pencil" size={27} color="#959595" />
                         </View>
@@ -86,10 +93,13 @@ export function ProfilePage({ navigation, route }){
                 </TouchableNativeFeedback>
 
                 <TouchableNativeFeedback
-                background={TouchableNativeFeedback.Ripple('#505050')}
+                background = { TouchableNativeFeedback.Ripple('#505050') }
                 onPress = {() => navigation.navigate('HowDisplayed', {champions, time, days, lanes, rank, nick})}
                 >
-                    <MotiView style = {styles.infosView}>
+                    <MotiView style = {styles.infosView}
+                    from = {{opacity: 0, translateX: -20}}
+                    animate = {{opacity: 1, translateX: 0}}
+                    transition = {{delay: 350, type: 'timing'}}>
                         <View style = {{width: '20%',  height: height * 0.08, alignItems: 'flex-start', justifyContent: 'center'}}>
                             <MaterialCommunityIcons name="account-eye" size={27} color="#959595" />
                         </View>
@@ -105,14 +115,18 @@ export function ProfilePage({ navigation, route }){
                 </TouchableNativeFeedback>
 
                 <TouchableNativeFeedback
-                background={TouchableNativeFeedback.Ripple('#505050')}>
-                    <MotiView style = {styles.infosView}>
+                background = { TouchableNativeFeedback.Ripple('#505050') }>
+                    <MotiView
+                    from = {{opacity: 0, translateX: -20}}
+                    animate = {{opacity: 0.7, translateX: 0}}
+                    transition = {{delay: 200, type: 'timing'}} 
+                    style = {styles.infosView}>
                         <View style = {{width: '20%',  height: height * 0.08, alignItems: 'flex-start', justifyContent: 'center'}}>
-                            <MaterialIcons name="exit-to-app" size={27} color="red" style = {{opacity: 0.7}} />
+                            <MaterialIcons name="exit-to-app" size={27} color="red"/>
                         </View>
                         
                         <View style = {{width: '50%', height: height * 0.08, alignItems: 'flex-start', justifyContent: 'center'}}>
-                            <Text style = {{...styles.subTopics, color: 'red', opacity: 0.7}}>Log out</Text>
+                            <Text style = {{...styles.subTopics, color: 'red'}}>Log out</Text>
                         </View>
                     </MotiView>
                 </TouchableNativeFeedback>
@@ -413,7 +427,7 @@ export function HowDisplayed({ navigation, route }){
                 source = { frameTier } />
                 <Image
                 style = {styles.highlightChampion}
-                source={{uri: item}}/>
+                source = {{uri: item}}/>
             </View>
         )
     }

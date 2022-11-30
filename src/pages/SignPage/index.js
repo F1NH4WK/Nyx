@@ -73,12 +73,12 @@ export default function SignPage({ navigation, route }){
 
     async function signUp(){
         try{
+            
             const user =  await createUserWithEmailAndPassword(auth, email, password);
             await addNewUser(email)
             const userData = {
                 email: user.user.email,
             }
-
             navigation.navigate('InfoPage', { userData })
         }
         catch(e){

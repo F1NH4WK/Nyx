@@ -138,7 +138,9 @@ export default function App() {
               
             }}/>
             
-            <Tab.Screen name='Searching' component = { SearchingPage } 
+            <Tab.Screen name='Searching' 
+            component = { SearchingPage }
+            initialParams = { currentUser }  
             listeners = {{tabPress: () => searchAnimation.current?.play(0, 120)}}
             options = {{
               tabBarStyle: {display: 'none'},

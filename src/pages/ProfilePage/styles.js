@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#232323',
-        padding: 25
+        padding: 15
     },
     
     header: {

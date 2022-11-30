@@ -8,7 +8,7 @@ import { MotiView } from 'moti';
 
 // LOCAL IMPORTS
 import styles from './styles'
-import { getSummoner } from '../../firebase';
+import { getSummoner, likesTheSummoner } from '../../firebase';
 import Loading from '../../components/loading';
 
 // FIXED VALUES
@@ -16,7 +16,6 @@ const { width, height } = Dimensions.get('window')
 const ITEM_SIZE = width * 0.72
 const SPACER_ITEM_SIZE = ( width - ITEM_SIZE ) / 2
 const BACKDROP_HEIGHT = height  * 0.9;
-
 
 const getItemLayout = (data, index) => (
     { length: ITEM_SIZE, offset: ITEM_SIZE * index, index}
@@ -29,8 +28,8 @@ function BackdropImage({ splash, opacity }){
         removeClippedSubviews = {false}
         style = {{ ...styles.backdropImage, opacity: opacity}}>
             <Image
-            blurRadius={10}
-            style = {{ width: width, height: BACKDROP_HEIGHT , resizeMode: 'cover' }}
+            blurRadius = { 10 }
+            style = { styles.backdropStyle }
             source = {{ uri: splash }}
             />
         </Animated.View>
@@ -42,13 +41,13 @@ function Backdrop({ champions, scrollX }){
     return(
         <View style = {styles.backdropView}>
             <FlatList
-            contentContainerStyle = {{width: width, height: BACKDROP_HEIGHT}}
+            contentContainerStyle = {styles.backdropFlatlist}
             data = { champions }
             removeClippedSubviews = {false}
             keyExtractor = {({ index }) => index } 
             renderItem = {({ item, index }) => {
 
-                if (!item.id){ return null}
+                if (!item.id){ return null }
                 
                 const opacity = scrollX.interpolate({
                     inputRange: [(index - 2) * ITEM_SIZE, (index - 1) * ITEM_SIZE],
@@ -169,7 +168,7 @@ function DaysPlaying({ weekPlay }){
 
 function SummonerLanes({lanes}){
     return(
-        <View style = {{...styles.timePlayingWrapper, borderColor: '#C8AA6E', opacity: 0.9}}>
+        <View style = {{...styles.timePlayingWrapper, borderColor: '#C8AA6E'}}>
             { lanes.map((i, index) => {
 
                 let LaneRender = () => {
@@ -227,11 +226,15 @@ function SummonerLanes({lanes}){
 }
 
 
-export default function SearchingPage({ navigation }){
+export default function SearchingPage({ navigation, route }){
 
     // SUMMONERS TO BE DISPLAYED
     const [summoners, setSummoners] = useState([])
     let currentIndex = 0
+
+    // CURRENT USER
+    const currentUser = route.params.currentUserInfos.nick
+    console.log(currentUser)
 
     // ---------ANIMATION----------
     
@@ -346,7 +349,8 @@ export default function SearchingPage({ navigation }){
                         <View style = {styles.likesStyle}>
                             <Pressable 
                             onPressIn = { () => pressAnimation(true, likePress)}
-                            onPressOut = { () => { 
+                            onPressOut = { async() => { 
+                                await likesTheSummoner(currentUser, item.nick)
                                 pressAnimation(false, likePress)
                                 userPress()
                              }}  

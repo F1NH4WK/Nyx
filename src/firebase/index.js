@@ -68,3 +68,18 @@ export async function getDataByEmail(email){
     const docSnap = await getDoc(docRef);
     return docSnap.data()
 }
+
+export async function likesTheSummoner(current, target){
+    console.log(target + ' - ' + current)
+    const docRef = doc(db, 'likes', target.trim())
+    const docSnap = await getDoc(docRef)
+    const data = docSnap.data().likesThey
+
+    console.log(data)
+    if(data.includes(current)){
+        alert('OOOOOOOOOHHHHHHH')
+    }
+    else{
+        return
+    }
+}
